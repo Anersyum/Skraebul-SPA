@@ -28,11 +28,13 @@ export class GameBoardComponent implements OnInit {
   }
 
   ngAfterViewInit() {
+
     this.canvas = this.canvasElement?.nativeElement;
     this.colorsContanier = this.colorsContainerElement?.nativeElement;
 
     this.canvas!.width = window.innerWidth / 2;
     this.canvas!.height = window.innerHeight / 2;
+
     this.xOffset = this.canvas!.width / 2 + (this.colorsContanier!.clientWidth / 2);
     this.yOffset = this.canvas!.height / 2;
 
@@ -49,12 +51,10 @@ export class GameBoardComponent implements OnInit {
 
   startDrawing(e: MouseEvent) {
 
-    this.context?.save();
-
     this.context!.moveTo(e.clientX - this.xOffset, e.clientY - this.yOffset);
 
-    const lastX = e.clientX - this.xOffset;
-    const lastY = e.clientY - this.yOffset;
+    const lastX : number = e.clientX - this.xOffset;
+    const lastY : number = e.clientY - this.yOffset;
 
     const points : Position = {
       x: lastX,
@@ -69,10 +69,10 @@ export class GameBoardComponent implements OnInit {
     this.isDrawing = true;
 
     this.initializePen();
-
+    
     this.context?.beginPath();
+    
     this.draw(e);
-
   }
 
   draw(e: MouseEvent) {
@@ -82,8 +82,8 @@ export class GameBoardComponent implements OnInit {
       this.context?.lineTo(e.clientX - this.xOffset, e.clientY - this.yOffset);
       this.context?.stroke();
 
-      const lastX = e.clientX - this.xOffset;
-      const lastY = e.clientY - this.yOffset;
+      const lastX : number = e.clientX - this.xOffset;
+      const lastY : number = e.clientY - this.yOffset;
 
       const points : Position = {
         x: lastX,
@@ -99,8 +99,8 @@ export class GameBoardComponent implements OnInit {
 
   stopDrawing(e : MouseEvent) {
 
-    const lastX = e.clientX - this.xOffset;
-    const lastY = e.clientY - this.yOffset;
+    const lastX : number = e.clientX - this.xOffset;
+    const lastY : number = e.clientY - this.yOffset;
 
     const points : Position = {
       x: lastX,
@@ -117,7 +117,7 @@ export class GameBoardComponent implements OnInit {
 
   changePenColor(event : MouseEvent) {
     
-    const element = event.target as HTMLButtonElement;
+    const element : HTMLButtonElement = event.target as HTMLButtonElement;
 
     this.color = element.dataset.color!;
   }
@@ -173,11 +173,11 @@ export class GameBoardComponent implements OnInit {
 
   private redrawDrawingStack() {
 
-    const me = this;
-    let stopDrawing = false;
+    const me : GameBoardComponent = this;
+    let stopDrawing : boolean = false;
 
     for (let i = this.undoStack.length - 1; i >= 0; i--) {
-      const element = this.undoStack[i];
+      const element : Array<Position> = this.undoStack[i];
       
       element.forEach((e : Position) => {
         if (e.drawing == 0){
