@@ -137,7 +137,6 @@ export class GameBoardComponent implements OnInit {
     }
   }
 
-  // do it a bit better
   undo() {
     this.removeFromDrawingStack();
 
@@ -157,11 +156,13 @@ export class GameBoardComponent implements OnInit {
   private addToDrawingStack(position: Position) {
 
     if (typeof this.undoStack[this.move] === "undefined") {
+      // we add a new empty array to the 2D array model so that we can store point objects in it
       this.undoStack.push([]);
     }
 
     this.undoStack[this.move].push(position);
 
+    // we increase a players move only when the player has stopped drawing or cleared the board
     if (position.drawing === 2 || position.drawing === 3) {
       this.move++;
     }
@@ -185,7 +186,6 @@ export class GameBoardComponent implements OnInit {
           me.context?.beginPath();
         }
         else if (e.drawing == 1) {
-          // console.log(e.x, e.y)
           me.context?.lineTo(e.x, e.y);
           me.context?.stroke();
         }
