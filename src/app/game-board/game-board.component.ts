@@ -23,6 +23,7 @@ export class GameBoardComponent implements OnInit {
   move : number = 0;
   penColorsArray : Array<string> = ["yellow", "red", "black"];
   penColors? : Array<Color> = [];
+  selectedColor? : string;
 
   // 0 - start 1 - drawing 2 - end 3 - clear board
   undoStack : Array<Array<Position>> = [];
@@ -141,6 +142,8 @@ export class GameBoardComponent implements OnInit {
     });
 
     color.isActive = true;
+
+    this.selectedColor = color.name;
   }
 
   clearBoard(isUndo : boolean = false) {
@@ -225,6 +228,8 @@ export class GameBoardComponent implements OnInit {
         break;
       }
     }
+
+    me.color = me.selectedColor as string;
   }
 
   private emptyDrawingStack() {
