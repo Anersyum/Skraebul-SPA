@@ -36,7 +36,7 @@ export class GameBoardComponent implements OnInit {
 
       const colorObject : Color = {
         name : color,
-        isActive : (color == "black") ? true : false
+        isActive : (color == "black") ? true : false // black is the default color
       };
 
       this.penColors?.push(colorObject);
@@ -119,6 +119,10 @@ export class GameBoardComponent implements OnInit {
     const lastX : number = e.clientX - this.xOffset;
     const lastY : number = e.clientY - this.yOffset;
 
+    if (!this.isDrawing) {
+      return;
+    }
+    
     const points : Position = {
       x: lastX,
       y: lastY,
@@ -128,7 +132,6 @@ export class GameBoardComponent implements OnInit {
     };
 
     this.addToDrawingStack(points);
-
     this.isDrawing = false;
   }
 

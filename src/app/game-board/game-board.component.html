@@ -4,7 +4,7 @@
       (click)="changePenColor($event, penColor)" attr.data-color="{{ penColor.name }}" class="color-btn"></a>
   </div>
   <div style="display: flex; flex-direction: column;">
-    <canvas #myCanvas (mousedown)="startDrawing($event)" (mousemove)="draw($event)" (mouseup)="stopDrawing($event)"></canvas>
+    <canvas #myCanvas draggable="false" (dragstart)="false;" (mouseleave)="stopDrawing($event)" (mousedown)="startDrawing($event)" (mousemove)="draw($event)" (mouseup)="stopDrawing($event)"></canvas>
     <div #boardControlContainer id="board-control-btns-container">
       <button (click)="clearBoard()">Clear</button>
       <button (click)="undo()">Undo</button>

@@ -11,6 +11,8 @@ canvas {
 
     border: 1px solid black;
     background-color: #ffffff;
+    -webkit-user-drag: none;
+    user-drag: none;
 }
 
 #color-container {
