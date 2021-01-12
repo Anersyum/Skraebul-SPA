@@ -1,0 +1,10 @@
+<div id="canvas-container">
+  <div  #colorContainer id="color-container">
+    <button (click)="changePenColor($event)" data-color="yellow">Yellow</button>
+    <button (click)="changePenColor($event)" data-color="red">Red</button>
+    <button (click)="changePenColor($event)" data-color="black">Black</button>
+    <button (click)="clearBoard()">Clear</button>
+    <button (click)="undo()">Undo</button>
+  </div>
+  <canvas #myCanvas (mousedown)="startDrawing($event)" (mousemove)="draw($event)" (mouseup)="stopDrawing($event)"></canvas>
+</div>
