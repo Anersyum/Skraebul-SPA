@@ -11,14 +11,14 @@ export class GameBoardComponent implements OnInit {
 
   @ViewChild("myCanvas") canvasElement? : ElementRef<HTMLCanvasElement>;
   @ViewChild("colorContainer") colorsContainerElement? : ElementRef<HTMLDivElement>;
-  isDrawing = false;
+  isDrawing : boolean = false;
   canvas? : HTMLCanvasElement;
-  color = "black";
+  color : string = "black";
   colorsContanier? : HTMLDivElement;
   context? : CanvasRenderingContext2D;
-  xOffset = 0;
-  yOffset = 0;
-  move = 0;
+  xOffset : number = 0;
+  yOffset : number = 0;
+  move : number = 0;
   
   // 0 - start 1 - drawing 2 - end 3 - clear board
   undoStack : Array<Array<Position>> = [];
