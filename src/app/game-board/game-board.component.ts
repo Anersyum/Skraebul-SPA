@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Position } from '../_models/Position';
 
 @Component({
   selector: 'app-game-board',
@@ -19,8 +20,8 @@ export class GameBoardComponent implements OnInit {
   yOffset = 0;
   move = 0;
   
-  // 0 - start 1 - drawing 2 - end
-  undoStack : Array<Array<Object>> = [];
+  // 0 - start 1 - drawing 2 - end 3 - clear board
+  undoStack : Array<Array<Position>> = [];
   constructor() { }
 
   ngOnInit() {
@@ -55,18 +56,15 @@ export class GameBoardComponent implements OnInit {
     const lastX = e.clientX - this.xOffset;
     const lastY = e.clientY - this.yOffset;
 
-    const points : {
-      x: number,
-      y: number,
-      drawing: number
-    } = {
+    const points : Position = {
       x: lastX,
       y: lastY,
-      drawing: 0
+      drawing: 0,
+      brushColor: this.context?.strokeStyle,
+      brushWidth: this.context?.lineCap
     };
 
-    this.undoStack.push([]);
-    this.undoStack[this.move].push(points);
+    this.addToDrawingStack(points);
 
     this.isDrawing = true;
 
@@ -87,17 +85,15 @@ export class GameBoardComponent implements OnInit {
       const lastX = e.clientX - this.xOffset;
       const lastY = e.clientY - this.yOffset;
 
-      const points : {
-        x: number,
-        y: number,
-        drawing: number
-      } = {
+      const points : Position = {
         x: lastX,
         y: lastY,
-        drawing: 1
+        drawing: 1,
+        brushColor: this.context?.strokeStyle,
+        brushWidth: this.context?.lineCap
       };
 
-      this.undoStack[this.move].push(points);
+      this.addToDrawingStack(points);
     }
   }
 
@@ -106,19 +102,16 @@ export class GameBoardComponent implements OnInit {
     const lastX = e.clientX - this.xOffset;
     const lastY = e.clientY - this.yOffset;
 
-    const points : {
-      x: number,
-      y: number,
-      drawing: number
-    } = {
+    const points : Position = {
       x: lastX,
       y: lastY,
-      drawing: 2
+      drawing: 2,
+      brushColor: this.context?.strokeStyle,
+      brushWidth: this.context?.lineCap
     };
 
-    this.undoStack[this.move].push(points);
+    this.addToDrawingStack(points);
 
-    this.move++;
     this.isDrawing = false;
   }
 
@@ -129,37 +122,86 @@ export class GameBoardComponent implements OnInit {
     this.color = element.dataset.color!;
   }
 
-  clearBoard() {
+  clearBoard(isUndo : boolean = false) {
 
     this.context?.clearRect(0, 0, this.canvas!.width, this.canvas!.height);
+
+    if (this.undoStack.length > 0 && !isUndo) {
+      this.addToDrawingStack({
+        x: 0,
+        y: 0,
+        drawing: 3,
+        brushColor: this.context?.strokeStyle,
+        brushWidth: this.context?.lineCap
+      });
+    }
   }
 
   // do it a bit better
   undo() {
+    this.removeFromDrawingStack();
+
+    if (this.undoStack.length <= 0) {
+      this.move = 0;
+    }
+    else {
+      this.move--;
+    }
+
+    const isUndo : boolean = true;
+
+    this.clearBoard(isUndo);
+    this.redrawDrawingStack();
+  }
+
+  private addToDrawingStack(position: Position) {
+
+    if (typeof this.undoStack[this.move] === "undefined") {
+      this.undoStack.push([]);
+    }
+
+    this.undoStack[this.move].push(position);
+
+    if (position.drawing === 2 || position.drawing === 3) {
+      this.move++;
+    }
+  }
+
+  private removeFromDrawingStack() {
+    this.undoStack.pop();
+  }
+
+  private redrawDrawingStack() {
 
     const me = this;
+    let stopDrawing = false;
 
-    this.clearBoard();
-
-    this.undoStack.pop();
-    this.move--;
-
-    this.undoStack.forEach(function(el, index) {
-
-      el.forEach((e) => {
+    for (let i = this.undoStack.length - 1; i >= 0; i--) {
+      const element = this.undoStack[i];
+      
+      element.forEach((e : Position) => {
         if (e.drawing == 0){
           me.context?.moveTo(e.x, e.y);
           me.context?.beginPath();
         }
         else if (e.drawing == 1) {
-          console.log(e.x, e.y)
+          // console.log(e.x, e.y)
           me.context?.lineTo(e.x, e.y);
           me.context?.stroke();
         }
-        else if (e.drawing == 2) {
-  
+        else if (e.drawing == 3) {
+          stopDrawing = true;
+          return;
         }
-      })
-    })
+      });
+
+      if (stopDrawing) {
+        break;
+      }
+    }
+  }
+
+  private emptyDrawingStack() {
+    this.undoStack = [];
   }
 }
