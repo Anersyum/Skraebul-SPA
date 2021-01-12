@@ -3,5 +3,5 @@ export interface Position {
     y: number,
     drawing: number,
     brushColor?: string | CanvasGradient | CanvasPattern,
-    brushWidth?: string
+    brushWidth?: number
 }

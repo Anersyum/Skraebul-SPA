@@ -14,6 +14,7 @@ export class GameBoardComponent implements OnInit {
   isDrawing : boolean = false;
   canvas? : HTMLCanvasElement;
   color : string = "black";
+  brushWidth : number = 5;
   colorsContanier? : HTMLDivElement;
   context? : CanvasRenderingContext2D;
   xOffset : number = 0;
@@ -22,6 +23,7 @@ export class GameBoardComponent implements OnInit {
   
   // 0 - start 1 - drawing 2 - end 3 - clear board
   undoStack : Array<Array<Position>> = [];
+
   constructor() { }
 
   ngOnInit() {
@@ -43,13 +45,15 @@ export class GameBoardComponent implements OnInit {
 
   initializePen() {
 
-    this.context!.lineWidth = 5;
+    this.context!.lineWidth = this.brushWidth;
     this.context!.lineCap = "round";
     this.context!.strokeStyle = this.color;
 
   }
 
   startDrawing(e: MouseEvent) {
+
+    this.initializePen();
 
     this.context!.moveTo(e.clientX - this.xOffset, e.clientY - this.yOffset);
 
@@ -61,14 +65,12 @@ export class GameBoardComponent implements OnInit {
       y: lastY,
       drawing: 0,
       brushColor: this.context?.strokeStyle,
-      brushWidth: this.context?.lineCap
+      brushWidth: this.context?.lineWidth
     };
 
     this.addToDrawingStack(points);
 
     this.isDrawing = true;
-
-    this.initializePen();
     
     this.context?.beginPath();
     
@@ -90,7 +92,7 @@ export class GameBoardComponent implements OnInit {
         y: lastY,
         drawing: 1,
         brushColor: this.context?.strokeStyle,
-        brushWidth: this.context?.lineCap
+        brushWidth: this.context?.lineWidth
       };
 
       this.addToDrawingStack(points);
@@ -107,7 +109,7 @@ export class GameBoardComponent implements OnInit {
       y: lastY,
       drawing: 2,
       brushColor: this.context?.strokeStyle,
-      brushWidth: this.context?.lineCap
+      brushWidth: this.context?.lineWidth
     };
 
     this.addToDrawingStack(points);
@@ -132,7 +134,7 @@ export class GameBoardComponent implements OnInit {
         y: 0,
         drawing: 3,
         brushColor: this.context?.strokeStyle,
-        brushWidth: this.context?.lineCap
+        brushWidth: this.context?.lineWidth
       });
     }
   }
@@ -182,6 +184,11 @@ export class GameBoardComponent implements OnInit {
       
       element.forEach((e : Position) => {
         if (e.drawing == 0){
+
+          me.color = e.brushColor as string;
+          me.brushWidth = this.context?.lineWidth as number;
+          me.initializePen();
+
           me.context?.moveTo(e.x, e.y);
           me.context?.beginPath();
         }
