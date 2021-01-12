@@ -12,6 +12,7 @@ export class GameBoardComponent implements OnInit {
 
   @ViewChild("myCanvas") canvasElement? : ElementRef<HTMLCanvasElement>;
   @ViewChild("colorContainer") colorsContainerElement? : ElementRef<HTMLDivElement>;
+  @ViewChild("boardControlContainer") boardControlBtnsContainer? : ElementRef<HTMLDivElement>;
   isDrawing : boolean = false;
   canvas? : HTMLCanvasElement;
   color : string = "black";
@@ -21,7 +22,7 @@ export class GameBoardComponent implements OnInit {
   xOffset : number = 0;
   yOffset : number = 0;
   move : number = 0;
-  penColorsArray : Array<string> = ["yellow", "red", "black"];
+  penColorsArray : Array<string> = ["yellow", "red", "black", "green"];
   penColors? : Array<Color> = [];
   selectedColor? : string;
 
@@ -35,25 +36,24 @@ export class GameBoardComponent implements OnInit {
 
       const colorObject : Color = {
         name : color,
-        isActive : false
+        isActive : (color == "black") ? true : false
       };
 
       this.penColors?.push(colorObject);
     });
-
-    console.log(this.penColors)
   }
 
   ngAfterViewInit() {
 
     this.canvas = this.canvasElement?.nativeElement;
     this.colorsContanier = this.colorsContainerElement?.nativeElement;
+    const boardControlContainer : HTMLDivElement = this.boardControlBtnsContainer?.nativeElement as HTMLDivElement;
 
     this.canvas!.width = window.innerWidth / 2;
     this.canvas!.height = window.innerHeight / 2;
 
     this.xOffset = this.canvas!.width / 2 + (this.colorsContanier!.clientWidth / 2);
-    this.yOffset = this.canvas!.height / 2;
+    this.yOffset = this.canvas!.height / 2 - (boardControlContainer!.clientHeight / 2);
 
     this.context = this.canvas?.getContext("2d")!;
   }
@@ -137,6 +137,7 @@ export class GameBoardComponent implements OnInit {
     const element : HTMLAnchorElement = event.target as HTMLAnchorElement;
 
     this.color = element.dataset.color!;
+
     this.penColors?.forEach((color : Color) => {
       color.isActive = false;
     });
