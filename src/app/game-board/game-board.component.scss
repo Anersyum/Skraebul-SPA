@@ -18,3 +18,18 @@ canvas {
     justify-content: center;
     align-items: center;
 }
+
+.color-btn {
+
+    border-radius: 100%;
+    height: 50px;
+    width: 50px;
+    border: 2px solid black;
+    background-color: var(--btn-background-color);
+    cursor: pointer;
+}
+
+.color-active {
+
+    background-color: white;
+}

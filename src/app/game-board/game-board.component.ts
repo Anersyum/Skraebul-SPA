@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Color } from '../_models/Color';
 import { Position } from '../_models/Position';
 
 @Component({
@@ -20,13 +21,26 @@ export class GameBoardComponent implements OnInit {
   xOffset : number = 0;
   yOffset : number = 0;
   move : number = 0;
-  
+  penColorsArray : Array<string> = ["yellow", "red", "black"];
+  penColors? : Array<Color> = [];
+
   // 0 - start 1 - drawing 2 - end 3 - clear board
   undoStack : Array<Array<Position>> = [];
 
   constructor() { }
 
   ngOnInit() {
+    this.penColorsArray.forEach((color : string) => {
+
+      const colorObject : Color = {
+        name : color,
+        isActive : false
+      };
+
+      this.penColors?.push(colorObject);
+    });
+
+    console.log(this.penColors)
   }
 
   ngAfterViewInit() {
@@ -117,11 +131,16 @@ export class GameBoardComponent implements OnInit {
     this.isDrawing = false;
   }
 
-  changePenColor(event : MouseEvent) {
+  changePenColor(event : MouseEvent, color : Color) {
     
-    const element : HTMLButtonElement = event.target as HTMLButtonElement;
+    const element : HTMLAnchorElement = event.target as HTMLAnchorElement;
 
     this.color = element.dataset.color!;
+    this.penColors?.forEach((color : Color) => {
+      color.isActive = false;
+    });
+
+    color.isActive = true;
   }
 
   clearBoard(isUndo : boolean = false) {
