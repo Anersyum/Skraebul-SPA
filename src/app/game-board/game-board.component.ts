@@ -22,7 +22,7 @@ export class GameBoardComponent implements OnInit {
   xOffset : number = 0;
   yOffset : number = 0;
   move : number = 0;
-  penColorsArray : Array<string> = ["yellow", "red", "black", "green"];
+  penColorsArray : Array<string> = ["yellow", "red", "black", "green", "#ffffff"];
   penColors? : Array<Color> = [];
   selectedColor? : string;
 
@@ -122,7 +122,7 @@ export class GameBoardComponent implements OnInit {
     if (!this.isDrawing) {
       return;
     }
-    
+
     const points : Position = {
       x: lastX,
       y: lastY,
@@ -203,9 +203,8 @@ export class GameBoardComponent implements OnInit {
   private redrawDrawingStack() {
 
     const me : GameBoardComponent = this;
-    let stopDrawing : boolean = false;
 
-    for (let i = this.undoStack.length - 1; i >= 0; i--) {
+    for (let i = 0; i < me.undoStack.length; i++) {
       const element : Array<Position> = this.undoStack[i];
       
       element.forEach((e : Position) => {
@@ -223,14 +222,9 @@ export class GameBoardComponent implements OnInit {
           me.context?.stroke();
         }
         else if (e.drawing == 3) {
-          stopDrawing = true;
-          return;
+          this.context?.clearRect(0, 0, this.canvas!.width, this.canvas!.height);
         }
       });
-
-      if (stopDrawing) {
-        break;
-      }
     }
 
     me.color = me.selectedColor as string;
