@@ -8,6 +8,11 @@
     <div #boardControlContainer id="board-control-btns-container">
       <button (click)="clearBoard()">Clear</button>
       <button (click)="undo()">Undo</button>
+      <div id="brush-thickness-container">
+        <div class="brush-btn" *ngFor="let thickness of penThickness">
+          <div class="brush-thickness" style="width: {{ thickness }}px; height: {{ thickness }}px;" (click)="changeBrushSize(thickness)"></div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

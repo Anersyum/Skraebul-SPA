@@ -23,8 +23,9 @@ export class GameBoardComponent implements OnInit {
   yOffset : number = 0;
   move : number = 0;
   penColorsArray : Array<string> = ["yellow", "red", "black", "green", "#ffffff"];
-  penColors? : Array<Color> = [];
+  penColors : Array<Color> = [];
   selectedColor? : string;
+  penThickness : Array<number> = [5, 7, 10, 12, 15];
 
   // 0 - start 1 - drawing 2 - end 3 - clear board
   undoStack : Array<Array<Position>> = [];
@@ -229,7 +230,8 @@ export class GameBoardComponent implements OnInit {
     me.color = me.selectedColor as string;
   }
 
-  private emptyDrawingStack() {
-    this.undoStack = [];
+  changeBrushSize(penThickness : number) {
+    
+    this.brushWidth = penThickness;
   }
 }
