@@ -11,7 +11,7 @@
         <button (click)="undo()">Undo</button>
       </div>
       <div id="brush-thickness-container">
-        <div class="brush-btn" *ngFor="let thickness of penThickness" (click)="changeBrushSize(thickness.value)">
+        <div class="brush-btn" *ngFor="let thickness of penThickness" (click)="changeBrushSize(thickness)" [ngClass]="{'thickness-active': thickness.isActive}">
           <div class="brush-thickness" style="width: {{ thickness.value }}px; height: {{ thickness.value }}px;"></div>
         </div>
       </div>

@@ -59,7 +59,7 @@
     cursor: pointer;
     border-radius: 5px;
     margin-right: 5px;
-    
+
     .brush-thickness {
 
         border: 1px solid #000000;
@@ -78,9 +78,15 @@
 
     display: flex;
     flex-direction: row;
+    margin-top: 10px;
 }
 
 #game-managment-btns-container {
 
     margin-right: 30px;
+}
+
+.thickness-active {
+
+    border: 2px solid #000000;
 }

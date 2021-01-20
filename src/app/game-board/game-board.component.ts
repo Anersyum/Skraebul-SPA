@@ -244,8 +244,14 @@ export class GameBoardComponent implements OnInit {
     me.color = me.selectedColor as string;
   }
 
-  changeBrushSize(penThickness : number) {
+  changeBrushSize(penThickness : Thickness) {
     
-    this.brushWidth = penThickness;
+    this.penThickness?.forEach((thickness : Thickness) => {
+      thickness.isActive = false;
+    });
+
+    penThickness.isActive = true;
+
+    this.brushWidth = penThickness.value;
   }
 }
