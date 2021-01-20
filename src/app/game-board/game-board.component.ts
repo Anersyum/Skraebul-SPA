@@ -47,13 +47,12 @@ export class GameBoardComponent implements OnInit {
 
     this.canvas = this.canvasElement?.nativeElement;
     this.colorsContanier = this.colorsContainerElement?.nativeElement;
-    const boardControlContainer : HTMLDivElement = this.boardControlBtnsContainer?.nativeElement as HTMLDivElement;
 
     this.canvas!.width = window.innerWidth / 2;
-    this.canvas!.height = window.innerHeight / 2;
+    this.canvas!.height = window.innerHeight / 1.5;
 
-    this.xOffset = this.canvas!.width / 2 + (this.colorsContanier!.clientWidth / 2);
-    this.yOffset = this.canvas!.height / 2 - (boardControlContainer!.clientHeight / 2);
+    this.xOffset = this.canvas!.getClientRects()[0].x;
+    this.yOffset = this.canvas!.getClientRects()[0].y;
 
     this.context = this.canvas?.getContext("2d")!;
   }
