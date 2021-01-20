@@ -28,7 +28,7 @@ export class GameBoardComponent implements OnInit {
   selectedColor? : string;
   penThicknessArray : Array<number> = [5, 7, 10, 12, 15];
   penThickness : Array<Thickness> = [];
-
+  selectedThickness? : number;
   // 0 - start 1 - drawing 2 - end 3 - clear board
   undoStack : Array<Array<Position>> = [];
 
@@ -51,6 +51,10 @@ export class GameBoardComponent implements OnInit {
         value: thickness,
         isActive: (thickness === 5) ? true : false
       };
+
+      if (thicknessObject.isActive) {
+        this.selectedThickness = thicknessObject.value;
+      }
 
       this.penThickness?.push(thicknessObject);
     });
@@ -121,7 +125,7 @@ export class GameBoardComponent implements OnInit {
         y: lastY,
         drawing: 1,
         brushColor: this.context?.strokeStyle,
-        brushWidth: this.context?.lineWidth
+        brushWidth: this.brushWidth
       };
 
       this.addToDrawingStack(points);
@@ -142,7 +146,7 @@ export class GameBoardComponent implements OnInit {
       y: lastY,
       drawing: 2,
       brushColor: this.context?.strokeStyle,
-      brushWidth: this.context?.lineWidth
+      brushWidth: this.brushWidth
     };
 
     this.addToDrawingStack(points);
@@ -174,7 +178,7 @@ export class GameBoardComponent implements OnInit {
         y: 0,
         drawing: 3,
         brushColor: this.context?.strokeStyle,
-        brushWidth: this.context?.lineWidth
+        brushWidth: this.brushWidth
       });
     }
   }
@@ -225,7 +229,7 @@ export class GameBoardComponent implements OnInit {
         if (e.drawing == 0){
 
           me.color = e.brushColor as string;
-          me.brushWidth = this.context?.lineWidth as number;
+          me.brushWidth = e.brushWidth as number;
           me.initializePen();
 
           me.context?.moveTo(e.x, e.y);
@@ -242,6 +246,7 @@ export class GameBoardComponent implements OnInit {
     }
 
     me.color = me.selectedColor as string;
+    me.brushWidth = me.selectedThickness as number;
   }
 
   changeBrushSize(penThickness : Thickness) {
@@ -252,6 +257,6 @@ export class GameBoardComponent implements OnInit {
 
     penThickness.isActive = true;
 
-    this.brushWidth = penThickness.value;
+    this.brushWidth = this.selectedThickness = penThickness.value;
   }
 }
