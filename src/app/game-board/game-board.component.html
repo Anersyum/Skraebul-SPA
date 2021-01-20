@@ -6,11 +6,13 @@
   <div style="display: flex; flex-direction: column;">
     <canvas #myCanvas draggable="false" (dragstart)="false;" (mouseleave)="stopDrawing($event)" (mousedown)="startDrawing($event)" (mousemove)="draw($event)" (mouseup)="stopDrawing($event)"></canvas>
     <div #boardControlContainer id="board-control-btns-container">
-      <button (click)="clearBoard()">Clear</button>
-      <button (click)="undo()">Undo</button>
+      <div id="game-managment-btns-container">
+        <button (click)="clearBoard()">Clear</button>
+        <button (click)="undo()">Undo</button>
+      </div>
       <div id="brush-thickness-container">
-        <div class="brush-btn" *ngFor="let thickness of penThickness">
-          <div class="brush-thickness" style="width: {{ thickness }}px; height: {{ thickness }}px;" (click)="changeBrushSize(thickness)"></div>
+        <div class="brush-btn" *ngFor="let thickness of penThickness" (click)="changeBrushSize(thickness.value)">
+          <div class="brush-thickness" style="width: {{ thickness.value }}px; height: {{ thickness.value }}px;"></div>
         </div>
       </div>
     </div>

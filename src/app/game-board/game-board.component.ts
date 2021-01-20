@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Color } from '../_models/Color';
 import { Position } from '../_models/Position';
+import { Thickness } from '../_models/Thickness';
 
 @Component({
   selector: 'app-game-board',
@@ -25,7 +26,8 @@ export class GameBoardComponent implements OnInit {
   penColorsArray : Array<string> = ["yellow", "red", "black", "green", "#ffffff"];
   penColors : Array<Color> = [];
   selectedColor? : string;
-  penThickness : Array<number> = [5, 7, 10, 12, 15];
+  penThicknessArray : Array<number> = [5, 7, 10, 12, 15];
+  penThickness : Array<Thickness> = [];
 
   // 0 - start 1 - drawing 2 - end 3 - clear board
   undoStack : Array<Array<Position>> = [];
@@ -42,6 +44,18 @@ export class GameBoardComponent implements OnInit {
 
       this.penColors?.push(colorObject);
     });
+
+    this.penThicknessArray.forEach((thickness : number) => {
+
+      const thicknessObject : Thickness = {
+        value: thickness,
+        isActive: (thickness === 5) ? true : false
+      };
+
+      this.penThickness?.push(thicknessObject);
+    });
+
+    console.log(this.penThickness)
   }
 
   ngAfterViewInit() {
