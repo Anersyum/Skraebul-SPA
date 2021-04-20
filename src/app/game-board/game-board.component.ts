@@ -58,8 +58,6 @@ export class GameBoardComponent implements OnInit {
 
       this.penThickness?.push(thicknessObject);
     });
-
-    console.log(this.penThickness)
   }
 
   ngAfterViewInit() {
@@ -76,6 +74,14 @@ export class GameBoardComponent implements OnInit {
     this.context = this.canvas?.getContext("2d")!;
   }
 
+  onResize(event : Event) {
+    this.canvas!.width = window.innerWidth / 2;
+    this.canvas!.height = window.innerHeight / 1.5;
+
+    this.xOffset = this.canvas!.getClientRects()[0].x;
+    this.yOffset = this.canvas!.getClientRects()[0].y;
+  }
+
   initializePen() {
 
     this.context!.lineWidth = this.brushWidth;
@@ -84,14 +90,26 @@ export class GameBoardComponent implements OnInit {
 
   }
 
-  startDrawing(e: MouseEvent) {
+  startDrawing(e: MouseEvent | TouchEvent) {
 
     this.initializePen();
 
-    this.context!.moveTo(e.clientX - this.xOffset, e.clientY - this.yOffset);
+    let clientX : number = 0;
+    let clientY : number = 0;
 
-    const lastX : number = e.clientX - this.xOffset;
-    const lastY : number = e.clientY - this.yOffset;
+    if (!this.isTouchEvent(e)) {
+      clientX = e.clientX;
+      clientY = e.clientY;
+    }
+    else {
+      clientX = e.touches[0].clientX;
+      clientY = e.touches[0].clientY;
+    }
+      
+    this.context!.moveTo(clientX - this.xOffset, clientY - this.yOffset);
+
+    const lastX : number = clientX - this.xOffset;
+    const lastY : number = clientY - this.yOffset;
 
     const points : Position = {
       x: lastX,
@@ -110,15 +128,34 @@ export class GameBoardComponent implements OnInit {
     this.draw(e);
   }
 
-  draw(e: MouseEvent) {
+  private isTouchEvent(event: MouseEvent | TouchEvent): event is TouchEvent {
+    if (event && (event as TouchEvent).touches) {
+      return 'touches' in event;
+    }
+    return false;
+  }
+
+  draw(e: MouseEvent | TouchEvent) {
+
+    let clientX : number = 0;
+    let clientY : number = 0;
+
+    if (!this.isTouchEvent(e)) {
+      clientX = e.clientX;
+      clientY = e.clientY;
+    }
+    else {
+      clientX = e.touches[0].clientX;
+      clientY = e.touches[0].clientY;
+    }
 
     if (this.isDrawing) {
       
-      this.context?.lineTo(e.clientX - this.xOffset, e.clientY - this.yOffset);
+      this.context?.lineTo(clientX - this.xOffset, clientY - this.yOffset);
       this.context?.stroke();
 
-      const lastX : number = e.clientX - this.xOffset;
-      const lastY : number = e.clientY - this.yOffset;
+      const lastX : number = clientX - this.xOffset;
+      const lastY : number = clientY - this.yOffset;
 
       const points : Position = {
         x: lastX,
@@ -132,10 +169,22 @@ export class GameBoardComponent implements OnInit {
     }
   }
 
-  stopDrawing(e : MouseEvent) {
+  stopDrawing(e : MouseEvent | TouchEvent) {
 
-    const lastX : number = e.clientX - this.xOffset;
-    const lastY : number = e.clientY - this.yOffset;
+    let clientX : number = 0;
+    let clientY : number = 0;
+
+    if (!this.isTouchEvent(e)) {
+      clientX = e.clientX;
+      clientY = e.clientY;
+    }
+    else {
+      clientX = e.touches[0].clientX;
+      clientY = e.touches[0].clientY;
+    }
+      
+    const lastX : number = clientX - this.xOffset;
+    const lastY : number = clientY - this.yOffset;
 
     if (!this.isDrawing) {
       return;
