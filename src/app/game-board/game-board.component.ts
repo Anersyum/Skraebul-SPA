@@ -179,8 +179,8 @@ export class GameBoardComponent implements OnInit {
       clientY = e.clientY;
     }
     else {
-      clientX = e.touches[0].clientX;
-      clientY = e.touches[0].clientY;
+      clientX = e.changedTouches[0].clientX;
+      clientY = e.changedTouches[0].clientY;
     }
       
     const lastX : number = clientX - this.xOffset;
