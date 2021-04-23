@@ -14,6 +14,7 @@ export class GameBoardComponent implements OnInit {
   @ViewChild("myCanvas") canvasElement? : ElementRef<HTMLCanvasElement>;
   @ViewChild("colorContainer") colorsContainerElement? : ElementRef<HTMLDivElement>;
   @ViewChild("boardControlContainer") boardControlBtnsContainer? : ElementRef<HTMLDivElement>;
+  wordContainerWidth : number = 0;
   isDrawing : boolean = false;
   canvas? : HTMLCanvasElement;
   color : string = "black";
@@ -67,6 +68,8 @@ export class GameBoardComponent implements OnInit {
 
     this.canvas!.width = window.innerWidth / 2;
     this.canvas!.height = window.innerHeight / 1.5;
+
+    this.wordContainerWidth = this.canvas!.width;
 
     this.xOffset = this.canvas!.getClientRects()[0].x;
     this.yOffset = this.canvas!.getClientRects()[0].y;
