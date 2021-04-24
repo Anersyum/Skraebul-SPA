@@ -1,24 +1,24 @@
 #chat-container {
 
     height: 100%;
-    // border: solid 1px #000;
+    max-width: 250px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 
     .chat-window {
-        width: 200px;
+        width: 250px;
         height: 90%;
         border: solid 1px #000;
         background-color: #fff;
         border-radius: 5px;
         padding: 0 10px;
+        overflow-wrap: break-word;
         overflow-y: auto;
-        white-space: pre-wrap;
     }
 
     .chat-message-box {
-        width: 200px;
+        width: 250px;
         padding: 10px 5px;
         border: 1px solid #000;
         border-radius: 5px;
