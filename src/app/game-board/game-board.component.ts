@@ -14,6 +14,7 @@ export class GameBoardComponent implements OnInit {
   @ViewChild("myCanvas") canvasElement? : ElementRef<HTMLCanvasElement>;
   @ViewChild("colorContainer") colorsContainerElement? : ElementRef<HTMLDivElement>;
   @ViewChild("boardControlContainer") boardControlBtnsContainer? : ElementRef<HTMLDivElement>;
+  chatBoxHeight : number = 0;
   wordContainerWidth : number = 0;
   isDrawing : boolean = false;
   canvas? : HTMLCanvasElement;
@@ -70,6 +71,7 @@ export class GameBoardComponent implements OnInit {
     this.canvas!.height = window.innerHeight / 1.5;
 
     this.wordContainerWidth = this.canvas!.width;
+    this.chatBoxHeight = this.canvas!.height
 
     this.xOffset = this.canvas!.getClientRects()[0].x;
     this.yOffset = this.canvas!.getClientRects()[0].y;
@@ -78,8 +80,14 @@ export class GameBoardComponent implements OnInit {
   }
 
   onResize(event : Event) {
+    this.wordContainerWidth = 0;
+    this.chatBoxHeight = 0;
+    
     this.canvas!.width = window.innerWidth / 2;
     this.canvas!.height = window.innerHeight / 1.5;
+
+    this.wordContainerWidth = this.canvas!.width;
+    this.chatBoxHeight = this.canvas!.height;
 
     this.xOffset = this.canvas!.getClientRects()[0].x;
     this.yOffset = this.canvas!.getClientRects()[0].y;
