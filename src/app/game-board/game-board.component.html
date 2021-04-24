@@ -1,8 +1,4 @@
 <div id="canvas-container">
-  <div  #colorContainer id="color-container">
-    <a *ngFor="let penColor of penColors" [ngClass]="{'color-active': penColor.isActive}" style="--btn-background-color: {{ penColor.name }}" 
-      (click)="changePenColor($event, penColor)" attr.data-color="{{ penColor.name }}" class="color-btn"></a>
-  </div>
   <div style="display: flex; flex-direction: column; position: relative;">
     <app-word-contaner style="width: {{ wordContainerWidth }}px" class="word-container"></app-word-contaner>
     <canvas (window:resize)="onResize($event)" #myCanvas draggable="false" (dragstart)="false;" 
@@ -17,6 +13,10 @@
         <div class="brush-btn" *ngFor="let thickness of penThickness" (click)="changeBrushSize(thickness)" [ngClass]="{'thickness-active': thickness.isActive}">
           <div class="brush-thickness" style="width: {{ thickness.value }}px; height: {{ thickness.value }}px;"></div>
         </div>
+      </div>
+      <div  #colorContainer id="color-container">
+        <a *ngFor="let penColor of penColors" [ngClass]="{'color-active': penColor.isActive}" style="--btn-background-color: {{ penColor.name }}" 
+          (click)="changePenColor($event, penColor)" attr.data-color="{{ penColor.name }}" class="color-btn"></a>
       </div>
     </div>
   </div>
