@@ -11,6 +11,8 @@ export class WordContanerComponent implements OnInit {
 
   word : string = '';
   timer : number = 60;
+  timerInterval : any;
+
   constructor(private wordService: Guess_wordService) { }
 
   ngOnInit() {
@@ -34,7 +36,7 @@ export class WordContanerComponent implements OnInit {
         }
       }
 
-      setInterval(() => {
+      this.timerInterval = setInterval(() => {
         this.timer--;
         console.log(this.timer);
         if (this.timer % 15 == 0) {
@@ -44,7 +46,7 @@ export class WordContanerComponent implements OnInit {
         }
 
         if (this.timer <= 0) {
-          clearInterval();
+          clearInterval(this.timerInterval);
         }
       }, 1000);
     });
