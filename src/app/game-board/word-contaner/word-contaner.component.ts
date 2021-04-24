@@ -9,12 +9,44 @@ import { Guess_wordService } from 'src/app/_services/guess_word.service';
 })
 export class WordContanerComponent implements OnInit {
 
-  word : string = "";
+  word : string = '';
+  timer : number = 60;
   constructor(private wordService: Guess_wordService) { }
 
   ngOnInit() {
+    this.hideWord()
+  }
+
+  private hideWord() {
+
+    let gottenWord : Word;
+
     this.wordService.getWord().subscribe((x : Word) => {
-      this.word = x?.word;
+      gottenWord = x;
+
+      // replace only letters not whitespace or any special character todo
+      this.word = gottenWord.word;
+      
+      for (let i = 0; i < this.word.length; i++) {
+        
+        if (this.word[i].match(/([A-Za-z])+/)) {
+          this.word = this.word.replace(this.word[i], '_');
+        }
+      }
+
+      setInterval(() => {
+        this.timer--;
+        console.log(this.timer);
+        if (this.timer % 15 == 0) {
+
+          let randPos = Math.floor(Math.random() * this.word.length);
+          this.word = this.word.slice(0, randPos) + gottenWord.word[randPos] + this.word.slice(randPos + 1);
+        }
+
+        if (this.timer <= 0) {
+          clearInterval();
+        }
+      }, 1000);
     });
   }
 
