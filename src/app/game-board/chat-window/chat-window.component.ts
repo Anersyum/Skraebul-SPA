@@ -16,6 +16,11 @@ export class ChatWindowComponent implements OnInit {
   }
 
   onKeyEnter(input : HTMLInputElement, chatbox : HTMLDivElement) {
+    
+    if (input.value == '') {
+      return;
+    }
+    
     chatbox.innerHTML += '<p>' + this.username + ':<br />' + input.value + '</p>';
     input.value = '';
     chatbox.scrollTop = chatbox.scrollHeight;
