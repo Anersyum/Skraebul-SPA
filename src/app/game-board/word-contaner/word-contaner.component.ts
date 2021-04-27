@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Word } from 'src/app/_models/Word';
 import { Guess_wordService } from 'src/app/_services/guess_word.service';
 
@@ -7,13 +7,17 @@ import { Guess_wordService } from 'src/app/_services/guess_word.service';
   templateUrl: './word-contaner.component.html',
   styleUrls: ['./word-contaner.component.scss']
 })
-export class WordContanerComponent implements OnInit {
+export class WordContanerComponent implements OnInit, OnDestroy {
 
   word : string = '';
   timer : number = 60;
   timerInterval : any;
 
   constructor(private wordService: Guess_wordService) { }
+
+  ngOnDestroy(): void {
+    clearInterval(this.timerInterval);
+  }
 
   ngOnInit() {
     this.hideWord()
@@ -26,7 +30,6 @@ export class WordContanerComponent implements OnInit {
     this.wordService.getWord().subscribe((x : Word) => {
       gottenWord = x;
 
-      // replace only letters not whitespace or any special character todo
       this.word = gottenWord.word;
       
       for (let i = 0; i < this.word.length; i++) {
