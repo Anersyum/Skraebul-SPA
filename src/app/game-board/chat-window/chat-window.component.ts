@@ -11,7 +11,6 @@ import { UserService } from 'src/app/_services/user.service';
 export class ChatWindowComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChild('chatBox') chatbox? : ElementRef<HTMLDivElement>;
-  messages : string = '';
   username : string = '<strong>Amor</strong>';
 
   constructor(private userservice : UserService, private chatservice : ChatService) { }

@@ -19,20 +19,7 @@ export class ChatService {
 
   registerEvents(element : HTMLDivElement | undefined) {
     this.hubConnection.on("RecieveMessage", (message : Chat) => {
-
-      const p = document.createElement('p');
-      const strong = document.createElement('strong');
-      const br = document.createElement('br');
-      const span = document.createElement('span');
-
-      strong.innerText = message.username + ':';
-      span.innerText = message.message;
-      
-      p.appendChild(strong);
-      p.appendChild(br);
-      p.appendChild(span);
-
-      element!.appendChild(p);
+      element!.appendChild(this.createChatBubble(message));
       element!.scrollTop = element!.scrollHeight;
     });
 
@@ -42,6 +29,22 @@ export class ChatService {
       },
       error => console.error(error)
     );
+  }
+
+  private createChatBubble(message : Chat) : HTMLParagraphElement {
+    const p = document.createElement('p');
+    const strong = document.createElement('strong');
+    const br = document.createElement('br');
+    const span = document.createElement('span');
+
+    strong.innerText = message.username + ':';
+    span.innerText = message.message;
+    
+    p.appendChild(strong);
+    p.appendChild(br);
+    p.appendChild(span);
+
+    return p;
   }
 
   sendMessage(message : Chat) {

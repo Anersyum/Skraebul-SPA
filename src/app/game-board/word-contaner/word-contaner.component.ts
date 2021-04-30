@@ -48,7 +48,6 @@ export class WordContanerComponent implements OnInit, OnDestroy {
       this.timer--;
       console.log(this.timer);
       if (this.timer % 15 == 0) {
-
         let randPos = Math.floor(Math.random() * this.word.length);
         this.word = this.word.slice(0, randPos) + gottenWord.word[randPos] + this.word.slice(randPos + 1);
       }
