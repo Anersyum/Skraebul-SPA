@@ -8,6 +8,7 @@ import { WordContanerComponent } from './game-board/word-contaner/word-contaner.
 import { HttpClientModule } from '@angular/common/http';
 import { ChatWindowComponent } from './game-board/chat-window/chat-window.component';
 import { HomeComponent } from './home/home.component';
+import { PointsBoardComponent } from './game-board/points-board/points-board.component';
 
 @NgModule({
   declarations: [		
@@ -15,7 +16,8 @@ import { HomeComponent } from './home/home.component';
       GameBoardComponent,
       WordContanerComponent,
       ChatWindowComponent,
-      HomeComponent
+      HomeComponent,
+      PointsBoardComponent
    ],
   imports: [
     BrowserModule,
