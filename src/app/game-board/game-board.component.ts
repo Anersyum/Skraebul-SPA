@@ -1,7 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Color } from '../_models/Color';
 import { Position } from '../_models/Position';
 import { Thickness } from '../_models/Thickness';
+import { ChatService } from '../_services/chat.service';
+import { ChatWindowComponent } from './chat-window/chat-window.component';
+import { PointsBoardComponent } from './points-board/points-board.component';
 
 @Component({
   selector: 'app-game-board',
@@ -9,11 +12,13 @@ import { Thickness } from '../_models/Thickness';
   styleUrls: ['./game-board.component.scss']
 })
 
-export class GameBoardComponent implements OnInit {
+export class GameBoardComponent implements OnInit, AfterViewInit {
 
   @ViewChild("myCanvas") canvasElement? : ElementRef<HTMLCanvasElement>;
   @ViewChild("colorContainer") colorsContainerElement? : ElementRef<HTMLDivElement>;
   @ViewChild("boardControlContainer") boardControlBtnsContainer? : ElementRef<HTMLDivElement>;
+  @ViewChild("chatWindowComponent") chatWindowComponent? : ChatWindowComponent;
+  @ViewChild("pointsBoardComponent") pointsBoardComponent? : PointsBoardComponent;
   chatBoxHeight : number = 0;
   wordContainerWidth : number = 0;
   isDrawing : boolean = false;
@@ -34,7 +39,7 @@ export class GameBoardComponent implements OnInit {
   // 0 - start 1 - drawing 2 - end 3 - clear board
   undoStack : Array<Array<Position>> = [];
 
-  constructor() { }
+  constructor(private chatservice : ChatService) { }
 
   ngOnInit() {
     this.penColorsArray.forEach((color : string) => {
@@ -77,6 +82,9 @@ export class GameBoardComponent implements OnInit {
     this.yOffset = this.canvas!.getClientRects()[0].y;
 
     this.context = this.canvas?.getContext("2d")!;
+
+    this.chatservice.registerEvents(this.chatWindowComponent?.chatbox?.nativeElement,
+      this.pointsBoardComponent?.pointsBoard?.nativeElement);
   }
 
   onResize(event : Event) {

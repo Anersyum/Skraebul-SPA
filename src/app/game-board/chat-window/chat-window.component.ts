@@ -11,12 +11,11 @@ import { UserService } from 'src/app/_services/user.service';
 export class ChatWindowComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChild('chatBox') chatbox? : ElementRef<HTMLDivElement>;
-  username : string = '<strong>Amor</strong>';
+  username : string = '';
 
   constructor(private userservice : UserService, private chatservice : ChatService) { }
   
   ngAfterViewInit(): void {
-    this.chatservice.registerEvents(this.chatbox?.nativeElement);
   }
 
   ngOnInit() : void {
