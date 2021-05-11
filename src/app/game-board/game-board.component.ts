@@ -327,4 +327,8 @@ export class GameBoardComponent implements OnInit, AfterViewInit {
 
     this.brushWidth = this.selectedThickness = penThickness.value;
   }
+
+  disconnect() {
+    this.chatservice.disconnect();
+  }
 }

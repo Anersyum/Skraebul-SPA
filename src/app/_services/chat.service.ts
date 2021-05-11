@@ -26,9 +26,14 @@ export class ChatService {
       chatWindow!.scrollTop = chatWindow!.scrollHeight;
     });
 
-    this.hubConnection.on("Connected", (username : string) => {
-      pointsWindow?.appendChild(this.createPointsBubble(username));
+    this.hubConnection.on("Connected", (users : string, username : string) => {
+      pointsWindow?.firstChild?.replaceWith(this.createPointsBubble(users));
       chatWindow?.appendChild(this.createConnectedBubble(username));
+    });
+
+    this.hubConnection.on("Disconnected", (users : string, username : string) => {
+      pointsWindow?.firstChild?.replaceWith(this.createPointsBubble(users));
+      chatWindow?.appendChild(this.createConnectedBubble(username, false));
     });
 
     this.hubConnection.start().then(
@@ -70,14 +75,20 @@ export class ChatService {
     return p;
   }
 
-  private createConnectedBubble(username : string) {
+  private createConnectedBubble(username : string, connected : boolean = true) {
     
+    const message = (connected) ? 'connected' : 'disconnected';
     const p = document.createElement("p");
-    p.innerText = username + ' connected!';
+    p.innerText = username + ' ' + message + '!';
 
     return p;
   }
+  
   sendMessage(message : Chat) : void {
     this.hubConnection.invoke('SendMessage', message.username, message.message).catch((err : any) => { console.error(err.toString())});
+  }
+
+  disconnect() : void {
+    this.hubConnection.stop();
   }
 }
