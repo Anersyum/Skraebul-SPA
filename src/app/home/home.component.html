@@ -1,4 +1,4 @@
 <div style="width: 100%; height: 100%;">
-  <input #username type="text" />
-  <a routerLink="/gameboard" (click)="onPlay(username)">Play</a>
+  <input #usernameInput type="text" value="{{ this.username }}"/>
+  <a style="cursor: pointer; color: blue;" (click)="onPlay(usernameInput)">Play</a>
 </div>

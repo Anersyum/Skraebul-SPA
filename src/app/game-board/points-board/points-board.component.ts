@@ -11,7 +11,7 @@ export class PointsBoardComponent implements OnInit, AfterViewInit {
 
   @ViewChild("pointsBoard") pointsBoard? : ElementRef<HTMLDivElement>;
 
-  constructor(private chatservice : ChatService) { }
+  constructor() { }
 
   ngAfterViewInit(): void {
     

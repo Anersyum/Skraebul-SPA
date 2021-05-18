@@ -8,7 +8,7 @@ import { UserService } from 'src/app/_services/user.service';
   templateUrl: './chat-window.component.html',
   styleUrls: ['./chat-window.component.scss']
 })
-export class ChatWindowComponent implements OnInit, OnDestroy, AfterViewInit {
+export class ChatWindowComponent implements OnInit {
 
   @ViewChild('chatBox') chatbox? : ElementRef<HTMLDivElement>;
   username : string = '';
@@ -36,9 +36,5 @@ export class ChatWindowComponent implements OnInit, OnDestroy, AfterViewInit {
     this.chatservice.sendMessage(message);
 
     input.value = '';
-  }
-
-  ngOnDestroy(): void {
-    this.userservice.deleteName();
   }
 }

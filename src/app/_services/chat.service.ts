@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
+import { Injectable, OnDestroy } from '@angular/core';
+import { HubConnection, HubConnectionBuilder, LogLevel, RetryContext } from '@microsoft/signalr';
 import { Chat } from '../_models/Chat';
 import { UserService } from './user.service';
 
@@ -8,35 +8,39 @@ import { UserService } from './user.service';
 })
 export class ChatService {
 
-  private hubConnection : HubConnection;
+  private hubConnection : HubConnection | null = null;
 
-  constructor(private userservice : UserService) {
-    const username = this.userservice.getName();
+  constructor(private userservice : UserService) {}
 
+  connect() {
+    let username = this.userservice.getName();
+    
     this.hubConnection = new HubConnectionBuilder()
-      .withUrl("http://localhost:5000/chathub?username=" + username)
-      .withAutomaticReconnect()
-      .configureLogging(LogLevel.Information)
-      .build();
-   }
+    .withUrl("http://localhost:5000/chathub?username=" + username)
+    .withAutomaticReconnect()
+    .configureLogging(LogLevel.Information)
+    .build();
+  }
 
   registerEvents(chatWindow : HTMLDivElement | undefined, pointsWindow : HTMLDivElement | undefined) : void {
-    this.hubConnection.on("RecieveMessage", (message : Chat) => {
+    this.hubConnection?.on("RecieveMessage", (message : Chat) => {
       chatWindow!.appendChild(this.createChatBubble(message));
       chatWindow!.scrollTop = chatWindow!.scrollHeight;
     });
 
-    this.hubConnection.on("Connected", (users : string, username : string) => {
+    this.hubConnection?.on("Connected", (users : string, username : string) => {
       pointsWindow?.firstChild?.replaceWith(this.createPointsBubble(users));
       chatWindow?.appendChild(this.createConnectedBubble(username));
     });
 
-    this.hubConnection.on("Disconnected", (users : string, username : string) => {
+    this.hubConnection?.on("Disconnected", (users : string, username : string) => {
       pointsWindow?.firstChild?.replaceWith(this.createPointsBubble(users));
       chatWindow?.appendChild(this.createConnectedBubble(username, false));
     });
+  }
 
-    this.hubConnection.start().then(
+  startConnection() {
+    this.hubConnection?.start().then(
       () => {
         console.log("Started");
       },

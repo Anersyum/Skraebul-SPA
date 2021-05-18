@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { UserService } from '../_services/user.service';
 
 @Component({
@@ -8,12 +9,15 @@ import { UserService } from '../_services/user.service';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private userservice : UserService) { }
+  username : string = "";
+  constructor(private userservice : UserService, private router : Router) { }
 
   ngOnInit() {
+    this.username = this.userservice.getName();
   }
 
   onPlay(input : HTMLInputElement) {
     this.userservice.setName(input.value);
+    this.router.navigateByUrl("/gameboard");
   }
 }

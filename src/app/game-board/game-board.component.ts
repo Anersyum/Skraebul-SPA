@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Color } from '../_models/Color';
 import { Position } from '../_models/Position';
 import { Thickness } from '../_models/Thickness';
@@ -12,7 +12,7 @@ import { PointsBoardComponent } from './points-board/points-board.component';
   styleUrls: ['./game-board.component.scss']
 })
 
-export class GameBoardComponent implements OnInit, AfterViewInit {
+export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild("myCanvas") canvasElement? : ElementRef<HTMLCanvasElement>;
   @ViewChild("colorContainer") colorsContainerElement? : ElementRef<HTMLDivElement>;
@@ -40,8 +40,13 @@ export class GameBoardComponent implements OnInit, AfterViewInit {
   undoStack : Array<Array<Position>> = [];
 
   constructor(private chatservice : ChatService) { }
+  
+  ngOnDestroy(): void {
+    this.chatservice.disconnect();
+  }
 
   ngOnInit() {
+    this.chatservice.connect();
     this.penColorsArray.forEach((color : string) => {
 
       const colorObject : Color = {
@@ -64,6 +69,9 @@ export class GameBoardComponent implements OnInit, AfterViewInit {
       }
 
       this.penThickness?.push(thicknessObject);
+
+      this.wordContainerWidth = window.innerWidth / 2;
+      this.chatBoxHeight = window.innerHeight / 1.5
     });
   }
 
@@ -75,9 +83,6 @@ export class GameBoardComponent implements OnInit, AfterViewInit {
     this.canvas!.width = window.innerWidth / 2;
     this.canvas!.height = window.innerHeight / 1.5;
 
-    this.wordContainerWidth = this.canvas!.width;
-    this.chatBoxHeight = this.canvas!.height
-
     this.xOffset = this.canvas!.getClientRects()[0].x;
     this.yOffset = this.canvas!.getClientRects()[0].y;
 
@@ -85,6 +90,8 @@ export class GameBoardComponent implements OnInit, AfterViewInit {
 
     this.chatservice.registerEvents(this.chatWindowComponent?.chatbox?.nativeElement,
       this.pointsBoardComponent?.pointsBoard?.nativeElement);
+
+    this.chatservice.startConnection();
   }
 
   onResize(event : Event) {
@@ -326,9 +333,5 @@ export class GameBoardComponent implements OnInit, AfterViewInit {
     penThickness.isActive = true;
 
     this.brushWidth = this.selectedThickness = penThickness.value;
-  }
-
-  disconnect() {
-    this.chatservice.disconnect();
   }
 }
