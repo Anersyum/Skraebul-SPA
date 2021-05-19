@@ -72,13 +72,17 @@ export class GameService {
   private createPointsBubble(username : string) : HTMLParagraphElement {
 
     const p = document.createElement('p');
-    const span = document.createElement('span');
-    const br = document.createElement('br');
+    const users = username.split('|');
 
-    span.innerText = username;
+    for (let i = 0; i < users.length - 1; i++) {
+      
+      const userParagraph = document.createElement('p');
+  
+      userParagraph.innerText = users[i];
+      userParagraph.style.margin = '5px';
 
-    p.appendChild(span);
-    p.appendChild(br);
+      p.appendChild(userParagraph);
+    }
 
     return p;
   }
