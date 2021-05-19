@@ -80,11 +80,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.canvas = this.canvasElement?.nativeElement;
     this.colorsContanier = this.colorsContainerElement?.nativeElement;
 
-    this.canvas!.width = window.innerWidth / 2;
-    this.canvas!.height = window.innerHeight / 1.5;
-
-    this.xOffset = this.canvas!.getClientRects()[0].x;
-    this.yOffset = this.canvas!.getClientRects()[0].y;
+    this.createCanvasDimensions();
 
     this.context = this.canvas?.getContext("2d")!;
 
@@ -94,18 +90,22 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.chatservice.startConnection();
   }
 
-  onResize(event : Event) {
-    this.wordContainerWidth = 0;
-    this.chatBoxHeight = 0;
-    
+  private createCanvasDimensions() {
     this.canvas!.width = window.innerWidth / 2;
     this.canvas!.height = window.innerHeight / 1.5;
 
-    this.wordContainerWidth = this.canvas!.width;
-    this.chatBoxHeight = this.canvas!.height;
-
     this.xOffset = this.canvas!.getClientRects()[0].x;
     this.yOffset = this.canvas!.getClientRects()[0].y;
+  }
+
+  onResize() {
+    this.wordContainerWidth = 0;
+    this.chatBoxHeight = 0;
+
+    this.createCanvasDimensions();
+
+    this.wordContainerWidth = this.canvas!.width;
+    this.chatBoxHeight = this.canvas!.height;
   }
 
   initializePen() {

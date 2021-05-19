@@ -1,5 +1,5 @@
-import { Injectable, OnDestroy } from '@angular/core';
-import { HubConnection, HubConnectionBuilder, LogLevel, RetryContext } from '@microsoft/signalr';
+import { Injectable } from '@angular/core';
+import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { Chat } from '../_models/Chat';
 import { UserService } from './user.service';
 
@@ -24,7 +24,7 @@ export class ChatService {
 
   registerEvents(chatWindow : HTMLDivElement | undefined, pointsWindow : HTMLDivElement | undefined) : void {
     this.hubConnection?.on("RecieveMessage", (message : Chat) => {
-      chatWindow!.appendChild(this.createChatBubble(message));
+      chatWindow?.appendChild(this.createChatBubble(message));
       chatWindow!.scrollTop = chatWindow!.scrollHeight;
     });
 
@@ -89,10 +89,10 @@ export class ChatService {
   }
   
   sendMessage(message : Chat) : void {
-    this.hubConnection.invoke('SendMessage', message.username, message.message).catch((err : any) => { console.error(err.toString())});
+    this.hubConnection?.invoke('SendMessage', message.username, message.message).catch((err : any) => { console.error(err.toString()) });
   }
 
   disconnect() : void {
-    this.hubConnection.stop();
+    this.hubConnection?.stop();
   }
 }

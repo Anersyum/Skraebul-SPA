@@ -3,7 +3,7 @@
   <app-points-board #pointsBoardComponent style="height: {{ chatBoxHeight }}px; margin-left: 10px; margin-top: -40px;"></app-points-board>
   <div style="display: flex; flex-direction: column; position: relative;">
     <app-word-contaner style="width: {{ wordContainerWidth }}px" class="word-container"></app-word-contaner>
-    <canvas (window:resize)="onResize($event)" #myCanvas draggable="false" (dragstart)="false;" 
+    <canvas #myCanvas (window:resize)="onResize()" draggable="false" (dragstart)="false;" 
       (mouseleave)="stopDrawing($event)" (mousedown)="startDrawing($event)" (mousemove)="draw($event)" 
       (mouseup)="stopDrawing($event)" (touchstart)="startDrawing($event)" (touchmove)="draw($event)" (touchend)="stopDrawing($event)"></canvas>
     <div #boardControlContainer id="board-control-btns-container">

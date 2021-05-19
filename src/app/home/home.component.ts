@@ -17,6 +17,7 @@ export class HomeComponent implements OnInit {
   }
 
   onPlay(input : HTMLInputElement) {
+    
     this.userservice.setName(input.value);
     this.router.navigateByUrl("/gameboard");
   }
