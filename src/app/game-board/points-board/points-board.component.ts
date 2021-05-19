@@ -1,6 +1,5 @@
 import { ElementRef } from '@angular/core';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { ChatService } from 'src/app/_services/chat.service';
 
 @Component({
   selector: 'app-points-board',

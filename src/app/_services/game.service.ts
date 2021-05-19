@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
-import { Chat } from '../_models/Chat';
+import { Message } from '../_models/Message';
 import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ChatService {
+export class GameService {
 
   private hubConnection : HubConnection | null = null;
 
@@ -16,24 +16,24 @@ export class ChatService {
     let username = this.userservice.getName();
     
     this.hubConnection = new HubConnectionBuilder()
-    .withUrl("http://localhost:5000/chathub?username=" + username)
+    .withUrl('http://localhost:5000/chathub?username=' + username)
     .withAutomaticReconnect()
     .configureLogging(LogLevel.Information)
     .build();
   }
 
   registerEvents(chatWindow : HTMLDivElement | undefined, pointsWindow : HTMLDivElement | undefined) : void {
-    this.hubConnection?.on("RecieveMessage", (message : Chat) => {
+    this.hubConnection?.on('RecieveMessage', (message : Message) => {
       chatWindow?.appendChild(this.createChatBubble(message));
       chatWindow!.scrollTop = chatWindow!.scrollHeight;
     });
 
-    this.hubConnection?.on("Connected", (users : string, username : string) => {
+    this.hubConnection?.on('Connected', (users : string, username : string) => {
       pointsWindow?.firstChild?.replaceWith(this.createPointsBubble(users));
       chatWindow?.appendChild(this.createConnectedBubble(username));
     });
 
-    this.hubConnection?.on("Disconnected", (users : string, username : string) => {
+    this.hubConnection?.on('Disconnected', (users : string, username : string) => {
       pointsWindow?.firstChild?.replaceWith(this.createPointsBubble(users));
       chatWindow?.appendChild(this.createConnectedBubble(username, false));
     });
@@ -42,13 +42,14 @@ export class ChatService {
   startConnection() {
     this.hubConnection?.start().then(
       () => {
-        console.log("Started");
+        console.log('Started');
       },
       error => console.error(error)
     );
   }
 
-  private createChatBubble(message : Chat) : HTMLParagraphElement {
+  private createChatBubble(message : Message) : HTMLParagraphElement {
+
     const p = document.createElement('p');
     const strong = document.createElement('strong');
     const br = document.createElement('br');
@@ -61,20 +62,23 @@ export class ChatService {
     p.appendChild(br);
     p.appendChild(span);
 
+    p.style.margin = '0';
+    p.style.padding = '0';
+    p.style.marginBottom = '5px';
+
     return p;
   }
 
   private createPointsBubble(username : string) : HTMLParagraphElement {
 
-    const p = document.createElement("p");
-    const span = document.createElement("span");
-    const br = document.createElement("br");
-    const span2 = document.createElement("span");
+    const p = document.createElement('p');
+    const span = document.createElement('span');
+    const br = document.createElement('br');
 
     span.innerText = username;
-    span2.innerText = "0";
 
-    p.appendChild(span).appendChild(br).appendChild(span2);
+    p.appendChild(span);
+    p.appendChild(br);
 
     return p;
   }
@@ -82,13 +86,13 @@ export class ChatService {
   private createConnectedBubble(username : string, connected : boolean = true) {
     
     const message = (connected) ? 'connected' : 'disconnected';
-    const p = document.createElement("p");
+    const p = document.createElement('p');
     p.innerText = username + ' ' + message + '!';
 
     return p;
   }
   
-  sendMessage(message : Chat) : void {
+  sendMessage(message : Message) : void {
     this.hubConnection?.invoke('SendMessage', message.username, message.message).catch((err : any) => { console.error(err.toString()) });
   }
 

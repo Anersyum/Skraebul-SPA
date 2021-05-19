@@ -2,7 +2,7 @@ import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } fr
 import { Color } from '../_models/Color';
 import { Position } from '../_models/Position';
 import { Thickness } from '../_models/Thickness';
-import { ChatService } from '../_services/chat.service';
+import { GameService } from '../_services/game.service';
 import { ChatWindowComponent } from './chat-window/chat-window.component';
 import { PointsBoardComponent } from './points-board/points-board.component';
 
@@ -39,14 +39,14 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
   // 0 - start 1 - drawing 2 - end 3 - clear board
   undoStack : Array<Array<Position>> = [];
 
-  constructor(private chatservice : ChatService) { }
+  constructor(private gameService : GameService) { }
   
   ngOnDestroy(): void {
-    this.chatservice.disconnect();
+    this.gameService.disconnect();
   }
 
   ngOnInit() {
-    this.chatservice.connect();
+    this.gameService.connect();
     this.penColorsArray.forEach((color : string) => {
 
       const colorObject : Color = {
@@ -84,10 +84,10 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.context = this.canvas?.getContext("2d")!;
 
-    this.chatservice.registerEvents(this.chatWindowComponent?.chatbox?.nativeElement,
+    this.gameService.registerEvents(this.chatWindowComponent?.chatbox?.nativeElement,
       this.pointsBoardComponent?.pointsBoard?.nativeElement);
 
-    this.chatservice.startConnection();
+    this.gameService.startConnection();
   }
 
   private createCanvasDimensions() {

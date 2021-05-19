@@ -1,4 +1,4 @@
-export interface Chat {
+export interface Message {
     username : string,
     message : string
 };

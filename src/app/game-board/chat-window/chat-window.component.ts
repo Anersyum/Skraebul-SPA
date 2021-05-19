@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Chat } from 'src/app/_models/Chat';
-import { ChatService } from 'src/app/_services/chat.service';
+import { Message } from 'src/app/_models/Message';
+import { GameService } from 'src/app/_services/game.service';
 import { UserService } from 'src/app/_services/user.service';
 
 @Component({
@@ -13,13 +13,13 @@ export class ChatWindowComponent implements OnInit {
   @ViewChild('chatBox') chatbox? : ElementRef<HTMLDivElement>;
   username : string = '';
 
-  constructor(private userservice : UserService, private chatservice : ChatService) { }
+  constructor(private userService : UserService, private gameService : GameService) { }
   
   ngAfterViewInit(): void {
   }
 
   ngOnInit() : void {
-    this.username = this.userservice.getName();
+    this.username = this.userService.getName();
   }
 
   onKeyEnter(input : HTMLInputElement) : void {
@@ -28,12 +28,12 @@ export class ChatWindowComponent implements OnInit {
       return;
     }
 
-    const message : Chat = {
+    const message : Message = {
       username : this.username,
       message : input.value
     };
 
-    this.chatservice.sendMessage(message);
+    this.gameService.sendMessage(message);
 
     input.value = '';
   }
