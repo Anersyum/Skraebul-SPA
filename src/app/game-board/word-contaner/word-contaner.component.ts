@@ -20,7 +20,7 @@ export class WordContanerComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.hideWord()
+    this.hideWord();
   }
 
   private hideWord() {

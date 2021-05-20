@@ -1,5 +1,8 @@
+import { Position } from '../_models/Position';
 import { Injectable } from '@angular/core';
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
+import { GameBoardComponent } from '../game-board/game-board.component';
+import { GameManager } from '../_models/GameManager';
 import { Message } from '../_models/Message';
 import { UserService } from './user.service';
 
@@ -9,6 +12,7 @@ import { UserService } from './user.service';
 export class GameService {
 
   private hubConnection : HubConnection | null = null;
+  public gameManager : GameManager | null = null;
 
   constructor(private userservice : UserService) {}
 
@@ -22,7 +26,7 @@ export class GameService {
     .build();
   }
 
-  registerEvents(chatWindow : HTMLDivElement | undefined, pointsWindow : HTMLDivElement | undefined) : void {
+  registerEvents(chatWindow : HTMLDivElement | undefined, pointsWindow : HTMLDivElement | undefined, gameBoardComponent : GameBoardComponent) : void {
     this.hubConnection?.on('RecieveMessage', (message : Message) => {
       chatWindow?.appendChild(this.createChatBubble(message));
       chatWindow!.scrollTop = chatWindow!.scrollHeight;
@@ -37,6 +41,25 @@ export class GameService {
       pointsWindow?.firstChild?.replaceWith(this.createPointsBubble(users));
       chatWindow?.appendChild(this.createConnectedBubble(username, false));
     });
+
+    this.hubConnection?.on("RecieveMove", (position : Position) => {
+      console.log(position, "meho");
+      if (position.drawing == 0) {
+          gameBoardComponent.color = position.brushColor as string;
+          gameBoardComponent.brushWidth = position.brushWidth as number;
+          gameBoardComponent.initializePen();
+
+          gameBoardComponent.context?.moveTo(position.x, position.y);
+          gameBoardComponent.context?.beginPath();
+      }
+      else if (position.drawing == 1) {
+        gameBoardComponent.context?.lineTo(position.x, position.y);
+        gameBoardComponent.context?.stroke();
+      }
+      else if (position.drawing == 3) {
+        gameBoardComponent.context?.clearRect(0, 0, gameBoardComponent.canvas!.width, gameBoardComponent.canvas!.height);
+      }
+    })
   }
 
   startConnection() {
@@ -97,10 +120,14 @@ export class GameService {
   }
   
   sendMessage(message : Message) : void {
-    this.hubConnection?.invoke('SendMessage', message.username, message.message).catch((err : any) => { console.error(err.toString()) });
+    this.hubConnection?.invoke('SendMessage', message.username, message.message).catch((err : any) => { console.error(err.toString()); });
   }
 
   disconnect() : void {
     this.hubConnection?.stop();
   }
+
+  sendMove(position : Position) : void {
+    this.hubConnection?.invoke('SendMove', position).catch((err : any) => { console.error(err);  }) ;
+  } 
 }

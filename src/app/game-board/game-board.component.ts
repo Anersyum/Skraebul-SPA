@@ -5,6 +5,7 @@ import { Thickness } from '../_models/Thickness';
 import { GameService } from '../_services/game.service';
 import { ChatWindowComponent } from './chat-window/chat-window.component';
 import { PointsBoardComponent } from './points-board/points-board.component';
+import { WordContanerComponent } from './word-contaner/word-contaner.component';
 
 @Component({
   selector: 'app-game-board',
@@ -39,7 +40,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
   // 0 - start 1 - drawing 2 - end 3 - clear board
   undoStack : Array<Array<Position>> = [];
 
-  constructor(private gameService : GameService) { }
+  constructor(public gameService : GameService) { }
   
   ngOnDestroy(): void {
     this.gameService.disconnect();
@@ -85,7 +86,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.context = this.canvas?.getContext("2d")!;
 
     this.gameService.registerEvents(this.chatWindowComponent?.chatbox?.nativeElement,
-      this.pointsBoardComponent?.pointsBoard?.nativeElement);
+      this.pointsBoardComponent?.pointsBoard?.nativeElement, this);
 
     this.gameService.startConnection();
   }
@@ -151,6 +152,8 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
     
     this.context?.beginPath();
     
+    this.gameService.sendMove(points);
+
     this.draw(e);
   }
 
@@ -192,6 +195,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
       };
 
       this.addToDrawingStack(points);
+      this.gameService.sendMove(points);
     }
   }
 
@@ -226,6 +230,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.addToDrawingStack(points);
     this.isDrawing = false;
+    this.gameService.sendMove(points);
   }
 
   changePenColor(event : MouseEvent, color : Color) {
