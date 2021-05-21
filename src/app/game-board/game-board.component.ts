@@ -152,9 +152,18 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
     
     this.context?.beginPath();
     
-    this.gameService.sendMove(points);
+    this.gameService.sendMove({
+      x: clientX,
+      y: clientY,
+      drawing: points.drawing,
+      brushColor: points.brushColor,
+      brushWidth: points.brushWidth,
+      canvasWidth: this.canvas?.width as number,
+      canvasHeight: this.canvas?.height
+    });
 
     this.draw(e);
+    console.log(clientX, "klijento x-u");
   }
 
   private isTouchEvent(event: MouseEvent | TouchEvent): event is TouchEvent {
@@ -195,7 +204,17 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
       };
 
       this.addToDrawingStack(points);
-      this.gameService.sendMove(points);
+      this.gameService.sendMove({
+        x: clientX,
+        y: clientY,
+        drawing: points.drawing,
+        brushColor: points.brushColor,
+        brushWidth: points.brushWidth,
+        canvasWidth: this.canvas?.width as number,
+        canvasHeight: this.canvas?.height
+      });
+
+      console.log(e, "offsetu");
     }
   }
 
@@ -230,7 +249,15 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.addToDrawingStack(points);
     this.isDrawing = false;
-    this.gameService.sendMove(points);
+    this.gameService.sendMove({
+      x: clientX,
+      y: clientY,
+      drawing: points.drawing,
+      brushColor: points.brushColor,
+      brushWidth: points.brushWidth,
+      canvasWidth: this.canvas?.width as number,
+      canvasHeight: this.canvas?.height
+    });
   }
 
   changePenColor(event : MouseEvent, color : Color) {

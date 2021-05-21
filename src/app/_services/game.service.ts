@@ -1,4 +1,5 @@
 import { Position } from '../_models/Position';
+import { Move } from '../_models/Move';
 import { Injectable } from '@angular/core';
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { GameBoardComponent } from '../game-board/game-board.component';
@@ -42,18 +43,46 @@ export class GameService {
       chatWindow?.appendChild(this.createConnectedBubble(username, false));
     });
 
-    this.hubConnection?.on("RecieveMove", (position : Position) => {
-      console.log(position, "meho");
+    this.hubConnection?.on("RecieveMove", (position : Move) => {
+      console.log(gameBoardComponent.xOffset, "meho");
+      console.log(position.canvasWidth, "dammit");
+      let multiply : boolean = false;
+      let ratioX : number = position.canvasWidth / (gameBoardComponent.canvas?.width as number);
+      let ratioY : number = (position.canvasHeight as number) / (gameBoardComponent.canvas?.height as number);
+
+      if (position.canvasWidth < (gameBoardComponent.canvas?.width as number)) {
+        multiply = true;
+        ratioX = (gameBoardComponent.canvas?.width as number) / position.canvasWidth;
+        ratioY = (gameBoardComponent.canvas?.height as number) / (position.canvasHeight as number);
+      }
+
+      let positionX : number = position.x;
+      let positionY : number = position.y;
+
+      if (multiply) {
+
+        positionX *= ratioX;
+        positionY *= ratioY;
+      }
+      else {
+        positionX /= ratioX;
+        positionY /= ratioY;
+      }
+
       if (position.drawing == 0) {
           gameBoardComponent.color = position.brushColor as string;
           gameBoardComponent.brushWidth = position.brushWidth as number;
           gameBoardComponent.initializePen();
 
-          gameBoardComponent.context?.moveTo(position.x, position.y);
+          gameBoardComponent.context?.moveTo(
+            positionX - gameBoardComponent.xOffset,
+            positionY - gameBoardComponent.yOffset);
           gameBoardComponent.context?.beginPath();
       }
       else if (position.drawing == 1) {
-        gameBoardComponent.context?.lineTo(position.x, position.y);
+        gameBoardComponent.context?.lineTo(
+          positionX - gameBoardComponent.xOffset,
+          positionY - gameBoardComponent.yOffset);
         gameBoardComponent.context?.stroke();
       }
       else if (position.drawing == 3) {
@@ -127,7 +156,7 @@ export class GameService {
     this.hubConnection?.stop();
   }
 
-  sendMove(position : Position) : void {
+  sendMove(position : Move) : void {
     this.hubConnection?.invoke('SendMove', position).catch((err : any) => { console.error(err);  }) ;
   } 
 }
