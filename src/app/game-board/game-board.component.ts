@@ -23,6 +23,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
   chatBoxHeight : number = 0;
   wordContainerWidth : number = 0;
   isDrawing : boolean = false;
+  canDraw : boolean = false;
   canvas? : HTMLCanvasElement;
   color : string = "black";
   brushWidth : number = 5;
@@ -119,6 +120,10 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   startDrawing(e: MouseEvent | TouchEvent) {
 
+    if (!this.canDraw) {
+      return;
+    }
+
     this.initializePen();
 
     const eventCoordinates : Array<number> = this.getEventCoordinates(e);
@@ -167,6 +172,10 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   draw(e: MouseEvent | TouchEvent) {
 
+    if (!this.canDraw) {
+      return;
+    }
+
     const eventCoordinates : Array<number> = this.getEventCoordinates(e);
     const clientX : number = eventCoordinates[0];
     const clientY : number = eventCoordinates[1];
@@ -202,6 +211,10 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   stopDrawing(e : MouseEvent | TouchEvent) {
+
+    if (!this.canDraw) {
+      return;
+    }
 
     const eventCoordinates : Array<number> = this.getEventCoordinates(e);
     const clientX : number = eventCoordinates[0];
@@ -382,5 +395,9 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
     penThickness.isActive = true;
 
     this.brushWidth = this.selectedThickness = penThickness.value;
+  }
+
+  startGame() {
+    this.canDraw = true;
   }
 }
