@@ -9,7 +9,7 @@
     <div #boardControlContainer id="board-control-btns-container">
       <div id="game-managment-btns-container">
         <button (click)="clearBoard()">Clear</button>
-        <button (click)="undo()">Undo</button>
+        <button (click)="undo(false)">Undo</button>
       </div>
       <div id="brush-thickness-container">
         <div class="brush-btn" *ngFor="let thickness of penThickness" (click)="changeBrushSize(thickness)" [ngClass]="{'thickness-active': thickness.isActive}">

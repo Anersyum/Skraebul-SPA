@@ -13,11 +13,10 @@ import { UserService } from './user.service';
 export class GameService {
 
   private hubConnection : HubConnection | null = null;
-  public gameManager : GameManager | null = null;
 
   constructor(private userservice : UserService) {}
 
-  connect() {
+  connect() : void {
     let username = this.userservice.getName();
     
     this.hubConnection = new HubConnectionBuilder()
@@ -43,55 +42,75 @@ export class GameService {
       chatWindow?.appendChild(this.createConnectedBubble(username, false));
     });
 
-    this.hubConnection?.on("RecieveMove", (position : Move) => {
-      console.log(gameBoardComponent.xOffset, "meho");
-      console.log(position.canvasWidth, "dammit");
-      let multiply : boolean = false;
-      let ratioX : number = position.canvasWidth / (gameBoardComponent.canvas?.width as number);
-      let ratioY : number = (position.canvasHeight as number) / (gameBoardComponent.canvas?.height as number);
+    this.hubConnection?.on("RecieveMove", (move : Move) => {
+      const coordinates = this.getAdaptedCoordinates(gameBoardComponent, move);
+      const x = coordinates[0];
+      const y = coordinates[1];
 
-      if (position.canvasWidth < (gameBoardComponent.canvas?.width as number)) {
-        multiply = true;
-        ratioX = (gameBoardComponent.canvas?.width as number) / position.canvasWidth;
-        ratioY = (gameBoardComponent.canvas?.height as number) / (position.canvasHeight as number);
+      if (move.isUndo) {
+        const isSentMove = true;
+        gameBoardComponent.undo(isSentMove);
+        return;
       }
 
-      let positionX : number = position.x;
-      let positionY : number = position.y;
-
-      if (multiply) {
-
-        positionX *= ratioX;
-        positionY *= ratioY;
-      }
-      else {
-        positionX /= ratioX;
-        positionY /= ratioY;
-      }
-
-      if (position.drawing == 0) {
-          gameBoardComponent.color = position.brushColor as string;
-          gameBoardComponent.brushWidth = position.brushWidth as number;
+      if (move.drawing == 0) {
+          gameBoardComponent.color = move.brushColor as string;
+          gameBoardComponent.brushWidth = move.brushWidth as number;
           gameBoardComponent.initializePen();
 
           gameBoardComponent.context?.moveTo(
-            positionX - gameBoardComponent.xOffset,
-            positionY - gameBoardComponent.yOffset);
+            x - gameBoardComponent.xOffset,
+            y - gameBoardComponent.yOffset);
           gameBoardComponent.context?.beginPath();
       }
-      else if (position.drawing == 1) {
+      else if (move.drawing == 1) {
         gameBoardComponent.context?.lineTo(
-          positionX - gameBoardComponent.xOffset,
-          positionY - gameBoardComponent.yOffset);
+          x - gameBoardComponent.xOffset,
+          y - gameBoardComponent.yOffset);
         gameBoardComponent.context?.stroke();
       }
-      else if (position.drawing == 3) {
+      else if (move.drawing == 3) {
         gameBoardComponent.context?.clearRect(0, 0, gameBoardComponent.canvas!.width, gameBoardComponent.canvas!.height);
       }
-    })
+
+      gameBoardComponent.addToDrawingStack({
+        x: x - gameBoardComponent.xOffset,
+        y: y - gameBoardComponent.yOffset,
+        drawing: move.drawing,
+        brushColor: move.brushColor as string,
+        brushWidth: move.brushWidth as number
+      });
+    });
   }
 
-  startConnection() {
+  private getAdaptedCoordinates(gameBoardComponent : GameBoardComponent, move : Move) : Array<number> {
+    let shouldMultiply : boolean = false;
+    let ratioX : number = move.canvasWidth / (gameBoardComponent.canvas?.width as number);
+    let ratioY : number = (move.canvasHeight as number) / (gameBoardComponent.canvas?.height as number);
+
+    if (move.canvasWidth < (gameBoardComponent.canvas?.width as number)) {
+      shouldMultiply = true;
+      ratioX = (gameBoardComponent.canvas?.width as number) / move.canvasWidth;
+      ratioY = (gameBoardComponent.canvas?.height as number) / (move.canvasHeight as number);
+    }
+
+    let x : number = move.x;
+    let y : number = move.y;
+
+    if (shouldMultiply) {
+
+      x *= ratioX;
+      y *= ratioY;
+    }
+    else {
+      x /= ratioX;
+      y /= ratioY;
+    }
+
+    return [x, y];
+  }
+
+  startConnection() : void {
     this.hubConnection?.start().then(
       () => {
         console.log('Started');
@@ -139,7 +158,7 @@ export class GameService {
     return p;
   }
 
-  private createConnectedBubble(username : string, connected : boolean = true) {
+  private createConnectedBubble(username : string, connected : boolean = true) : HTMLParagraphElement {
     
     const message = (connected) ? 'connected' : 'disconnected';
     const p = document.createElement('p');

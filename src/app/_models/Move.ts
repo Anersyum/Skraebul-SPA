@@ -6,5 +6,6 @@ export interface Move {
     brushColor?: string | CanvasGradient | CanvasPattern,
     brushWidth?: number,
     canvasWidth: number,
-    canvasHeight?: number
+    canvasHeight?: number,
+    isUndo: boolean
 }
