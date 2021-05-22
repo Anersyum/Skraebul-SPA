@@ -20,6 +20,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild("boardControlContainer") boardControlBtnsContainer? : ElementRef<HTMLDivElement>;
   @ViewChild("chatWindowComponent") chatWindowComponent? : ChatWindowComponent;
   @ViewChild("pointsBoardComponent") pointsBoardComponent? : PointsBoardComponent;
+  @ViewChild("wordContainerComponent") wordContainerComponent? : WordContanerComponent
   chatBoxHeight : number = 0;
   wordContainerWidth : number = 0;
   isDrawing : boolean = false;
@@ -399,5 +400,6 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   startGame() {
     this.canDraw = true;
+    this.wordContainerComponent?.hideWord();
   }
 }

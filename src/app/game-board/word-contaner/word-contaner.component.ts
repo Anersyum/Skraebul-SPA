@@ -19,11 +19,9 @@ export class WordContanerComponent implements OnInit, OnDestroy {
     clearInterval(this.timerInterval);
   }
 
-  ngOnInit() {
-    this.hideWord();
-  }
+  ngOnInit() {}
 
-  private hideWord() {
+  hideWord() {
 
     let gottenWord : Word;
 
