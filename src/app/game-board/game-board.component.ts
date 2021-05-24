@@ -25,6 +25,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
   wordContainerWidth : number = 0;
   isDrawing : boolean = false;
   canDraw : boolean = false;
+  canStartGame : boolean = false;
   canvas? : HTMLCanvasElement;
   color : string = "black";
   brushWidth : number = 5;
@@ -401,5 +402,6 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
   startGame() {
     this.canDraw = true;
     this.wordContainerComponent?.hideWord();
+    console.log(this.canStartGame, "meho")
   }
 }

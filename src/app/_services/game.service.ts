@@ -6,6 +6,7 @@ import { GameBoardComponent } from '../game-board/game-board.component';
 import { GameManager } from '../_models/GameManager';
 import { Message } from '../_models/Message';
 import { UserService } from './user.service';
+import { Player } from '../_models/Player';
 
 @Injectable({
   providedIn: 'root'
@@ -32,12 +33,14 @@ export class GameService {
       chatWindow!.scrollTop = chatWindow!.scrollHeight;
     });
 
-    this.hubConnection?.on('Connected', (users : string, username : string) => {
+    this.hubConnection?.on('Connected', (users : Array<Player>, username : string) => {
+      console.log(users)
       pointsWindow?.firstChild?.replaceWith(this.createPointsBubble(users));
-      chatWindow?.appendChild(this.createConnectedBubble(username));
+      chatWindow?.appendChild(this.createConnectedBubble(username)); 
+      this.setAdmin(users, gameBoardComponent);
     });
 
-    this.hubConnection?.on('Disconnected', (users : string, username : string) => {
+    this.hubConnection?.on('Disconnected', (users : Array<Player>, username : string) => {
       pointsWindow?.firstChild?.replaceWith(this.createPointsBubble(users));
       chatWindow?.appendChild(this.createConnectedBubble(username, false));
     });
@@ -81,6 +84,16 @@ export class GameService {
         brushWidth: move.brushWidth as number
       });
     });
+  }
+
+  private setAdmin(users : Array<Player>, gameBoardComponent : GameBoardComponent) {
+    for (let i = 0; i < users.length; i++) {
+      const user = users[i];
+      
+      if (user.username == this.userservice.getName()) {
+        gameBoardComponent.canStartGame = user.isAdmin;
+      }
+    }
   }
 
   private getAdaptedCoordinates(gameBoardComponent : GameBoardComponent, move : Move) : Array<number> {
@@ -140,16 +153,15 @@ export class GameService {
     return p;
   }
 
-  private createPointsBubble(username : string) : HTMLParagraphElement {
+  private createPointsBubble(users : Array<Player>) : HTMLParagraphElement {
 
     const p = document.createElement('p');
-    const users = username.split('|');
 
-    for (let i = 0; i < users.length - 1; i++) {
+    for (let i = 0; i < users.length; i++) {
       
       const userParagraph = document.createElement('p');
   
-      userParagraph.innerText = users[i];
+      userParagraph.innerText = users[i].username + ' ' + users[i].points;
       userParagraph.style.margin = '5px';
 
       p.appendChild(userParagraph);
@@ -177,5 +189,5 @@ export class GameService {
 
   sendMove(position : Move) : void {
     this.hubConnection?.invoke('SendMove', position).catch((err : any) => { console.error(err);  }) ;
-  } 
+  }
 }
