@@ -89,7 +89,7 @@ export class GameService {
     });
 
     this.hubConnection?.on('RecieveChosenWord', (word : string) => {
-      wordContainerComponent.hideWord({word: word});
+      wordContainerComponent.hideWord({word: word}, false);
     });
   }
 

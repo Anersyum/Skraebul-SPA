@@ -21,18 +21,20 @@ export class WordContanerComponent implements OnInit, OnDestroy {
 
   ngOnInit() {}
 
-  hideWord(gottenWord : Word) : void {
+  hideWord(gottenWord : Word, isAdmin : boolean) : void {
 
     this.word = gottenWord.word;
 
-    for (let i = 0; i < this.word.length; i++) {
+    if (!isAdmin) {
+      for (let i = 0; i < this.word.length; i++) {
         
-      if (this.word[i].match(/([A-Za-z])+/)) {
-        this.word = this.word.replace(this.word[i], '_');
+        if (this.word[i].match(/([A-Za-z])+/)) {
+          this.word = this.word.replace(this.word[i], '_');
+        }
       }
+  
+      this.startTimer(gottenWord);
     }
-
-    this.startTimer(gottenWord);
   }
 
   private startTimer(gottenWord : Word) : void {
