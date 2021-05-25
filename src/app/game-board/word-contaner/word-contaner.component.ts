@@ -13,7 +13,7 @@ export class WordContanerComponent implements OnInit, OnDestroy {
   timer : number = 60;
   timerInterval : any;
 
-  constructor(private wordService: Guess_wordService) { }
+  constructor() { }
 
   ngOnDestroy(): void {
     clearInterval(this.timerInterval);
@@ -21,27 +21,21 @@ export class WordContanerComponent implements OnInit, OnDestroy {
 
   ngOnInit() {}
 
-  hideWord() {
+  hideWord(gottenWord : Word) : void {
 
-    let gottenWord : Word;
+    this.word = gottenWord.word;
 
-    this.wordService.getWord().subscribe((x : Word) => {
-      gottenWord = x;
-
-      this.word = gottenWord.word;
-      
-      for (let i = 0; i < this.word.length; i++) {
+    for (let i = 0; i < this.word.length; i++) {
         
-        if (this.word[i].match(/([A-Za-z])+/)) {
-          this.word = this.word.replace(this.word[i], '_');
-        }
+      if (this.word[i].match(/([A-Za-z])+/)) {
+        this.word = this.word.replace(this.word[i], '_');
       }
+    }
 
-      this.startTimer(gottenWord);
-    });
+    this.startTimer(gottenWord);
   }
 
-  private startTimer(gottenWord : Word) {
+  private startTimer(gottenWord : Word) : void {
     this.timerInterval = setInterval(() => {
       this.timer--;
       console.log(this.timer);

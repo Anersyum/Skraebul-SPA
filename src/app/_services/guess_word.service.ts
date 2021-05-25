@@ -11,7 +11,7 @@ export class Guess_wordService {
   constructor(private http: HttpClient) { }
 
   getWord() : Observable<Word>
- {
+  {
     return this.http.get<Word>(this.route);
   }
 }

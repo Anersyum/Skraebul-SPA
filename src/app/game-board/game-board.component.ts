@@ -2,7 +2,9 @@ import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } fr
 import { Color } from '../_models/Color';
 import { Position } from '../_models/Position';
 import { Thickness } from '../_models/Thickness';
+import { Word } from '../_models/Word';
 import { GameService } from '../_services/game.service';
+import { Guess_wordService } from '../_services/guess_word.service';
 import { ChatWindowComponent } from './chat-window/chat-window.component';
 import { PointsBoardComponent } from './points-board/points-board.component';
 import { WordContanerComponent } from './word-contaner/word-contaner.component';
@@ -43,7 +45,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
   // 0 - start 1 - drawing 2 - end 3 - clear board
   undoStack : Array<Array<Position>> = [];
 
-  constructor(public gameService : GameService) { }
+  constructor(public gameService : GameService, private wordService: Guess_wordService) { }
   
   ngOnDestroy(): void {
     this.gameService.disconnect();
@@ -89,7 +91,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.context = this.canvas?.getContext("2d")!;
 
     this.gameService.registerEvents(this.chatWindowComponent?.chatbox?.nativeElement,
-      this.pointsBoardComponent?.pointsBoard?.nativeElement, this);
+      this.pointsBoardComponent?.pointsBoard?.nativeElement, this, this.wordContainerComponent as WordContanerComponent);
 
     this.gameService.startConnection();
   }
@@ -399,9 +401,14 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.brushWidth = this.selectedThickness = penThickness.value;
   }
 
-  startGame() {
+  startGame() : void {
     this.canDraw = true;
-    this.wordContainerComponent?.hideWord();
-    console.log(this.canStartGame, "meho")
+    let gottenWord : Word;
+
+    this.wordService.getWord().subscribe((x : Word) => {
+      
+      gottenWord = x;
+      this.gameService.sendWord(gottenWord);
+    });
   }
 }

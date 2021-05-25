@@ -7,6 +7,8 @@ import { GameManager } from '../_models/GameManager';
 import { Message } from '../_models/Message';
 import { UserService } from './user.service';
 import { Player } from '../_models/Player';
+import { Word } from '../_models/Word';
+import { WordContanerComponent } from '../game-board/word-contaner/word-contaner.component';
 
 @Injectable({
   providedIn: 'root'
@@ -27,14 +29,14 @@ export class GameService {
     .build();
   }
 
-  registerEvents(chatWindow : HTMLDivElement | undefined, pointsWindow : HTMLDivElement | undefined, gameBoardComponent : GameBoardComponent) : void {
+  registerEvents(chatWindow : HTMLDivElement | undefined, pointsWindow : HTMLDivElement | undefined,
+    gameBoardComponent : GameBoardComponent, wordContainerComponent : WordContanerComponent) : void {
     this.hubConnection?.on('RecieveMessage', (message : Message) => {
       chatWindow?.appendChild(this.createChatBubble(message));
       chatWindow!.scrollTop = chatWindow!.scrollHeight;
     });
 
     this.hubConnection?.on('Connected', (users : Array<Player>, username : string) => {
-      console.log(users)
       pointsWindow?.firstChild?.replaceWith(this.createPointsBubble(users));
       chatWindow?.appendChild(this.createConnectedBubble(username)); 
       this.setAdmin(users, gameBoardComponent);
@@ -43,6 +45,7 @@ export class GameService {
     this.hubConnection?.on('Disconnected', (users : Array<Player>, username : string) => {
       pointsWindow?.firstChild?.replaceWith(this.createPointsBubble(users));
       chatWindow?.appendChild(this.createConnectedBubble(username, false));
+      this.setAdmin(users, gameBoardComponent);
     });
 
     this.hubConnection?.on("RecieveMove", (move : Move) => {
@@ -83,6 +86,10 @@ export class GameService {
         brushColor: move.brushColor as string,
         brushWidth: move.brushWidth as number
       });
+    });
+
+    this.hubConnection?.on('RecieveChosenWord', (word : string) => {
+      wordContainerComponent.hideWord({word: word});
     });
   }
 
@@ -189,5 +196,9 @@ export class GameService {
 
   sendMove(position : Move) : void {
     this.hubConnection?.invoke('SendMove', position).catch((err : any) => { console.error(err);  }) ;
+  }
+
+  sendWord(word : Word) : void {
+    this.hubConnection?.invoke('SendChosenWord', word.word);
   }
 }
