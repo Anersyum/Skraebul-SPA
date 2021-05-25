@@ -91,6 +91,10 @@ export class GameService {
     this.hubConnection?.on('RecieveChosenWord', (word : string) => {
       wordContainerComponent.hideWord({word: word}, false);
     });
+
+    this.hubConnection?.on('RecieveUncoveredLetter', (letter : string, letterPoistion : number) => {
+      wordContainerComponent.uncoverLetter(letter, letterPoistion);
+    });
   }
 
   private setAdmin(users : Array<Player>, gameBoardComponent : GameBoardComponent) {
@@ -200,5 +204,9 @@ export class GameService {
 
   sendWord(word : Word) : void {
     this.hubConnection?.invoke('SendChosenWord', word.word);
+  }
+
+  sendUncoveredLetter(letter : string, letterPoistion : number) {
+    this.hubConnection?.invoke('SendUncoveredLetter', letter, letterPoistion);
   }
 }

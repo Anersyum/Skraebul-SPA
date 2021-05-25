@@ -1,5 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Word } from 'src/app/_models/Word';
+import { GameService } from 'src/app/_services/game.service';
 import { Guess_wordService } from 'src/app/_services/guess_word.service';
 
 @Component({
@@ -9,6 +10,7 @@ import { Guess_wordService } from 'src/app/_services/guess_word.service';
 })
 export class WordContanerComponent implements OnInit, OnDestroy {
 
+  @Input() public gameService : GameService | null = null;
   word : string = '';
   timer : number = 60;
   timerInterval : any;
@@ -32,9 +34,11 @@ export class WordContanerComponent implements OnInit, OnDestroy {
           this.word = this.word.replace(this.word[i], '_');
         }
       }
-  
-      this.startTimer(gottenWord);
+
+      return;
     }
+
+    this.startTimer(gottenWord);
   }
 
   private startTimer(gottenWord : Word) : void {
@@ -43,13 +47,18 @@ export class WordContanerComponent implements OnInit, OnDestroy {
       console.log(this.timer);
       if (this.timer % 15 == 0) {
         let randPos = Math.floor(Math.random() * this.word.length);
-        this.word = this.word.slice(0, randPos) + gottenWord.word[randPos] + this.word.slice(randPos + 1);
+        this.gameService?.sendUncoveredLetter(this.word[randPos], randPos);
       }
 
       if (this.timer <= 0) {
         clearInterval(this.timerInterval);
       }
     }, 1000);
+  }
+
+  public uncoverLetter(letter : string, letterPoistion : number) : void {
+    console.log("meho");
+    this.word = this.word.slice(0, letterPoistion) + letter + this.word.slice(letterPoistion + 1);
   }
 
 }
