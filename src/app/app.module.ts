@@ -13,11 +13,11 @@ import { PointsBoardComponent } from './game-board/points-board/points-board.com
 @NgModule({
   declarations: [		
     AppComponent,
-      GameBoardComponent,
-      WordContanerComponent,
-      ChatWindowComponent,
-      HomeComponent,
-      PointsBoardComponent
+    GameBoardComponent,
+    WordContanerComponent,
+    ChatWindowComponent,
+    HomeComponent,
+    PointsBoardComponent
    ],
   imports: [
     BrowserModule,

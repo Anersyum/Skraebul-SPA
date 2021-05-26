@@ -49,9 +49,11 @@ export class GameService {
     });
 
     this.hubConnection?.on("RecieveMove", (move : Move) => {
-      const coordinates = this.getAdaptedCoordinates(gameBoardComponent, move);
-      const x = coordinates[0];
-      const y = coordinates[1];
+      const coordinates : Position = this.getAdaptedCoordinates(gameBoardComponent, move);
+      const offsetCoordinates : Position = {
+        x: coordinates.x - gameBoardComponent.xOffset,
+        y: coordinates.y - gameBoardComponent.yOffset
+      };
 
       if (move.isUndo) {
         const isSentMove = true;
@@ -60,19 +62,19 @@ export class GameService {
       }
 
       if (move.drawing == 0) {
-          gameBoardComponent.color = move.brushColor as string;
-          gameBoardComponent.brushWidth = move.brushWidth as number;
+          gameBoardComponent.color = move.brush.brushColor as string;
+          gameBoardComponent.brushWidth = move.brush.brushWidth as number;
           gameBoardComponent.initializePen();
 
           gameBoardComponent.context?.moveTo(
-            x - gameBoardComponent.xOffset,
-            y - gameBoardComponent.yOffset);
+            offsetCoordinates.x,
+            offsetCoordinates.y);
           gameBoardComponent.context?.beginPath();
       }
       else if (move.drawing == 1) {
         gameBoardComponent.context?.lineTo(
-          x - gameBoardComponent.xOffset,
-          y - gameBoardComponent.yOffset);
+          offsetCoordinates.x,
+          offsetCoordinates.y);
         gameBoardComponent.context?.stroke();
       }
       else if (move.drawing == 3) {
@@ -80,11 +82,11 @@ export class GameService {
       }
 
       gameBoardComponent.addToDrawingStack({
-        x: x - gameBoardComponent.xOffset,
-        y: y - gameBoardComponent.yOffset,
+        position: offsetCoordinates,
         drawing: move.drawing,
-        brushColor: move.brushColor as string,
-        brushWidth: move.brushWidth as number
+        brush: move.brush,
+        canvas: move.canvas,
+        isUndo: move.isUndo
       });
     });
 
@@ -107,19 +109,23 @@ export class GameService {
     }
   }
 
-  private getAdaptedCoordinates(gameBoardComponent : GameBoardComponent, move : Move) : Array<number> {
+  private getAdaptedCoordinates(gameBoardComponent : GameBoardComponent, move : Move) : Position {
+    const sentMoveCanvasWidth : number = move.canvas?.canvasWidth as number;
+    const sentMoveCanvasHeight : number = move.canvas?.canvasHeight as number;
+    const currentCanvasHeight : number = gameBoardComponent.canvas?.height as number;
+    const currentCanvasWidth : number = gameBoardComponent.canvas?.width as number;
     let shouldMultiply : boolean = false;
-    let ratioX : number = move.canvasWidth / (gameBoardComponent.canvas?.width as number);
-    let ratioY : number = (move.canvasHeight as number) / (gameBoardComponent.canvas?.height as number);
+    let ratioX : number = sentMoveCanvasWidth / currentCanvasWidth;
+    let ratioY : number = sentMoveCanvasHeight / currentCanvasHeight;
 
-    if (move.canvasWidth < (gameBoardComponent.canvas?.width as number)) {
+    if (sentMoveCanvasWidth < currentCanvasWidth) {
       shouldMultiply = true;
-      ratioX = (gameBoardComponent.canvas?.width as number) / move.canvasWidth;
-      ratioY = (gameBoardComponent.canvas?.height as number) / (move.canvasHeight as number);
+      ratioX = currentCanvasWidth / sentMoveCanvasWidth;
+      ratioY = currentCanvasHeight / sentMoveCanvasHeight;
     }
 
-    let x : number = move.x;
-    let y : number = move.y;
+    let x : number = move.position.x;
+    let y : number = move.position.y;
 
     if (shouldMultiply) {
 
@@ -131,7 +137,10 @@ export class GameService {
       y /= ratioY;
     }
 
-    return [x, y];
+    return {
+      x,
+      y
+    };
   }
 
   startConnection() : void {
@@ -198,8 +207,8 @@ export class GameService {
     this.hubConnection?.stop();
   }
 
-  sendMove(position : Move) : void {
-    this.hubConnection?.invoke('SendMove', position).catch((err : any) => { console.error(err);  }) ;
+  sendMove(move : Move) : void {
+    this.hubConnection?.invoke('SendMove', move).catch((err : any) => { console.error(err);  }) ;
   }
 
   sendWord(word : Word) : void {

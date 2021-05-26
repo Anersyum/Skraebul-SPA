@@ -1,5 +1,8 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Brush } from '../_models/Brush';
+import { Canvas } from '../_models/Canvas';
 import { Color } from '../_models/Color';
+import { Move } from '../_models/Move';
 import { Position } from '../_models/Position';
 import { Thickness } from '../_models/Thickness';
 import { Word } from '../_models/Word';
@@ -43,7 +46,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
   penThickness : Array<Thickness> = [];
   selectedThickness? : number;
   // 0 - start 1 - drawing 2 - end 3 - clear board
-  undoStack : Array<Array<Position>> = [];
+  undoStack : Array<Array<Move>> = [];
 
   constructor(public gameService : GameService, private wordService: Guess_wordService) { }
   
@@ -130,21 +133,24 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.initializePen();
 
-    const eventCoordinates : Array<number> = this.getEventCoordinates(e);
-    const clientX : number = eventCoordinates[0];
-    const clientY : number = eventCoordinates[1];
-      
-    this.context!.moveTo(clientX - this.xOffset, clientY - this.yOffset);
-
-    const lastX : number = clientX - this.xOffset;
-    const lastY : number = clientY - this.yOffset;
-
-    const points : Position = {
-      x: lastX,
-      y: lastY,
-      drawing: 0,
+    const eventCoordinates : Position = this.getEventCoordinates(e);
+    const offsetCoordinates : Position = {
+      x: eventCoordinates.x - this.xOffset,
+      y: eventCoordinates.y - this.yOffset 
+    };
+    
+    this.context!.moveTo(offsetCoordinates.x, offsetCoordinates.y);
+    
+    const brush : Brush = {
       brushColor: this.context?.strokeStyle,
       brushWidth: this.context?.lineWidth
+    };
+
+    const points : Move = {
+      position: offsetCoordinates,
+      drawing: 0,
+      brush,
+      isUndo: false
     };
 
     this.addToDrawingStack(points);
@@ -154,13 +160,13 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.context?.beginPath();
     
     this.gameService.sendMove({
-      x: clientX,
-      y: clientY,
+      position: eventCoordinates,
       drawing: points.drawing,
-      brushColor: points.brushColor,
-      brushWidth: points.brushWidth,
-      canvasWidth: this.canvas?.width as number,
-      canvasHeight: this.canvas?.height,
+      brush: points.brush,
+      canvas: {
+        canvasHeight: this.canvas?.height as number,
+        canvasWidth: this.canvas?.width as number
+      },
       isUndo: false
     });
 
@@ -180,35 +186,38 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
-    const eventCoordinates : Array<number> = this.getEventCoordinates(e);
-    const clientX : number = eventCoordinates[0];
-    const clientY : number = eventCoordinates[1];
+    const eventCoordinates : Position = this.getEventCoordinates(e);
+    const offsetCoordinates : Position = {
+      x: eventCoordinates.x - this.xOffset,
+      y: eventCoordinates.y - this.yOffset 
+    };
 
     if (this.isDrawing) {
       
-      this.context?.lineTo(clientX - this.xOffset, clientY - this.yOffset);
+      this.context?.lineTo(offsetCoordinates.x, offsetCoordinates.y);
       this.context?.stroke();
 
-      const lastX : number = clientX - this.xOffset;
-      const lastY : number = clientY - this.yOffset;
-
-      const points : Position = {
-        x: lastX,
-        y: lastY,
-        drawing: 1,
+      const brush : Brush = {
         brushColor: this.context?.strokeStyle,
-        brushWidth: this.brushWidth
+        brushWidth: this.context?.lineWidth
+      };
+  
+      const points : Move = {
+        position: offsetCoordinates,
+        drawing: 1,
+        brush,
+        isUndo: false
       };
 
       this.addToDrawingStack(points);
       this.gameService.sendMove({
-        x: clientX,
-        y: clientY,
+        position: eventCoordinates,
         drawing: points.drawing,
-        brushColor: points.brushColor,
-        brushWidth: points.brushWidth,
-        canvasWidth: this.canvas?.width as number,
-        canvasHeight: this.canvas?.height,
+        brush: points.brush,
+        canvas: {
+          canvasHeight: this.canvas?.height as number,
+          canvasWidth: this.canvas?.width as number
+        },
         isUndo: false
       });
     }
@@ -220,40 +229,43 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
-    const eventCoordinates : Array<number> = this.getEventCoordinates(e);
-    const clientX : number = eventCoordinates[0];
-    const clientY : number = eventCoordinates[1];
-      
-    const lastX : number = clientX - this.xOffset;
-    const lastY : number = clientY - this.yOffset;
+    const eventCoordinates : Position = this.getEventCoordinates(e);
+    const offsetCoordinates : Position = {
+      x: eventCoordinates.x - this.xOffset,
+      y: eventCoordinates.y - this.yOffset 
+    };
 
     if (!this.isDrawing) {
       return;
     }
 
-    const points : Position = {
-      x: lastX,
-      y: lastY,
-      drawing: 2,
+    const brush : Brush = {
       brushColor: this.context?.strokeStyle,
-      brushWidth: this.brushWidth
+      brushWidth: this.context?.lineWidth
+    };
+
+    const points : Move = {
+      position: offsetCoordinates,
+      drawing: 2,
+      brush,
+      isUndo: false
     };
 
     this.addToDrawingStack(points);
     this.isDrawing = false;
     this.gameService.sendMove({
-      x: clientX,
-      y: clientY,
+      position: eventCoordinates,
       drawing: points.drawing,
-      brushColor: points.brushColor,
-      brushWidth: points.brushWidth,
-      canvasWidth: this.canvas?.width as number,
-      canvasHeight: this.canvas?.height,
+      brush: points.brush,
+      canvas: {
+        canvasHeight: this.canvas?.height as number,
+        canvasWidth: this.canvas?.width as number
+      },
       isUndo: false
     });
   }
 
-  private getEventCoordinates(e : MouseEvent | TouchEvent) : Array<number> {
+  private getEventCoordinates(e : MouseEvent | TouchEvent) : Position {
 
     let clientX : number = 0;
     let clientY : number = 0;
@@ -267,7 +279,10 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
       clientY = e.touches[0].clientY;
     }
 
-    return [clientX, clientY];
+    return {
+      x: clientX,
+      y: clientY
+    };
   }
 
   changePenColor(event : MouseEvent, color : Color) {
@@ -290,22 +305,35 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.context?.clearRect(0, 0, this.canvas!.width, this.canvas!.height);
 
     if (this.undoStack.length > 0 && !isUndo) {
-      this.addToDrawingStack({
+      const position : Position = {
         x: 0,
-        y: 0,
-        drawing: 3,
+        y: 0
+      };
+
+      const brush : Brush = {
         brushColor: this.context?.strokeStyle,
         brushWidth: this.brushWidth
-      });
+      };
+
+      const canvas : Canvas = {
+        canvasWidth: this.canvas?.width as number,
+        canvasHeight: this.canvas?.height as number,
+      };
+
+      const move : Move = {
+        position,
+        drawing: 3,
+        brush,
+        isUndo: false
+      };
+
+      this.addToDrawingStack(move);
 
       this.gameService.sendMove({
-        x: 0,
-        y: 0,
+        position,
         drawing: 3,
-        brushColor: this.context?.strokeStyle,
-        brushWidth: this.brushWidth,
-        canvasWidth: this.canvas?.width as number,
-        canvasHeight: this.canvas?.height,
+        brush,
+        canvas,
         isUndo: false
       });
     }
@@ -328,29 +356,26 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
     
     if (!isSentMove) {
       this.gameService.sendMove({
-        x: 0,
-        y: 0,
+        position: { x: 0, y: 0},
         drawing: 4,
-        brushColor: "",
-        brushWidth: 0,
-        canvasHeight: 0,
-        canvasWidth: 0,
+        brush: { brushColor: "", brushWidth: 0 },
+        canvas: { canvasHeight: 0, canvasWidth: 0},
         isUndo: true
       });
     }
   }
 
-  public addToDrawingStack(position: Position) {
+  public addToDrawingStack(move: Move) {
 
     if (typeof this.undoStack[this.move] === "undefined") {
       // we add a new empty array to the 2D array model so that we can store point objects in it
       this.undoStack.push([]);
     }
 
-    this.undoStack[this.move].push(position);
+    this.undoStack[this.move].push(move);
 
     // we increase a players move only when the player has stopped drawing or cleared the board
-    if (position.drawing === 2 || position.drawing === 3) {
+    if (move.drawing === 2 || move.drawing === 3) {
       this.move++;
     }
   }
@@ -364,20 +389,20 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
     const me : GameBoardComponent = this;
 
     for (let i = 0; i < me.undoStack.length; i++) {
-      const element : Array<Position> = this.undoStack[i];
+      const element : Array<Move> = this.undoStack[i];
       
-      element.forEach((e : Position) => {
+      element.forEach((e : Move) => {
         if (e.drawing == 0){
 
-          me.color = e.brushColor as string;
-          me.brushWidth = e.brushWidth as number;
+          me.color = e.brush.brushColor as string;
+          me.brushWidth = e.brush.brushWidth as number;
           me.initializePen();
 
-          me.context?.moveTo(e.x, e.y);
+          me.context?.moveTo(e.position.x, e.position.y);
           me.context?.beginPath();
         }
         else if (e.drawing == 1) {
-          me.context?.lineTo(e.x, e.y);
+          me.context?.lineTo(e.position.x, e.position.y);
           me.context?.stroke();
         }
         else if (e.drawing == 3) {

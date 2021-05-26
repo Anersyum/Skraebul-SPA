@@ -1,11 +1,11 @@
+import { Brush } from "./Brush";
+import { Canvas } from "./Canvas";
+import { Position } from "./Position";
+
 export interface Move {
-    x: number,
-    y: number,
+    position: Position,
     drawing: number,
-    // brush color and brush width go to brush model
-    brushColor?: string | CanvasGradient | CanvasPattern,
-    brushWidth?: number,
-    canvasWidth: number,
-    canvasHeight?: number,
+    brush: Brush,
+    canvas?: Canvas,
     isUndo: boolean
 }

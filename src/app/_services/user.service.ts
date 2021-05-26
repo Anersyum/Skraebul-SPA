@@ -11,7 +11,7 @@ export class UserService {
     return localStorage.getItem('username') ?? '';
   }
 
-  setName(username : string) : void{
+  setName(username : string) : void {
     localStorage.setItem('username', username);
   }
 
