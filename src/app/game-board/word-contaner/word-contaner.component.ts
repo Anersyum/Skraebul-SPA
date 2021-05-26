@@ -14,6 +14,7 @@ export class WordContanerComponent implements OnInit, OnDestroy {
   word : string = '';
   timer : number = 60;
   timerInterval : any;
+  sentLetters : Array<string> = [];
 
   constructor() { }
 
@@ -47,6 +48,13 @@ export class WordContanerComponent implements OnInit, OnDestroy {
       console.log(this.timer);
       if (this.timer % 15 == 0) {
         let randPos = Math.floor(Math.random() * this.word.length);
+        while (this.sentLetters.indexOf(this.word[randPos]) > -1) {
+          if (this.sentLetters.length >= this.word.length) {
+            break;
+          }
+
+          randPos = Math.floor(Math.random() * this.word.length);
+        }
         this.gameService?.sendUncoveredLetter(this.word[randPos], randPos);
       }
 
@@ -57,7 +65,6 @@ export class WordContanerComponent implements OnInit, OnDestroy {
   }
 
   public uncoverLetter(letter : string, letterPoistion : number) : void {
-    console.log("meho");
     this.word = this.word.slice(0, letterPoistion) + letter + this.word.slice(letterPoistion + 1);
   }
 
