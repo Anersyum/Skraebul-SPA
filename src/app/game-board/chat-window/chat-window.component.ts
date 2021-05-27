@@ -38,4 +38,8 @@ export class ChatWindowComponent implements OnInit {
 
     input.value = '';
   }
+
+  guess(word : string) {
+    
+  }
 }

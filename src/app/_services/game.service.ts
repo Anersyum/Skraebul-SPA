@@ -9,6 +9,7 @@ import { UserService } from './user.service';
 import { Player } from '../_models/Player';
 import { Word } from '../_models/Word';
 import { WordContanerComponent } from '../game-board/word-contaner/word-contaner.component';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +24,7 @@ export class GameService {
     let username = this.userservice.getName();
     
     this.hubConnection = new HubConnectionBuilder()
-    .withUrl('http://localhost:5000/chathub?username=' + username)
+    .withUrl(environment.url +'/chathub?username=' + username)
     .withAutomaticReconnect()
     .configureLogging(LogLevel.Information)
     .build();
