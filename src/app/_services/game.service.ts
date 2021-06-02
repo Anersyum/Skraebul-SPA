@@ -91,12 +91,25 @@ export class GameService {
       });
     });
 
+    // todo: recieve word will recieve letters from the drawing player and the other players timers will not have timers for the word
     this.hubConnection?.on('RecieveChosenWord', (word : string) => {
       wordContainerComponent.hideWord({word: word}, false);
     });
 
     this.hubConnection?.on('RecieveUncoveredLetter', (letter : string, letterPoistion : number) => {
       wordContainerComponent.uncoverLetter(letter, letterPoistion);
+    });
+
+    this.hubConnection?.on('RecieveAnswer', (objectToBeNamed : any, users : Array<Player>) => {
+      console.log(objectToBeNamed);
+      if (objectToBeNamed.lastRound) {
+        gameBoardComponent.finishGame();
+        return;
+      }
+      gameBoardComponent.clearBoardAndWord();
+      this.setAdmin(users, gameBoardComponent);
+      clearInterval(wordContainerComponent.timerInterval);
+      wordContainerComponent.timer = 60;
     });
   }
 
@@ -106,6 +119,7 @@ export class GameService {
       
       if (user.username == this.userservice.getName()) {
         gameBoardComponent.canStartGame = user.isAdmin;
+        gameBoardComponent.canDraw = false;
       }
     }
   }
@@ -218,5 +232,9 @@ export class GameService {
 
   sendUncoveredLetter(letter : string, letterPoistion : number) {
     this.hubConnection?.invoke('SendUncoveredLetter', letter, letterPoistion);
+  }
+
+  sendAnswer(answer : string) {
+    this.hubConnection?.invoke('SendAnswer', answer);
   }
 }

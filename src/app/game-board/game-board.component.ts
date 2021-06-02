@@ -437,4 +437,17 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
       this.wordContainerComponent?.hideWord(gottenWord, true);
     });
   }
+
+  clearBoardAndWord() {
+    this.wordContainerComponent!.word = '';
+    this.context?.clearRect(0, 0, this.canvas!.width, this.canvas!.height);
+  }
+
+  finishGame() {
+    this.canDraw = false;
+    this.canStartGame = false;
+    this.clearBoardAndWord();
+    clearInterval(this.wordContainerComponent?.timerInterval);
+    this.wordContainerComponent!.timer = 60;
+  }
 }

@@ -40,6 +40,6 @@ export class ChatWindowComponent implements OnInit {
   }
 
   guess(word : string) {
-    
+    this.gameService?.sendAnswer(word);
   }
 }
