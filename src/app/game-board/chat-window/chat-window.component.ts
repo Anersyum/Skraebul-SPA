@@ -12,6 +12,7 @@ export class ChatWindowComponent implements OnInit {
 
   @ViewChild('chatBox') chatbox? : ElementRef<HTMLDivElement>;
   @Input() gameService : GameService | null = null;
+  isDrawer : boolean = true;
   username : string = '';
 
   constructor(private userService : UserService) { }
@@ -39,7 +40,8 @@ export class ChatWindowComponent implements OnInit {
     input.value = '';
   }
 
-  guess(word : string) {
+  guess(word : string, guessBox : HTMLInputElement) {
+    guessBox.value = '';
     this.gameService?.sendAnswer(word);
   }
 }

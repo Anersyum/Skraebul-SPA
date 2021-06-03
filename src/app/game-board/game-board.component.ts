@@ -435,6 +435,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
       gottenWord = x;
       this.gameService.sendWord(gottenWord);
       this.wordContainerComponent?.hideWord(gottenWord, true);
+      this.chatWindowComponent!.isDrawer = true;
     });
   }
 

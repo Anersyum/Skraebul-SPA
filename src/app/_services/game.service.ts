@@ -94,6 +94,7 @@ export class GameService {
     // todo: recieve word will recieve letters from the drawing player and the other players timers will not have timers for the word
     this.hubConnection?.on('RecieveChosenWord', (word : string) => {
       wordContainerComponent.hideWord({word: word}, false);
+      gameBoardComponent.chatWindowComponent!.isDrawer = false;
     });
 
     this.hubConnection?.on('RecieveUncoveredLetter', (letter : string, letterPoistion : number) => {
@@ -102,6 +103,7 @@ export class GameService {
 
     this.hubConnection?.on('RecieveAnswer', (objectToBeNamed : any, users : Array<Player>) => {
       console.log(objectToBeNamed);
+      gameBoardComponent.chatWindowComponent!.isDrawer = true;
       if (objectToBeNamed.lastRound) {
         gameBoardComponent.finishGame();
         return;
