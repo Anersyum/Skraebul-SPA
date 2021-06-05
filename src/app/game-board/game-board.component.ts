@@ -384,6 +384,10 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.undoStack.pop();
   }
 
+  private emptyStack() {
+    this.undoStack = [];
+  }
+
   private redrawDrawingStack() {
 
     const me : GameBoardComponent = this;
@@ -442,6 +446,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
   clearBoardAndWord() {
     this.wordContainerComponent!.word = '';
     this.context?.clearRect(0, 0, this.canvas!.width, this.canvas!.height);
+    this.emptyStack();
   }
 
   finishGame() {

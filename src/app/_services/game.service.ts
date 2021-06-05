@@ -102,7 +102,6 @@ export class GameService {
     });
 
     this.hubConnection?.on('RecieveAnswer', (objectToBeNamed : any, users : Array<Player>) => {
-      console.log(objectToBeNamed);
       gameBoardComponent.chatWindowComponent!.isDrawer = true;
       if (objectToBeNamed.lastRound) {
         gameBoardComponent.finishGame();
