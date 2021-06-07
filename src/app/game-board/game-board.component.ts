@@ -47,6 +47,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
   selectedThickness? : number;
   // 0 - start 1 - drawing 2 - end 3 - clear board
   undoStack : Array<Array<Move>> = [];
+  isChosingWord : boolean = false;
 
   constructor(public gameService : GameService, private wordService: Guess_wordService) { }
   
@@ -431,16 +432,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   startGame() : void {
-    this.canDraw = true;
-    let gottenWord : Word;
-
-    this.wordService.getWord().subscribe((x : Word) => {
-      
-      gottenWord = x;
-      this.gameService.sendWord(gottenWord);
-      this.wordContainerComponent?.hideWord(gottenWord, true);
-      this.chatWindowComponent!.isDrawer = true;
-    });
+    this.isChosingWord = true;
   }
 
   clearBoardAndWord() {
