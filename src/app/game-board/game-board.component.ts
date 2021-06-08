@@ -5,7 +5,6 @@ import { Color } from '../_models/Color';
 import { Move } from '../_models/Move';
 import { Position } from '../_models/Position';
 import { Thickness } from '../_models/Thickness';
-import { Word } from '../_models/Word';
 import { GameService } from '../_services/game.service';
 import { Guess_wordService } from '../_services/guess_word.service';
 import { ChatWindowComponent } from './chat-window/chat-window.component';

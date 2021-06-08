@@ -1,7 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Word } from 'src/app/_models/Word';
 import { GameService } from 'src/app/_services/game.service';
-import { Guess_wordService } from 'src/app/_services/guess_word.service';
 
 @Component({
   selector: 'app-word-contaner',
@@ -24,9 +22,9 @@ export class WordContanerComponent implements OnInit, OnDestroy {
 
   ngOnInit() {}
 
-  hideWord(gottenWord : Word, isAdmin : boolean) : void {
+  hideWord(gottenWord : string, isAdmin : boolean) : void {
 
-    this.word = gottenWord.word;
+    this.word = gottenWord;
 
     if (!isAdmin) {
       for (let i = 0; i < this.word.length; i++) {
@@ -42,7 +40,7 @@ export class WordContanerComponent implements OnInit, OnDestroy {
     this.startTimer(gottenWord);
   }
 
-  private startTimer(gottenWord : Word) : void {
+  private startTimer(gottenWord : string) : void {
     this.timerInterval = setInterval(() => {
       this.timer--;
       console.log(this.timer);

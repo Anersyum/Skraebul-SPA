@@ -3,11 +3,9 @@ import { Move } from '../_models/Move';
 import { Injectable } from '@angular/core';
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { GameBoardComponent } from '../game-board/game-board.component';
-import { GameManager } from '../_models/GameManager';
 import { Message } from '../_models/Message';
 import { UserService } from './user.service';
 import { Player } from '../_models/Player';
-import { Word } from '../_models/Word';
 import { WordContanerComponent } from '../game-board/word-contaner/word-contaner.component';
 import { environment } from 'src/environments/environment';
 
@@ -93,7 +91,7 @@ export class GameService {
 
     // todo: recieve word will recieve letters from the drawing player and the other players timers will not have timers for the word
     this.hubConnection?.on('RecieveChosenWord', (word : string) => {
-      wordContainerComponent.hideWord({word: word}, false);
+      wordContainerComponent.hideWord(word, false);
       gameBoardComponent.chatWindowComponent!.isDrawer = false;
     });
 
@@ -227,8 +225,8 @@ export class GameService {
     this.hubConnection?.invoke('SendMove', move).catch((err : any) => { console.error(err);  }) ;
   }
 
-  sendWord(word : Word) : void {
-    this.hubConnection?.invoke('SendChosenWord', word.word);
+  sendWord(word : string) : void {
+    this.hubConnection?.invoke('SendChosenWord', word);
   }
 
   sendUncoveredLetter(letter : string, letterPoistion : number) {

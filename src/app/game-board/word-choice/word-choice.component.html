@@ -1,6 +1,6 @@
 <div id="word-choice-wrapper">
     <div class="word-choice" *ngFor="let word of this.words">
-        <div class="word-value">{{ word.word }}</div>
+        <div class="word-value">{{ word }}</div>
         <button class="select-btn" (click)="sendWord(word)">Select</button>
     </div>
     <!-- <div class="word-choice">
