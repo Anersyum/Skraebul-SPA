@@ -11,8 +11,8 @@ export class Guess_wordService {
   route : string = environment.url + "/words"
   constructor(private http: HttpClient) { }
 
-  getWord() : Observable<Word>
+  getWord() : Observable<Array<Word>>
   {
-    return this.http.get<Word>(this.route);
+    return this.http.get<Array<Word>>(this.route);
   }
 }

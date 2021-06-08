@@ -1,14 +1,14 @@
 <div id="word-choice-wrapper">
-    <div class="word-choice">
-        <div class="word-value">Word 1</div>
-        <button class="select-btn">Select</button>
+    <div class="word-choice" *ngFor="let word of this.words">
+        <div class="word-value">{{ word.word }}</div>
+        <button class="select-btn" (click)="sendWord(word)">Select</button>
     </div>
-    <div class="word-choice">
+    <!-- <div class="word-choice">
         <div class="word-value">Word 2</div>
         <button class="select-btn">Select</button>
     </div>
     <div class="word-choice">
         <div class="word-value">Word 3</div>
         <button class="select-btn">Select</button>
-    </div>
+    </div> -->
 </div>

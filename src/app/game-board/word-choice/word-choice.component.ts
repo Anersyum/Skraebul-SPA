@@ -16,19 +16,22 @@ export class WordChoiceComponent implements OnInit {
   @Input() gameService : GameService | null = null;
   @Input() wordContainerComponent : WordContanerComponent | null = null;
   @Input() chatWindowComponent : ChatWindowComponent | null = null;
+  words : Array<Word> = []; 
   constructor(private wordService : Guess_wordService) { }
 
   ngOnInit() {
-    this.canDraw = true;
-    let gottenWord : Word;
-
-    this.wordService.getWord().subscribe((x : Word) => {
-      
-      gottenWord = x;
-      this.gameService?.sendWord(gottenWord);
-      this.wordContainerComponent?.hideWord(gottenWord, true);
+    this.wordService.getWord().subscribe((x : Array<Word>) => {
+      this.canDraw = true;
+      this.words = x;
+      // this.gameService?.sendWord(gottenWord);
+      // this.wordContainerComponent?.hideWord(gottenWord, true);
       this.chatWindowComponent!.isDrawer = true;
     });
+  }
+
+  sendWord(chosenWord : Word) {
+      this.gameService?.sendWord(chosenWord);
+      this.wordContainerComponent?.hideWord(chosenWord, true);
   }
 
 }
