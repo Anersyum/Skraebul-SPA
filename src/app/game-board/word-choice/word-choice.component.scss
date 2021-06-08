@@ -1,0 +1,40 @@
+#word-choice-wrapper {
+
+    .word-choice {
+
+        border: 1px solid #fff;
+        padding: 40px 20px;
+        margin-right: 10px;
+    }
+
+    .word-value {
+        text-align: center;
+        color: #fff;
+    }
+
+    .select-btn {
+
+        margin-top: 20px;
+        padding: 10px 20px;
+        border-radius: 5px;
+        background-color: gray;
+        color: #fff;
+        cursor: pointer;
+        border: none;
+    }
+
+    .select-btn:hover {
+
+        background-color: lightslategrey;
+    }
+
+    .select-btn:active {
+
+        background-color: lightgrey;
+    }
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
