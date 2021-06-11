@@ -8,6 +8,7 @@ import { UserService } from './user.service';
 import { Player } from '../_models/Player';
 import { WordContanerComponent } from '../game-board/word-contaner/word-contaner.component';
 import { environment } from 'src/environments/environment';
+import { RoundInfo } from '../_models/RoundInfo';
 
 @Injectable({
   providedIn: 'root'
@@ -99,9 +100,9 @@ export class GameService {
       wordContainerComponent.uncoverLetter(letter, letterPoistion);
     });
 
-    this.hubConnection?.on('RecieveAnswer', (objectToBeNamed : any, users : Array<Player>) => {
+    this.hubConnection?.on('RecieveAnswer', (roundInfo : RoundInfo, users : Array<Player>) => {
       gameBoardComponent.chatWindowComponent!.isDrawer = true;
-      if (objectToBeNamed.lastRound) {
+      if (roundInfo.isLastRound) {
         gameBoardComponent.finishGame();
         return;
       }
