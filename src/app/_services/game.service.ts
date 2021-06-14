@@ -31,7 +31,8 @@ export class GameService {
 
   registerEvents(chatWindow : HTMLDivElement | undefined, pointsWindow : HTMLDivElement | undefined,
     gameBoardComponent : GameBoardComponent, wordContainerComponent : WordContanerComponent) : void {
-    this.hubConnection?.on('RecieveMessage', (message : Message) => {
+    
+      this.hubConnection?.on('RecieveMessage', (message : Message) => {
       chatWindow?.appendChild(this.createChatBubble(message));
       chatWindow!.scrollTop = chatWindow!.scrollHeight;
     });
@@ -111,6 +112,10 @@ export class GameService {
       clearInterval(wordContainerComponent.timerInterval);
       wordContainerComponent.timer = 60;
     });
+
+    this.hubConnection?.on('RecieveAnswerMessage', () => {
+      chatWindow?.appendChild(this.createGuessedCorrectlyBubble());
+    })
   }
 
   private setAdmin(users : Array<Player>, gameBoardComponent : GameBoardComponent) {
@@ -210,6 +215,16 @@ export class GameService {
     const message = (connected) ? 'connected' : 'disconnected';
     const p = document.createElement('p');
     p.innerText = username + ' ' + message + '!';
+
+    return p;
+  }
+
+  createGuessedCorrectlyBubble(): any {
+    
+    const p = document.createElement('p');
+    
+    p.innerText = 'You guessed correctly!';
+    p.style.color = 'green';
 
     return p;
   }
