@@ -1,3 +1,5 @@
 <div id="points-board" #pointsBoard>
-    <div></div>
+    <p *ngFor="let player of this.gameManagerService?.getPlayers()" style="margin-bottom: 5px;">
+        {{ player.username }} {{ player.points }}
+    </p>
 </div>

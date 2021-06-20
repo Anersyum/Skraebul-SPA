@@ -6,6 +6,7 @@ import { Move } from '../_models/Move';
 import { Position } from '../_models/Position';
 import { Thickness } from '../_models/Thickness';
 import { GameService } from '../_services/game.service';
+import { GameManagerService } from '../_services/gameManager.service';
 import { Guess_wordService } from '../_services/guess_word.service';
 import { ChatWindowComponent } from './chat-window/chat-window.component';
 import { PointsBoardComponent } from './points-board/points-board.component';
@@ -48,7 +49,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
   undoStack : Array<Array<Move>> = [];
   isChosingWord : boolean = false;
 
-  constructor(public gameService : GameService, private wordService: Guess_wordService) { }
+  constructor(public gameService : GameService, public gameManagerService : GameManagerService) { }
   
   ngOnDestroy(): void {
     this.gameService.disconnect();

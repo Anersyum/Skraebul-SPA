@@ -2,7 +2,7 @@
 <div id="canvas-container">
   <app-word-choice id="word-choice-container" *ngIf="isChosingWord" [gameService]="this.gameService"
     [wordContainerComponent]="this.wordContainerComponent" [chatWindowComponent]="this.chatWindowComponent" [gameBoardComponent]="this"></app-word-choice>
-  <app-points-board #pointsBoardComponent style="height: {{ chatBoxHeight }}px; margin-left: 10px; margin-top: -40px;"></app-points-board>
+  <app-points-board #pointsBoardComponent [gameManagerService]="this.gameManagerService" style="height: {{ chatBoxHeight }}px; margin-left: 10px; margin-top: -40px;"></app-points-board>
   <div style="display: flex; flex-direction: column; position: relative;">
     <app-word-contaner [gameService]="this.gameService" #wordContainerComponent style="width: {{ wordContainerWidth }}px" class="word-container"></app-word-contaner>
     <canvas #myCanvas (window:resize)="onResize()" draggable="false" (dragstart)="false;" 
@@ -25,5 +25,5 @@
       </div>
     </div>
   </div>
-  <app-chat-window #chatWindowComponent [gameService]="this.gameService" style="height: {{ chatBoxHeight }}px; margin-left: 10px; margin-top: -40px;"></app-chat-window>
+  <app-chat-window #chatWindowComponent [gameService]="this.gameService" [wordContainerComponent]="this.wordContainerComponent" style="height: {{ chatBoxHeight }}px; margin-left: 10px; margin-top: -40px;"></app-chat-window>
 </div>

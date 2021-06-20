@@ -9,6 +9,7 @@ import { Player } from '../_models/Player';
 import { WordContanerComponent } from '../game-board/word-contaner/word-contaner.component';
 import { environment } from 'src/environments/environment';
 import { RoundInfo } from '../_models/RoundInfo';
+import { GameManagerService } from './gameManager.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class GameService {
 
   private hubConnection : HubConnection | null = null;
 
-  constructor(private userservice : UserService) {}
+  constructor(private userservice : UserService, private gameManagerService: GameManagerService) {}
 
   connect() : void {
     let username = this.userservice.getName();
@@ -38,13 +39,13 @@ export class GameService {
     });
 
     this.hubConnection?.on('Connected', (users : Array<Player>, username : string) => {
-      pointsWindow?.firstChild?.replaceWith(this.createPointsBubble(users));
+      this.gameManagerService.setPlayers(users);
       chatWindow?.appendChild(this.createConnectedBubble(username)); 
       this.setAdmin(users, gameBoardComponent);
     });
 
     this.hubConnection?.on('Disconnected', (users : Array<Player>, username : string) => {
-      pointsWindow?.firstChild?.replaceWith(this.createPointsBubble(users));
+      this.gameManagerService.setPlayers(users);
       chatWindow?.appendChild(this.createConnectedBubble(username, false));
       this.setAdmin(users, gameBoardComponent);
     });
@@ -107,6 +108,8 @@ export class GameService {
         gameBoardComponent.finishGame();
         return;
       }
+      this.gameManagerService.setPlayers(users);
+      console.log(users);
       gameBoardComponent.clearBoardAndWord();
       this.setAdmin(users, gameBoardComponent);
       clearInterval(wordContainerComponent.timerInterval);
@@ -193,23 +196,6 @@ export class GameService {
     return p;
   }
 
-  private createPointsBubble(users : Array<Player>) : HTMLParagraphElement {
-
-    const p = document.createElement('p');
-
-    for (let i = 0; i < users.length; i++) {
-      
-      const userParagraph = document.createElement('p');
-  
-      userParagraph.innerText = users[i].username + ' ' + users[i].points;
-      userParagraph.style.margin = '5px';
-
-      p.appendChild(userParagraph);
-    }
-
-    return p;
-  }
-
   private createConnectedBubble(username : string, connected : boolean = true) : HTMLParagraphElement {
     
     const message = (connected) ? 'connected' : 'disconnected';
@@ -249,7 +235,7 @@ export class GameService {
     this.hubConnection?.invoke('SendUncoveredLetter', letter, letterPoistion);
   }
 
-  sendAnswer(answer : string) {
-    this.hubConnection?.invoke('SendAnswer', answer);
+  sendAnswer(answer : string, time : number) {
+    this.hubConnection?.invoke('SendAnswer', answer, time);
   }
 }

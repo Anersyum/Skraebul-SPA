@@ -2,6 +2,7 @@ import { AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChi
 import { Message } from 'src/app/_models/Message';
 import { GameService } from 'src/app/_services/game.service';
 import { UserService } from 'src/app/_services/user.service';
+import { WordContanerComponent } from '../word-contaner/word-contaner.component';
 
 @Component({
   selector: 'app-chat-window',
@@ -12,6 +13,7 @@ export class ChatWindowComponent implements OnInit {
 
   @ViewChild('chatBox') chatbox? : ElementRef<HTMLDivElement>;
   @Input() gameService : GameService | null = null;
+  @Input() wordContainerComponent : WordContanerComponent | null = null;
   isDrawer : boolean = true;
   username : string = '';
 
@@ -41,7 +43,9 @@ export class ChatWindowComponent implements OnInit {
   }
 
   guess(word : string, guessBox : HTMLInputElement) {
+
+    const timer : number = this.wordContainerComponent?.timer as number;
     guessBox.value = '';
-    this.gameService?.sendAnswer(word);
+    this.gameService?.sendAnswer(word, timer);
   }
 }
