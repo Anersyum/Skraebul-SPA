@@ -25,5 +25,11 @@
       </div>
     </div>
   </div>
-  <app-chat-window #chatWindowComponent [gameService]="this.gameService" [wordContainerComponent]="this.wordContainerComponent" style="height: {{ chatBoxHeight }}px; margin-left: 10px; margin-top: -40px;"></app-chat-window>
+  <app-chat-window #chatWindowComponent
+    [playerLoggedIn]="gameManagerService.player" 
+    [gameService]="this.gameService" 
+    [wordContainerComponent]="this.wordContainerComponent" 
+    style="height: {{ chatBoxHeight }}px; margin-left: 10px; margin-top: -40px;"
+  >
+  </app-chat-window>
 </div>

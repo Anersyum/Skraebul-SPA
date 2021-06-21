@@ -1,5 +1,6 @@
 export interface Player {
     username : string,
-    points : number,
-    isAdmin : boolean
+    points? : number,
+    isAdmin? : boolean,
+    loggedIn? : boolean
 };

@@ -13,19 +13,21 @@ import { WordChoiceComponent } from './game-board/word-choice/word-choice.compon
 
 @NgModule({
   declarations: [		
+    // components
     AppComponent,
     GameBoardComponent,
     WordContanerComponent,
     ChatWindowComponent,
     HomeComponent,
     PointsBoardComponent,
-    WordChoiceComponent
+    WordChoiceComponent,
    ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule
   ],
+  exports: [],
   providers: [],
   bootstrap: [AppComponent]
 })

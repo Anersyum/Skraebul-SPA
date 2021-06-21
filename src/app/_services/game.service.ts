@@ -1,6 +1,6 @@
 import { Position } from '../_models/Position';
 import { Move } from '../_models/Move';
-import { Injectable } from '@angular/core';
+import { Injectable, Output } from '@angular/core';
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { GameBoardComponent } from '../game-board/game-board.component';
 import { Message } from '../_models/Message';
@@ -40,13 +40,13 @@ export class GameService {
 
     this.hubConnection?.on('Connected', (users : Array<Player>, username : string) => {
       this.gameManagerService.setPlayers(users);
-      chatWindow?.appendChild(this.createConnectedBubble(username)); 
+      this.gameManagerService.player = {username : username, loggedIn : true};
       this.setAdmin(users, gameBoardComponent);
     });
 
     this.hubConnection?.on('Disconnected', (users : Array<Player>, username : string) => {
       this.gameManagerService.setPlayers(users);
-      chatWindow?.appendChild(this.createConnectedBubble(username, false));
+      this.gameManagerService.player = {username : username, loggedIn : false};
       this.setAdmin(users, gameBoardComponent);
     });
 
@@ -126,7 +126,7 @@ export class GameService {
       const user = users[i];
       
       if (user.username == this.userservice.getName()) {
-        gameBoardComponent.canStartGame = user.isAdmin;
+        gameBoardComponent.canStartGame = user.isAdmin as boolean;
         gameBoardComponent.canDraw = false;
       }
     }
@@ -192,15 +192,6 @@ export class GameService {
     p.style.margin = '0';
     p.style.padding = '0';
     p.style.marginBottom = '5px';
-
-    return p;
-  }
-
-  private createConnectedBubble(username : string, connected : boolean = true) : HTMLParagraphElement {
-    
-    const message = (connected) ? 'connected' : 'disconnected';
-    const p = document.createElement('p');
-    p.innerText = username + ' ' + message + '!';
 
     return p;
   }

@@ -7,11 +7,11 @@ import { Player } from '../_models/Player';
 export class GameManagerService {
 
   private players : Array<Player> | null = null;
-  
+  player? : Player;
+
   constructor() { }
   
   setPlayers(players : Array<Player>) : void {
-    console.log(players);
     this.players = players;
   }
 
