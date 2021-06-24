@@ -15,7 +15,7 @@ export class ChatWindowComponent implements OnInit {
   @ViewChild('chatBox') chatbox? : ElementRef<HTMLDivElement>;
   @Input() gameService : GameService | null = null;
   @Input() wordContainerComponent : WordContanerComponent | null = null;
-  @Input() playerLoggedIn? : Player;
+  @Input() chatMessage? : Player | Message;
   isDrawer : boolean = true;
   username : string = '';
   colors : Array<string> = ["red", "blue", "yellow"];

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Message } from '../_models/Message';
 import { Player } from '../_models/Player';
 
 @Injectable({
@@ -8,6 +9,7 @@ export class GameManagerService {
 
   private players : Array<Player> | null = null;
   player? : Player;
+  message? : Message;
 
   constructor() { }
   

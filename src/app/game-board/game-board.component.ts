@@ -48,7 +48,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
   // 0 - start 1 - drawing 2 - end 3 - clear board
   undoStack : Array<Array<Move>> = [];
   isChosingWord : boolean = false;
-
+  
   constructor(public gameService : GameService, public gameManagerService : GameManagerService) { }
   
   ngOnDestroy(): void {

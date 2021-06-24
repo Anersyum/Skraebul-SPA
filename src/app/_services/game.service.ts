@@ -33,9 +33,8 @@ export class GameService {
   registerEvents(chatWindow : HTMLDivElement | undefined, pointsWindow : HTMLDivElement | undefined,
     gameBoardComponent : GameBoardComponent, wordContainerComponent : WordContanerComponent) : void {
     
-      this.hubConnection?.on('RecieveMessage', (message : Message) => {
-      chatWindow?.appendChild(this.createChatBubble(message));
-      chatWindow!.scrollTop = chatWindow!.scrollHeight;
+    this.hubConnection?.on('RecieveMessage', (message : Message) => {
+      this.gameManagerService.message = message;
     });
 
     this.hubConnection?.on('Connected', (users : Array<Player>, username : string) => {
@@ -173,27 +172,6 @@ export class GameService {
       },
       error => console.error(error)
     );
-  }
-
-  private createChatBubble(message : Message) : HTMLParagraphElement {
-
-    const p = document.createElement('p');
-    const strong = document.createElement('strong');
-    const br = document.createElement('br');
-    const span = document.createElement('span');
-
-    strong.innerText = message.username + ':';
-    span.innerText = message.message;
-    
-    p.appendChild(strong);
-    p.appendChild(br);
-    p.appendChild(span);
-
-    p.style.margin = '0';
-    p.style.padding = '0';
-    p.style.marginBottom = '5px';
-
-    return p;
   }
 
   createGuessedCorrectlyBubble(): any {

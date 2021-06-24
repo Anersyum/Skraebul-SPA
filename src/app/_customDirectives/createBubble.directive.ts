@@ -1,4 +1,5 @@
 import { Directive, ElementRef, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Message } from '../_models/Message';
 import { Player } from '../_models/Player';
 
 @Directive({
@@ -6,21 +7,56 @@ import { Player } from '../_models/Player';
 })
 export class CreateBubbleDirective implements OnChanges {
 
-  @Input() appCreateBubble? : Player;
+  @Input() appCreateBubble? : Player | Message;
 
   constructor(private el : ElementRef<HTMLDivElement>) { }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.appCreateBubble) {
-      const p = document.createElement('p');
-      if (this.appCreateBubble?.loggedIn) {
-        p.innerText = this.appCreateBubble.username + ' connected!';
+    if (changes.appCreateBubble && changes.appCreateBubble.currentValue) {
+      let p : HTMLParagraphElement;
+
+      if (this.isMessage(this.appCreateBubble)) {
+        p = this.createChatBubble(this.appCreateBubble);
         this.el.nativeElement.appendChild(p);
+        this.el.nativeElement.scrollTop = this.el.nativeElement.scrollHeight;
+        return;
       }
-      else if (this.appCreateBubble?.loggedIn === false) {
-        p.innerText = this.appCreateBubble.username + ' disconnected!';
-        this.el.nativeElement.appendChild(p);
-      }
+
+      p = this.createConnectedBubble(this.appCreateBubble as Player);
+      this.el.nativeElement.appendChild(p);
     }
+  }
+
+  private isMessage(message? : Player | Message) : message is Message {
+    return (message as Message).message != undefined;
+  }
+
+  private createChatBubble(message : Message) : HTMLParagraphElement {
+
+    const p = document.createElement('p');
+    const strong = document.createElement('strong');
+    const br = document.createElement('br');
+    const span = document.createElement('span');
+
+    strong.innerText = message.username + ':';
+    span.innerText = message.message;
+    
+    p.appendChild(strong);
+    p.appendChild(br);
+    p.appendChild(span);
+
+    p.style.margin = '0';
+    p.style.padding = '0';
+    p.style.marginBottom = '5px';
+
+    return p;
+  }
+
+  private createConnectedBubble(player : Player) : HTMLParagraphElement {
+    const p : HTMLParagraphElement = document.createElement('p');
+    const connectedMessage : string = (player.loggedIn) ? ' connected!' : ' disconnected!';
+    p.innerText = player.username + ' ' + connectedMessage;
+
+    return p;
   }
 }
