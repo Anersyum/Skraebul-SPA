@@ -1,4 +1,5 @@
 export interface Message {
     username : string,
-    message : string
+    message : string,
+    correctAnswer? : boolean
 };

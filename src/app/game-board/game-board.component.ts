@@ -94,8 +94,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.context = this.canvas?.getContext("2d")!;
 
-    this.gameService.registerEvents(this.chatWindowComponent?.chatbox?.nativeElement,
-      this.pointsBoardComponent?.pointsBoard?.nativeElement, this, this.wordContainerComponent as WordContanerComponent);
+    this.gameService.registerEvents(this, this.wordContainerComponent as WordContanerComponent);
 
     this.gameService.startConnection();
   }

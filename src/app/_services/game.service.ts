@@ -30,11 +30,11 @@ export class GameService {
     .build();
   }
 
-  registerEvents(chatWindow : HTMLDivElement | undefined, pointsWindow : HTMLDivElement | undefined,
-    gameBoardComponent : GameBoardComponent, wordContainerComponent : WordContanerComponent) : void {
+  registerEvents(gameBoardComponent : GameBoardComponent, wordContainerComponent : WordContanerComponent) : void {
     
     this.hubConnection?.on('RecieveMessage', (message : Message) => {
       this.gameManagerService.message = message;
+      this.gameManagerService.message.correctAnswer = false;
     });
 
     this.hubConnection?.on('Connected', (users : Array<Player>, username : string) => {
@@ -116,8 +116,12 @@ export class GameService {
     });
 
     this.hubConnection?.on('RecieveAnswerMessage', () => {
-      chatWindow?.appendChild(this.createGuessedCorrectlyBubble());
-    })
+      this.gameManagerService.message = {
+        username: '',
+        message: '',
+        correctAnswer: true
+      };
+    });
   }
 
   private setAdmin(users : Array<Player>, gameBoardComponent : GameBoardComponent) {
@@ -172,16 +176,6 @@ export class GameService {
       },
       error => console.error(error)
     );
-  }
-
-  createGuessedCorrectlyBubble(): any {
-    
-    const p = document.createElement('p');
-    
-    p.innerText = 'You guessed correctly!';
-    p.style.color = 'green';
-
-    return p;
   }
   
   sendMessage(message : Message) : void {

@@ -16,7 +16,14 @@ export class CreateBubbleDirective implements OnChanges {
       let p : HTMLParagraphElement;
 
       if (this.isMessage(this.appCreateBubble)) {
-        p = this.createChatBubble(this.appCreateBubble);
+        
+        if (this.appCreateBubble.correctAnswer) {
+          p = this.createGuessedCorrectlyBubble();
+        }
+        else {
+          p = this.createChatBubble(this.appCreateBubble);
+        }
+        
         this.el.nativeElement.appendChild(p);
         this.el.nativeElement.scrollTop = this.el.nativeElement.scrollHeight;
         return;
@@ -56,6 +63,16 @@ export class CreateBubbleDirective implements OnChanges {
     const p : HTMLParagraphElement = document.createElement('p');
     const connectedMessage : string = (player.loggedIn) ? ' connected!' : ' disconnected!';
     p.innerText = player.username + ' ' + connectedMessage;
+
+    return p;
+  }
+
+  private createGuessedCorrectlyBubble(): HTMLParagraphElement {
+    
+    const p = document.createElement('p');
+    
+    p.innerText = 'You guessed correctly!';
+    p.style.color = 'green';
 
     return p;
   }
