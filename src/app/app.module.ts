@@ -10,6 +10,7 @@ import { ChatWindowComponent } from './game-board/chat-window/chat-window.compon
 import { HomeComponent } from './home/home.component';
 import { PointsBoardComponent } from './game-board/points-board/points-board.component';
 import { WordChoiceComponent } from './game-board/word-choice/word-choice.component';
+import { CreateBubbleDirective } from './_customDirectives/createBubble.directive';
 
 @NgModule({
   declarations: [		
@@ -21,6 +22,8 @@ import { WordChoiceComponent } from './game-board/word-choice/word-choice.compon
     HomeComponent,
     PointsBoardComponent,
     WordChoiceComponent,
+    // directives
+    CreateBubbleDirective
    ],
   imports: [
     BrowserModule,
