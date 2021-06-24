@@ -49,8 +49,4 @@ export class ChatWindowComponent implements OnInit {
     guessBox.value = '';
     this.gameService?.sendAnswer(word, timer);
   }
-
-  test(e : any) {
-    alert("radi");
-  }
 }
