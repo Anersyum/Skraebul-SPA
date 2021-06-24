@@ -43,7 +43,7 @@ export class ChatWindowComponent implements OnInit {
     input.value = '';
   }
 
-  guess(word : string, guessBox : HTMLInputElement) {
+  guess(word : string, guessBox : HTMLInputElement) : void {
 
     const timer : number = this.wordContainerComponent?.timer as number;
     guessBox.value = '';
