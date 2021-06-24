@@ -10,6 +10,7 @@ export class GameManagerService {
   private players : Array<Player> | null = null;
   player? : Player;
   message? : Message;
+  drawing : boolean = true;
 
   constructor() { }
   

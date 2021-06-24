@@ -16,7 +16,7 @@ export class ChatWindowComponent implements OnInit {
   @Input() gameService : GameService | null = null;
   @Input() wordContainerComponent : WordContanerComponent | null = null;
   @Input() chatMessage? : Player | Message;
-  isDrawer : boolean = true;
+  @Input() isDrawer? : boolean;
   username : string = '';
   colors : Array<string> = ["red", "blue", "yellow"];
   color : string = this.colors[0];
@@ -25,6 +25,7 @@ export class ChatWindowComponent implements OnInit {
 
   ngOnInit() : void {
     this.username = this.userService.getName();
+    console.log(this.isDrawer);
   }
 
   onKeyEnter(input : HTMLInputElement) : void {
