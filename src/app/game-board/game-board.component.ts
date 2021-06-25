@@ -113,7 +113,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.context!.strokeStyle = this.color;
   }
 
-  startDrawing(e: MouseEvent | TouchEvent) {
+  beginDrawing(e: MouseEvent | TouchEvent) {
 
     if (!this.gameManagerService.canDraw) {
       return;
@@ -418,17 +418,13 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.brushWidth = this.selectedThickness = penThickness.value;
   }
 
-  startGame() : void {
+  startDrawing() : void {
+    this.clearBoard();
     this.gameManagerService.isChosingWord = true;
   }
 
   clearBoard() {
     this.context?.clearRect(0, 0, this.canvas!.width, this.canvas!.height);
     this.emptyStack();
-  }
-
-  finishGame() {
-    this.clearBoard();
-    this.gameManagerService.finishGame();
   }
 }

@@ -95,6 +95,7 @@ export class GameService {
     // todo: recieve word will recieve letters from the drawing player and the other players timers will not have timers for the word
     this.hubConnection?.on('RecieveChosenWord', (word : string) => {
       let isAdmin : boolean = false;
+      gameBoardComponent.clearBoard();
       this.gameManagerService.hideWord(word, isAdmin, this);
       this.gameManagerService.drawing = false;
     });
@@ -106,12 +107,11 @@ export class GameService {
     this.hubConnection?.on('RecieveAnswer', (roundInfo : RoundInfo, users : Array<Player>) => {
       this.gameManagerService.drawing = true;
       if (roundInfo.isLastRound) {
-        gameBoardComponent.finishGame();
+        this.gameManagerService.finishGame();
         return;
       }
       this.gameManagerService.setPlayers(users);
       // console.log(users);
-      gameBoardComponent.clearBoard();
       this.gameManagerService.finishRound();
       this.setAdmin(users);
       this.gameManagerService.disableTimer();
