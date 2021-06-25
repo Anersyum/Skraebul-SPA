@@ -7,10 +7,6 @@ import { Position } from '../_models/Position';
 import { Thickness } from '../_models/Thickness';
 import { GameService } from '../_services/game.service';
 import { GameManagerService } from '../_services/gameManager.service';
-import { Guess_wordService } from '../_services/guess_word.service';
-import { ChatWindowComponent } from './chat-window/chat-window.component';
-import { PointsBoardComponent } from './points-board/points-board.component';
-import { WordContanerComponent } from './word-contaner/word-contaner.component';
 
 @Component({
   selector: 'app-game-board',
@@ -23,9 +19,6 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild("myCanvas") canvasElement? : ElementRef<HTMLCanvasElement>;
   @ViewChild("colorContainer") colorsContainerElement? : ElementRef<HTMLDivElement>;
   @ViewChild("boardControlContainer") boardControlBtnsContainer? : ElementRef<HTMLDivElement>;
-  @ViewChild("chatWindowComponent") chatWindowComponent? : ChatWindowComponent;
-  @ViewChild("pointsBoardComponent") pointsBoardComponent? : PointsBoardComponent;
-  @ViewChild("wordContainerComponent") wordContainerComponent? : WordContanerComponent
   chatBoxHeight : number = 0;
   wordContainerWidth : number = 0;
   canvas? : HTMLCanvasElement;
@@ -118,7 +111,6 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.context!.lineWidth = this.brushWidth;
     this.context!.lineCap = "round";
     this.context!.strokeStyle = this.color;
-
   }
 
   startDrawing(e: MouseEvent | TouchEvent) {
@@ -296,7 +288,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.selectedColor = color.name;
   }
 
-  clearBoard(isUndo : boolean = false) {
+  clearBoardMove(isUndo : boolean = false) {
 
     this.context?.clearRect(0, 0, this.canvas!.width, this.canvas!.height);
 
@@ -347,7 +339,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
 
     const isUndo : boolean = true;
 
-    this.clearBoard(isUndo);
+    this.clearBoardMove(isUndo);
     this.redrawDrawingStack();
     
     if (!isSentMove) {
@@ -430,17 +422,13 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.gameManagerService.isChosingWord = true;
   }
 
-  clearBoardAndWord() {
-    this.gameManagerService!.word = '';
+  clearBoard() {
     this.context?.clearRect(0, 0, this.canvas!.width, this.canvas!.height);
     this.emptyStack();
   }
 
   finishGame() {
-    this.gameManagerService.canDraw = false;
-    this.gameManagerService.canStartGame = false;
-    this.clearBoardAndWord();
-    clearInterval(this.gameManagerService.timerInterval);
-    this.gameManagerService.timer = 60;
+    this.clearBoard();
+    this.gameManagerService.finishGame();
   }
 }

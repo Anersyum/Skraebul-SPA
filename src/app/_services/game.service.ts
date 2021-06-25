@@ -10,6 +10,7 @@ import { WordContanerComponent } from '../game-board/word-contaner/word-contaner
 import { environment } from 'src/environments/environment';
 import { RoundInfo } from '../_models/RoundInfo';
 import { GameManagerService } from './gameManager.service';
+import { isatty } from 'tty';
 
 @Injectable({
   providedIn: 'root'
@@ -93,7 +94,8 @@ export class GameService {
 
     // todo: recieve word will recieve letters from the drawing player and the other players timers will not have timers for the word
     this.hubConnection?.on('RecieveChosenWord', (word : string) => {
-      this.gameManagerService.hideWord(word, false, this);
+      let isAdmin : boolean = false;
+      this.gameManagerService.hideWord(word, isAdmin, this);
       this.gameManagerService.drawing = false;
     });
 
@@ -109,10 +111,10 @@ export class GameService {
       }
       this.gameManagerService.setPlayers(users);
       // console.log(users);
-      gameBoardComponent.clearBoardAndWord();
+      gameBoardComponent.clearBoard();
+      this.gameManagerService.finishRound();
       this.setAdmin(users);
-      clearInterval(this.gameManagerService.timerInterval);
-      this.gameManagerService.timer = 60;
+      this.gameManagerService.disableTimer();
     });
 
     this.hubConnection?.on('RecieveAnswerMessage', () => {

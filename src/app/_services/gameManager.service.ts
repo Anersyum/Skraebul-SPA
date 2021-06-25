@@ -14,7 +14,7 @@ export class GameManagerService implements OnDestroy {
   drawing : boolean = true;
   word : string = '';
   timer : number = 60;
-  timerInterval : any;
+  private timerInterval : any;
   sentLetters : Array<string> = [];
   isChosingWord : boolean = false;
   isDrawing : boolean = false;
@@ -24,7 +24,7 @@ export class GameManagerService implements OnDestroy {
   constructor() { }
 
   ngOnDestroy(): void {
-    clearInterval(this.timerInterval);
+    this.disableTimer();
   }
   
   setPlayers(players : Array<Player>) : void {
@@ -79,7 +79,23 @@ export class GameManagerService implements OnDestroy {
     }, 1000);
   }
 
-  public uncoverLetter(letter : string, letterPoistion : number) : void {
+  uncoverLetter(letter : string, letterPoistion : number) : void {
     this.word = this.word.slice(0, letterPoistion) + letter + this.word.slice(letterPoistion + 1);
+  }
+
+  disableTimer() {
+    clearInterval(this.timerInterval);
+  }
+
+  finishGame() {
+    this.canDraw = false;
+    this.canStartGame = false;
+    this.disableTimer();
+    this.timer = 60;
+  }
+
+  finishRound() {
+    this.word = '';
+    this.timer = 60;
   }
 }
