@@ -47,7 +47,6 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
   selectedThickness? : number;
   // 0 - start 1 - drawing 2 - end 3 - clear board
   undoStack : Array<Array<Move>> = [];
-  isChosingWord : boolean = false;
   
   constructor(public gameService : GameService, public gameManagerService : GameManagerService) { }
   
@@ -431,11 +430,11 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   startGame() : void {
-    this.isChosingWord = true;
+    this.gameManagerService.isChosingWord = true;
   }
 
   clearBoardAndWord() {
-    this.wordContainerComponent!.word = '';
+    this.gameManagerService!.word = '';
     this.context?.clearRect(0, 0, this.canvas!.width, this.canvas!.height);
     this.emptyStack();
   }
@@ -444,7 +443,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.canDraw = false;
     this.canStartGame = false;
     this.clearBoardAndWord();
-    clearInterval(this.wordContainerComponent?.timerInterval);
-    this.wordContainerComponent!.timer = 60;
+    clearInterval(this.gameManagerService.timerInterval);
+    this.gameManagerService.timer = 60;
   }
 }

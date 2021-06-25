@@ -93,12 +93,12 @@ export class GameService {
 
     // todo: recieve word will recieve letters from the drawing player and the other players timers will not have timers for the word
     this.hubConnection?.on('RecieveChosenWord', (word : string) => {
-      wordContainerComponent.hideWord(word, false);
+      this.gameManagerService.hideWord(word, false, this);
       this.gameManagerService.drawing = false;
     });
 
     this.hubConnection?.on('RecieveUncoveredLetter', (letter : string, letterPoistion : number) => {
-      wordContainerComponent.uncoverLetter(letter, letterPoistion);
+      this.gameManagerService.uncoverLetter(letter, letterPoistion);
     });
 
     this.hubConnection?.on('RecieveAnswer', (roundInfo : RoundInfo, users : Array<Player>) => {
@@ -108,11 +108,11 @@ export class GameService {
         return;
       }
       this.gameManagerService.setPlayers(users);
-      console.log(users);
+      // console.log(users);
       gameBoardComponent.clearBoardAndWord();
       this.setAdmin(users, gameBoardComponent);
-      clearInterval(wordContainerComponent.timerInterval);
-      wordContainerComponent.timer = 60;
+      clearInterval(this.gameManagerService.timerInterval);
+      this.gameManagerService.timer = 60;
     });
 
     this.hubConnection?.on('RecieveAnswerMessage', () => {

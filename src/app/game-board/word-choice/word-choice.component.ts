@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { GameService } from 'src/app/_services/game.service';
+import { GameManagerService } from 'src/app/_services/gameManager.service';
 import { Guess_wordService } from 'src/app/_services/guess_word.service';
 import { ChatWindowComponent } from '../chat-window/chat-window.component';
 import { GameBoardComponent } from '../game-board.component';
@@ -16,6 +17,7 @@ export class WordChoiceComponent implements OnInit {
   @Input() wordContainerComponent : WordContanerComponent | null = null;
   @Input() chatWindowComponent : ChatWindowComponent | null = null;
   @Input() gameBoardComponent : GameBoardComponent | null = null;
+  @Input() gameManagerService : GameManagerService | null = null;
   words : Array<string> = []; 
   constructor(private wordService : Guess_wordService) { }
 
@@ -25,14 +27,14 @@ export class WordChoiceComponent implements OnInit {
       this.words = x;
       // this.gameService?.sendWord(gottenWord);
       // this.wordContainerComponent?.hideWord(gottenWord, true);
-      this.chatWindowComponent!.isDrawer = true;
+      this.gameManagerService!.drawing = true;
     });
   }
 
   sendWord(chosenWord : string) {
       this.gameService?.sendWord(chosenWord);
-      this.wordContainerComponent?.hideWord(chosenWord, true);
-      this.gameBoardComponent!.isChosingWord = false;
+      this.gameManagerService!.hideWord(chosenWord, true, this.gameService as GameService);
+      this.gameManagerService!.isChosingWord = false;
   }
 
 }
