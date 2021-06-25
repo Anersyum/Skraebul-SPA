@@ -30,7 +30,7 @@ export class GameService {
     .build();
   }
 
-  registerEvents(gameBoardComponent : GameBoardComponent, wordContainerComponent : WordContanerComponent) : void {
+  registerEvents(gameBoardComponent : GameBoardComponent) : void {
     
     this.hubConnection?.on('RecieveMessage', (message : Message) => {
       this.gameManagerService.message = message;
