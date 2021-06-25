@@ -41,6 +41,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(public gameService : GameService, public gameManagerService : GameManagerService) { }
   
   ngOnDestroy(): void {
+    this.gameManagerService.destroy();
     this.gameService.disconnect();
   }
 

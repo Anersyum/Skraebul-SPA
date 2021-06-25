@@ -24,7 +24,7 @@ export class GameManagerService implements OnDestroy {
   constructor() { }
 
   ngOnDestroy(): void {
-    this.disableTimer();
+    console.log("destroyed game manager");
   }
   
   setPlayers(players : Array<Player>) : void {
@@ -97,5 +97,9 @@ export class GameManagerService implements OnDestroy {
   finishRound() {
     this.word = '';
     this.timer = 60;
+  }
+
+  destroy() {
+    this.disableTimer();
   }
 }

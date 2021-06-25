@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, } from '@angular/core';
 import { Message } from 'src/app/_models/Message';
 import { Player } from 'src/app/_models/Player';
 import { GameService } from 'src/app/_services/game.service';
@@ -12,7 +12,6 @@ import { UserService } from 'src/app/_services/user.service';
 })
 export class ChatWindowComponent implements OnInit {
 
-  @ViewChild('chatBox') chatbox? : ElementRef<HTMLDivElement>;
   @Input() gameService : GameService | null = null;
   @Input() gameManagerService : GameManagerService | null = null;
   @Input() chatMessage? : Player | Message;

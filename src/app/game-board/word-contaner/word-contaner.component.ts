@@ -7,13 +7,14 @@ import { GameManagerService } from 'src/app/_services/gameManager.service';
   templateUrl: './word-contaner.component.html',
   styleUrls: ['./word-contaner.component.scss']
 })
-export class WordContanerComponent implements OnInit {
+export class WordContanerComponent implements OnDestroy {
 
   @Input() public gameService : GameService | null = null;
   @Input() gameManagerService? : GameManagerService;
-  // word : string = '';
 
   constructor() { }
 
-  ngOnInit() {}
+  ngOnDestroy(): void {
+    this.gameManagerService?.disableTimer();
+  }
 }

@@ -1,16 +1,14 @@
 import { Position } from '../_models/Position';
 import { Move } from '../_models/Move';
-import { Injectable, Output } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { GameBoardComponent } from '../game-board/game-board.component';
 import { Message } from '../_models/Message';
 import { UserService } from './user.service';
 import { Player } from '../_models/Player';
-import { WordContanerComponent } from '../game-board/word-contaner/word-contaner.component';
 import { environment } from 'src/environments/environment';
 import { RoundInfo } from '../_models/RoundInfo';
 import { GameManagerService } from './gameManager.service';
-import { isatty } from 'tty';
 
 @Injectable({
   providedIn: 'root'
@@ -186,6 +184,19 @@ export class GameService {
 
   disconnect() : void {
     this.hubConnection?.stop();
+    this.hubConnection = null;
+    this.deregisterEvents();
+  }
+
+  deregisterEvents() : void {
+    
+    this.hubConnection?.off('RecieveMessage');
+    this.hubConnection?.off('Connected');
+    this.hubConnection?.off('Disconnected');
+    this.hubConnection?.off("RecieveMove");
+    this.hubConnection?.off('RecieveChosenWord');
+    this.hubConnection?.off('RecieveUncoveredLetter');
+    this.hubConnection?.off('RecieveAnswer');
   }
 
   sendMove(move : Move) : void {
