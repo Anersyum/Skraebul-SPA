@@ -40,13 +40,13 @@ export class GameService {
     this.hubConnection?.on('Connected', (users : Array<Player>, username : string) => {
       this.gameManagerService.setPlayers(users);
       this.gameManagerService.player = {username : username, loggedIn : true};
-      this.setAdmin(users, gameBoardComponent);
+      this.setAdmin(users);
     });
 
     this.hubConnection?.on('Disconnected', (users : Array<Player>, username : string) => {
       this.gameManagerService.setPlayers(users);
       this.gameManagerService.player = {username : username, loggedIn : false};
-      this.setAdmin(users, gameBoardComponent);
+      this.setAdmin(users);
     });
 
     this.hubConnection?.on("RecieveMove", (move : Move) => {
@@ -110,7 +110,7 @@ export class GameService {
       this.gameManagerService.setPlayers(users);
       // console.log(users);
       gameBoardComponent.clearBoardAndWord();
-      this.setAdmin(users, gameBoardComponent);
+      this.setAdmin(users);
       clearInterval(this.gameManagerService.timerInterval);
       this.gameManagerService.timer = 60;
     });
@@ -124,13 +124,13 @@ export class GameService {
     });
   }
 
-  private setAdmin(users : Array<Player>, gameBoardComponent : GameBoardComponent) {
+  private setAdmin(users : Array<Player>) {
     for (let i = 0; i < users.length; i++) {
       const user = users[i];
       
       if (user.username == this.userservice.getName()) {
-        gameBoardComponent.canStartGame = user.isAdmin as boolean;
-        gameBoardComponent.canDraw = false;
+        this.gameManagerService.canStartGame = user.isAdmin as boolean;
+        this.gameManagerService.canDraw = false;
       }
     }
   }

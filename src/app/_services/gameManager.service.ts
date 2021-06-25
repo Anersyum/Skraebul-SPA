@@ -17,6 +17,9 @@ export class GameManagerService implements OnDestroy {
   timerInterval : any;
   sentLetters : Array<string> = [];
   isChosingWord : boolean = false;
+  isDrawing : boolean = false;
+  canDraw : boolean = false;
+  canStartGame : boolean = false;
 
   constructor() { }
 

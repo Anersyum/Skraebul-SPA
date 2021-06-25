@@ -23,7 +23,7 @@ export class WordChoiceComponent implements OnInit {
 
   ngOnInit() {
     this.wordService.getWord().subscribe((x : Array<string>) => {
-      this.gameBoardComponent!.canDraw = true;
+      this.gameManagerService!.canDraw = true;
       this.words = x;
       // this.gameService?.sendWord(gottenWord);
       // this.wordContainerComponent?.hideWord(gottenWord, true);

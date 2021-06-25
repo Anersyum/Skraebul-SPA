@@ -28,9 +28,6 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild("wordContainerComponent") wordContainerComponent? : WordContanerComponent
   chatBoxHeight : number = 0;
   wordContainerWidth : number = 0;
-  isDrawing : boolean = false;
-  canDraw : boolean = false;
-  canStartGame : boolean = false;
   canvas? : HTMLCanvasElement;
   color : string = "black";
   brushWidth : number = 5;
@@ -126,7 +123,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   startDrawing(e: MouseEvent | TouchEvent) {
 
-    if (!this.canDraw) {
+    if (!this.gameManagerService.canDraw) {
       return;
     }
 
@@ -154,7 +151,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.addToDrawingStack(points);
 
-    this.isDrawing = true;
+    this.gameManagerService.isDrawing = true;
     
     this.context?.beginPath();
     
@@ -181,7 +178,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   draw(e: MouseEvent | TouchEvent) {
 
-    if (!this.canDraw) {
+    if (!this.gameManagerService.canDraw) {
       return;
     }
 
@@ -191,7 +188,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
       y: eventCoordinates.y - this.yOffset 
     };
 
-    if (this.isDrawing) {
+    if (this.gameManagerService.isDrawing) {
       
       this.context?.lineTo(offsetCoordinates.x, offsetCoordinates.y);
       this.context?.stroke();
@@ -224,7 +221,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   stopDrawing(e : MouseEvent | TouchEvent) {
 
-    if (!this.canDraw) {
+    if (!this.gameManagerService.canDraw) {
       return;
     }
 
@@ -234,7 +231,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
       y: eventCoordinates.y - this.yOffset 
     };
 
-    if (!this.isDrawing) {
+    if (!this.gameManagerService.isDrawing) {
       return;
     }
 
@@ -251,7 +248,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
     };
 
     this.addToDrawingStack(points);
-    this.isDrawing = false;
+    this.gameManagerService.isDrawing = false;
     this.gameService.sendMove({
       position: eventCoordinates,
       drawing: points.drawing,
@@ -440,8 +437,8 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   finishGame() {
-    this.canDraw = false;
-    this.canStartGame = false;
+    this.gameManagerService.canDraw = false;
+    this.gameManagerService.canStartGame = false;
     this.clearBoardAndWord();
     clearInterval(this.gameManagerService.timerInterval);
     this.gameManagerService.timer = 60;
