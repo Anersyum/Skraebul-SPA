@@ -1,5 +1,4 @@
-import { Input } from '@angular/core';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { GameManagerService } from 'src/app/_services/gameManager.service';
 
 @Component({
@@ -9,9 +8,7 @@ import { GameManagerService } from 'src/app/_services/gameManager.service';
 })
 export class PointsBoardComponent implements OnInit, AfterViewInit {
 
-  @Input("gameManagerService") gameManagerService? : GameManagerService;
-
-  constructor() { }
+  constructor(public gameManagerService : GameManagerService) { }
 
   ngAfterViewInit(): void {
   }

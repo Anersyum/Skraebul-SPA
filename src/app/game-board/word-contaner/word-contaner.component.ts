@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { GameService } from 'src/app/_services/game.service';
 import { GameManagerService } from 'src/app/_services/gameManager.service';
 
@@ -9,10 +9,7 @@ import { GameManagerService } from 'src/app/_services/gameManager.service';
 })
 export class WordContanerComponent implements OnDestroy {
 
-  @Input() public gameService : GameService | null = null;
-  @Input() gameManagerService? : GameManagerService;
-
-  constructor() { }
+  constructor(public gameService : GameService, public gameManagerService : GameManagerService) { }
 
   ngOnDestroy(): void {
     this.gameManagerService?.disableTimer();

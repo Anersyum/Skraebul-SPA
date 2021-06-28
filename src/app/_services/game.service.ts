@@ -1,6 +1,6 @@
 import { Position } from '../_models/Position';
 import { Move } from '../_models/Move';
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { GameBoardComponent } from '../game-board/game-board.component';
 import { Message } from '../_models/Message';
@@ -13,20 +13,26 @@ import { GameManagerService } from './gameManager.service';
 @Injectable({
   providedIn: 'root'
 })
-export class GameService {
+export class GameService implements OnDestroy {
 
   private hubConnection : HubConnection | null = null;
 
-  constructor(private userservice : UserService, private gameManagerService: GameManagerService) {}
+  constructor(private userservice : UserService, private gameManagerService: GameManagerService) {
+    console.log("does me work")
+  }
+
+  ngOnDestroy(): void {
+    alert("Gameservice doen")
+  }
 
   connect() : void {
     let username = this.userservice.getName();
     
     this.hubConnection = new HubConnectionBuilder()
-    .withUrl(environment.url +'/chathub?username=' + username)
-    .withAutomaticReconnect()
-    .configureLogging(LogLevel.Information)
-    .build();
+      .withUrl(environment.url +'/chathub?username=' + username)
+      .withAutomaticReconnect()
+      .configureLogging(LogLevel.Information)
+      .build();
   }
 
   registerEvents(gameBoardComponent : GameBoardComponent) : void {

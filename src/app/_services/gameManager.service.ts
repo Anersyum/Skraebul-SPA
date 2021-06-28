@@ -24,7 +24,7 @@ export class GameManagerService implements OnDestroy {
   constructor() { }
 
   ngOnDestroy(): void {
-    console.log("destroyed game manager");
+    alert("destroyed game manager");
   }
   
   setPlayers(players : Array<Player>) : void {

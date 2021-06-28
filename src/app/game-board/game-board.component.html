@@ -1,10 +1,9 @@
 <a routerLink="" style="position: absolute; top: 10px; right: 10px; z-index: 1;">C</a>
 <div id="canvas-container">
-  <app-word-choice id="word-choice-container" *ngIf="gameManagerService.isChosingWord" [gameService]="this.gameService" [gameManagerService]="gameManagerService"
-    [wordContainerComponent]="this.wordContainerComponent" [chatWindowComponent]="this.chatWindowComponent" [gameBoardComponent]="this"></app-word-choice>
-  <app-points-board #pointsBoardComponent [gameManagerService]="this.gameManagerService" style="height: {{ chatBoxHeight }}px; margin-left: 10px; margin-top: -40px;"></app-points-board>
+  <app-word-choice id="word-choice-container" *ngIf="gameManagerService.isChosingWord"></app-word-choice>
+  <app-points-board #pointsBoardComponent style="height: {{ chatBoxHeight }}px; margin-left: 10px; margin-top: -40px;"></app-points-board>
   <div style="display: flex; flex-direction: column; position: relative;">
-    <app-word-contaner [gameManagerService]="gameManagerService" [gameService]="this.gameService" #wordContainerComponent style="width: {{ wordContainerWidth }}px" class="word-container"></app-word-contaner>
+    <app-word-contaner  #wordContainerComponent style="width: {{ wordContainerWidth }}px" class="word-container"></app-word-contaner>
     <canvas #myCanvas (window:resize)="onResize()" draggable="false" (dragstart)="false;" 
       (mouseleave)="stopDrawing($event)" (mousedown)="beginDrawing($event)" (mousemove)="draw($event)" 
       (mouseup)="stopDrawing($event)" (touchstart)="beginDrawing($event)" (touchmove)="draw($event)" (touchend)="stopDrawing($event)"></canvas>
@@ -26,11 +25,6 @@
     </div>
   </div>
   <app-chat-window #chatWindowComponent
-    [chatMessage]="gameManagerService.player" 
-    [chatMessage]="gameManagerService.message"
-    [isDrawer]="gameManagerService.drawing"
-    [gameService]="this.gameService" 
-    [gameManagerService]="gameManagerService" 
     style="height: {{ chatBoxHeight }}px; margin-left: 10px; margin-top: -40px;"
   >
   </app-chat-window>
