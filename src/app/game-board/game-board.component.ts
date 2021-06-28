@@ -45,7 +45,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.gameService.disconnect();
   }
 
-  ngOnInit() {
+  ngOnInit() : void {
     this.gameService.connect();
     this.penColorsArray.forEach((color : string) => {
 
@@ -75,7 +75,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit() : void {
 
     this.canvas = this.canvasElement?.nativeElement;
     this.colorsContanier = this.colorsContainerElement?.nativeElement;
@@ -85,11 +85,10 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.context = this.canvas?.getContext("2d")!;
 
     this.gameService.registerEvents(this);
-
     this.gameService.startConnection();
   }
 
-  private createCanvasDimensions() {
+  private createCanvasDimensions() : void {
     this.canvas!.width = window.innerWidth / 2;
     this.canvas!.height = window.innerHeight / 1.5;
 
@@ -97,7 +96,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.yOffset = this.canvas!.getClientRects()[0].y;
   }
 
-  onResize() {
+  onResize() : void {
     this.wordContainerWidth = 0;
     this.chatBoxHeight = 0;
 
@@ -107,14 +106,18 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.chatBoxHeight = this.canvas!.height;
   }
 
-  initializePen() {
+  initializePen() : void {
 
     this.context!.lineWidth = this.brushWidth;
     this.context!.lineCap = "round";
     this.context!.strokeStyle = this.color;
   }
 
-  beginDrawing(e: MouseEvent | TouchEvent) {
+  /**
+   * Initialize drawing immidiately after clicking on the canvas
+   * @param e : MouseEvent | TouchEvent
+   */
+  beginDrawing(e: MouseEvent | TouchEvent) : void {
 
     if (!this.gameManagerService.canDraw) {
       return;
@@ -169,7 +172,11 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
     return false;
   }
 
-  draw(e: MouseEvent | TouchEvent) {
+  /**
+   * Draws on canvas while holding the mouse button down.
+   * @param e : MouseEvent | TouchEvent
+   */
+  draw(e: MouseEvent | TouchEvent) : void {
 
     if (!this.gameManagerService.canDraw) {
       return;
@@ -212,7 +219,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  stopDrawing(e : MouseEvent | TouchEvent) {
+  stopDrawing(e : MouseEvent | TouchEvent) : void {
 
     if (!this.gameManagerService.canDraw) {
       return;
@@ -274,7 +281,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
     };
   }
 
-  changePenColor(event : MouseEvent, color : Color) {
+  changePenColor(event : MouseEvent, color : Color) : void {
     
     const element : HTMLAnchorElement = event.target as HTMLAnchorElement;
 
@@ -289,7 +296,12 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.selectedColor = color.name;
   }
 
-  clearBoardMove(isUndo : boolean = false) {
+  /**
+   * A move that the player can use to clear the board.
+   * @param isUndo : boolean - provided when the drawing player clicks undo. If isUndo, won't save that move on the
+   * drawing stack.
+   */
+  clearBoardMove(isUndo : boolean = false) : void {
 
     this.context?.clearRect(0, 0, this.canvas!.width, this.canvas!.height);
 
@@ -328,7 +340,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  undo(isSentMove : boolean) {
+  undo(isSentMove : boolean) : void {
     this.removeFromDrawingStack();
 
     if (this.undoStack.length <= 0) {
@@ -354,7 +366,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  public addToDrawingStack(move: Move) {
+  public addToDrawingStack(move: Move) : void {
 
     if (typeof this.undoStack[this.move] === "undefined") {
       // we add a new empty array to the 2D array model so that we can store point objects in it
@@ -369,15 +381,15 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  private removeFromDrawingStack() {
+  private removeFromDrawingStack() : void {
     this.undoStack.pop();
   }
 
-  private emptyStack() {
+  private emptyStack() : void{
     this.undoStack = [];
   }
 
-  private redrawDrawingStack() {
+  private redrawDrawingStack() : void {
 
     const me : GameBoardComponent = this;
 
@@ -408,7 +420,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
     me.brushWidth = me.selectedThickness as number;
   }
 
-  changeBrushSize(penThickness : Thickness) {
+  changeBrushSize(penThickness : Thickness) : void {
     
     this.penThickness?.forEach((thickness : Thickness) => {
       thickness.isActive = false;
@@ -424,7 +436,10 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.gameManagerService.isChosingWord = true;
   }
 
-  clearBoard() {
+  /**
+   * Used for clearing the board programmatically.
+   */
+  clearBoard() : void {
     this.context?.clearRect(0, 0, this.canvas!.width, this.canvas!.height);
     this.emptyStack();
   }

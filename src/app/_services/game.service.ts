@@ -1,6 +1,6 @@
 import { Position } from '../_models/Position';
 import { Move } from '../_models/Move';
-import { Injectable, OnDestroy, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { GameBoardComponent } from '../game-board/game-board.component';
 import { Message } from '../_models/Message';
@@ -13,17 +13,11 @@ import { GameManagerService } from './gameManager.service';
 @Injectable({
   providedIn: 'root'
 })
-export class GameService implements OnDestroy {
+export class GameService{
 
   private hubConnection : HubConnection | null = null;
 
-  constructor(private userservice : UserService, private gameManagerService: GameManagerService) {
-    console.log("does me work")
-  }
-
-  ngOnDestroy(): void {
-    alert("Gameservice doen")
-  }
+  constructor(private userservice : UserService, private gameManagerService: GameManagerService) {}
 
   connect() : void {
     let username = this.userservice.getName();
@@ -35,6 +29,10 @@ export class GameService implements OnDestroy {
       .build();
   }
 
+  /**
+   * Registers all the events needed for the game.
+   * @param gameBoardComponent
+   */
   registerEvents(gameBoardComponent : GameBoardComponent) : void {
     
     this.hubConnection?.on('RecieveMessage', (message : Message) => {
@@ -130,6 +128,10 @@ export class GameService implements OnDestroy {
     });
   }
 
+  /**
+   * Sets admin of the room so that the game can be started.
+   * @param users 
+   */
   private setAdmin(users : Array<Player>) {
     for (let i = 0; i < users.length; i++) {
       const user = users[i];
@@ -141,6 +143,12 @@ export class GameService implements OnDestroy {
     }
   }
 
+  /**
+   * Adapts coordinates to fit the transition from a larger resolution to a lower and vice versa.
+   * @param gameBoardComponent 
+   * @param move 
+   * @returns Position
+   */
   private getAdaptedCoordinates(gameBoardComponent : GameBoardComponent, move : Move) : Position {
     const sentMoveCanvasWidth : number = move.canvas?.canvasWidth as number;
     const sentMoveCanvasHeight : number = move.canvas?.canvasHeight as number;
