@@ -6,13 +6,10 @@ import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class Guess_wordService implements OnDestroy {
+export class Guess_wordService {
 
   route : string = environment.url + "/words"
   constructor(private http: HttpClient) { }
-  ngOnDestroy(): void {
-    alert("destroyx")
-  }
 
   getWord() : Observable<Array<string>>
   {
