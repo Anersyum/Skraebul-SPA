@@ -41,6 +41,7 @@ export class ChatWindowComponent implements OnInit {
   guess(word : string, guessBox : HTMLInputElement) : void {
 
     const timer : number = this.gameManagerService?.timer as number;
+    
     guessBox.value = '';
     this.gameService?.sendAnswer(word, timer);
   }

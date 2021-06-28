@@ -50,8 +50,6 @@ export class GameManagerService implements OnDestroy {
           this.word = this.word.replace(this.word[i], '_');
         }
       }
-
-      return;
     }
 
     this.startTimer(gameService);
@@ -59,7 +57,7 @@ export class GameManagerService implements OnDestroy {
 
   private startTimer(gameService : GameService) : void {
     this.timerInterval = setInterval(() => {
-      this.timer--;
+      --this.timer;
       console.log(this.timer);
       if (this.timer % 15 == 0) {
         let randPos = Math.floor(Math.random() * this.word.length);
