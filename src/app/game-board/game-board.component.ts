@@ -368,7 +368,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public addToDrawingStack(move: Move) : void {
 
-    if (typeof this.undoStack[this.move] === "undefined") {
+    if (typeof this.undoStack[this.move] === "undefined" || typeof this.undoStack === 'undefined') {
       // we add a new empty array to the 2D array model so that we can store point objects in it
       this.undoStack.push([]);
     }
@@ -387,6 +387,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private emptyStack() : void{
     this.undoStack = [];
+    this.move = 0;
   }
 
   private redrawDrawingStack() : void {
@@ -441,7 +442,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
    * Used for clearing the board programmatically.
    */
   clearBoard() : void {
-    this.context?.clearRect(0, 0, this.canvas!.width, this.canvas!.height);
     this.emptyStack();
+    this.context?.clearRect(0, 0, this.canvas!.width, this.canvas!.height);
   }
 }
