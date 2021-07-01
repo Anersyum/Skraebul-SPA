@@ -21,9 +21,11 @@ export class GameService{
 
   connect() : void {
     let username = this.userservice.getName();
-    
+    const roomNumber : number = this.userservice.roomNumber;
+    const isJoiningRoom : boolean = this.userservice.joinRoom;
+
     this.hubConnection = new HubConnectionBuilder()
-      .withUrl(environment.url +'/chathub?username=' + username)
+      .withUrl(environment.url +'/chathub?username=' + username + '&room=' + roomNumber + '&joinRoom' + isJoiningRoom)
       .withAutomaticReconnect()
       .configureLogging(LogLevel.Information)
       .build();
