@@ -434,6 +434,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
   startDrawing() : void {
     this.clearBoard();
     this.gameManagerService.isChosingWord = true;
+    this.gameManagerService.canStartGame = false;
   }
 
   /**

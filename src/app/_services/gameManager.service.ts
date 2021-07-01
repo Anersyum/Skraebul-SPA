@@ -99,5 +99,13 @@ export class GameManagerService implements OnDestroy {
 
   destroy() {
     this.disableTimer();
+    this.players  = null;
+    this.drawing = true;
+    this.word = '';
+    this.sentLetters = [];
+    this.isChosingWord = false;
+    this.isDrawing = false;
+    this.canDraw = false;
+    this.canStartGame = false;
   }
 }
