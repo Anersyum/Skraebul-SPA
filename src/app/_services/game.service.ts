@@ -119,12 +119,26 @@ export class GameService{
       this.gameManagerService.disableTimer();
     });
 
-    this.hubConnection?.on('RecieveAnswerMessage', () => {
+    this.hubConnection?.on('RecieveAnswerMessage', (answer : string) => {
       this.gameManagerService.message = {
         username: '',
         message: '',
         correctAnswer: true
       };
+      this.gameManagerService.word = answer;
+    });
+
+    this.hubConnection?.on('EndRoundViaTimer', (roundInfo : RoundInfo, users : Array<Player>) => {
+      if (roundInfo.isLastRound) {
+        this.gameManagerService.finishGame();
+        return;
+      }
+      this.gameManagerService.drawing = true;
+      this.gameManagerService.setPlayers(users);
+      // console.log(users);
+      this.gameManagerService.finishRound();
+      this.setAdmin(users);
+      this.gameManagerService.disableTimer();
     });
   }
 
@@ -227,5 +241,9 @@ export class GameService{
 
   sendAnswer(answer : string, time : number) {
     this.hubConnection?.invoke('SendAnswer', answer, time);
+  }
+
+  endRound() {
+    this.hubConnection?.invoke('EndRoundViaTimer');
   }
 }

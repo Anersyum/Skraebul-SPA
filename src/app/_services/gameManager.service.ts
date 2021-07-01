@@ -6,7 +6,7 @@ import { GameService } from './game.service';
 @Injectable({
   providedIn: 'root'
 })
-export class GameManagerService implements OnDestroy {
+export class GameManagerService {
 
   private players : Array<Player> | null = null;
   player? : Player;
@@ -22,10 +22,6 @@ export class GameManagerService implements OnDestroy {
   canStartGame : boolean = false;
 
   constructor() { }
-
-  ngOnDestroy(): void {
-    alert("destroyed game manager");
-  }
   
   setPlayers(players : Array<Player>) : void {
     this.players = players;
@@ -73,6 +69,7 @@ export class GameManagerService implements OnDestroy {
 
       if (this.timer <= 0) {
         clearInterval(this.timerInterval);
+        gameService.endRound();
       }
     }, 1000);
   }
