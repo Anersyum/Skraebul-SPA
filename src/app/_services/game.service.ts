@@ -106,19 +106,17 @@ export class GameService{
       this.gameManagerService.uncoverLetter(letter, letterPoistion);
     });
 
-    this.hubConnection?.on('RecieveAnswer', (roundInfo : RoundInfo, users : Array<Player>, shouldEndRound : boolean) => {
+    this.hubConnection?.on('RecieveAnswer', (roundInfo : RoundInfo, users : Array<Player>) => {
       if (roundInfo.isLastRound) {
         this.gameManagerService.finishGame();
         return;
       }
-      if (shouldEndRound) {
-        this.gameManagerService.drawing = true;
-        this.gameManagerService.setPlayers(users);
-        // console.log(users);
-        this.gameManagerService.finishRound();
-        this.setAdmin(users);
-        this.gameManagerService.disableTimer();
-      }
+      this.gameManagerService.drawing = true;
+      this.gameManagerService.setPlayers(users);
+      // console.log(users);
+      this.gameManagerService.finishRound();
+      this.setAdmin(users);
+      this.gameManagerService.disableTimer();
     });
 
     this.hubConnection?.on('RecieveAnswerMessage', () => {
