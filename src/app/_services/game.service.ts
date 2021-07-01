@@ -23,9 +23,9 @@ export class GameService{
     let username = this.userservice.getName();
     const roomNumber : number = this.userservice.roomNumber;
     const isJoiningRoom : boolean = this.userservice.joinRoom;
-
+    console.log(environment.url +'/chathub?username=' + username + '&room=' + roomNumber + '&joinRoom=' + isJoiningRoom);
     this.hubConnection = new HubConnectionBuilder()
-      .withUrl(environment.url +'/chathub?username=' + username + '&room=' + roomNumber + '&joinRoom' + isJoiningRoom)
+      .withUrl(environment.url +'/chathub?username=' + username + '&room=' + roomNumber + '&joinroom=' + isJoiningRoom)
       .withAutomaticReconnect()
       .configureLogging(LogLevel.Information)
       .build();

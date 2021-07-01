@@ -24,6 +24,7 @@ export class HomeComponent implements OnInit {
 
     this.userservice.roomNumber = (roomNumber.value as unknown) as number;
     this.userservice.setName(input.value);
+    console.log(this.userservice.roomNumber);
     this.router.navigateByUrl("/gameboard");
   }
 
@@ -34,6 +35,7 @@ export class HomeComponent implements OnInit {
     }
 
     this.userservice.roomNumber = (roomNumber.value as unknown) as number;
+    console.log(this.userservice.roomNumber);
     this.userservice.joinRoom = true;
     this.userservice.setName(input.value);
     this.router.navigateByUrl("/gameboard");
