@@ -16,8 +16,25 @@ export class HomeComponent implements OnInit {
     this.username = this.userservice.getName();
   }
 
-  onPlay(input : HTMLInputElement) {
+  onCreateRoom(input : HTMLInputElement, roomNumber : HTMLInputElement) {
     
+    if (input.value == '' || roomNumber.value == '') {
+      return;
+    }
+
+    this.userservice.roomNumber = (roomNumber.value as unknown) as number;
+    this.userservice.setName(input.value);
+    this.router.navigateByUrl("/gameboard");
+  }
+
+  onJoinRoom(input : HTMLInputElement, roomNumber : HTMLInputElement) {
+
+    if (input.value == '' || roomNumber.value == '') {
+      return;
+    }
+
+    this.userservice.roomNumber = (roomNumber.value as unknown) as number;
+    this.userservice.joinRoom = true;
     this.userservice.setName(input.value);
     this.router.navigateByUrl("/gameboard");
   }

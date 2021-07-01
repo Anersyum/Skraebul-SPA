@@ -5,6 +5,9 @@ import { Injectable } from '@angular/core';
 })
 export class UserService {
   
+  roomNumber : number = 0;
+  joinRoom : boolean = false;
+  
   constructor() { }
 
   getName() : string {

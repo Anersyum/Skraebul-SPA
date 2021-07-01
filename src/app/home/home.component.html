@@ -1,4 +1,8 @@
 <div style="width: 100%; height: 100%;">
-  <input #usernameInput type="text" value="{{ this.username }}"/>
-  <a style="cursor: pointer; color: blue;" (click)="onPlay(usernameInput)">Play</a>
+  <input #usernameInput type="text" value="{{ this.username }}" required/>
+  <input #roomNumber type="number">
+  <a style="cursor: pointer; color: blue;" (click)="onCreateRoom(usernameInput, roomNumber)">Create room</a>
+  <input #joinRoomNumber type="number" placeholder="Enter room to join">
+  <a style="cursor: pointer; color: blue;" (click)="onJoinRoom(usernameInput, joinRoomNumber)">Join room</a>
 </div>
+<!-- maybe create two tabs one for joining a room, one for creating a room -->
