@@ -2,30 +2,37 @@
 <div id="canvas-container">
   <app-word-choice id="word-choice-container" *ngIf="gameManagerService.isChosingWord"></app-word-choice>
   <app-points-board #pointsBoardComponent style="height: {{ chatBoxHeight }}px; margin-left: 10px; margin-top: -40px;"></app-points-board>
+  
   <div style="display: flex; flex-direction: column; position: relative;">
     <app-word-contaner  #wordContainerComponent style="width: {{ wordContainerWidth }}px" class="word-container"></app-word-contaner>
+    
     <canvas #myCanvas (window:resize)="onResize()" draggable="false" (dragstart)="false;" 
       (mouseleave)="stopDrawing($event)" (mousedown)="beginDrawing($event)" (mousemove)="draw($event)" 
-      (mouseup)="stopDrawing($event)" (touchstart)="beginDrawing($event)" (touchmove)="draw($event)" (touchend)="stopDrawing($event)"></canvas>
+      (mouseup)="stopDrawing($event)" (touchstart)="beginDrawing($event)" (touchmove)="draw($event)" (touchend)="stopDrawing($event)">
+    </canvas>
+    
     <div #boardControlContainer id="board-control-btns-container">
       <div id="game-managment-btns-container">
         <button (click)="clearBoardMove()" [disabled]="!gameManagerService.canDraw">Clear</button>
         <button (click)="undo(false)" [disabled]="!gameManagerService.canDraw">Undo</button>
         <button (click)="startDrawing()" [disabled]="!gameManagerService.canStartGame">Start Game</button>
       </div>
+
       <div id="brush-thickness-container">
         <div class="brush-btn" *ngFor="let thickness of penThickness" (click)="changeBrushSize(thickness)" [ngClass]="{'thickness-active': thickness.isActive}">
           <div class="brush-thickness" style="width: {{ thickness.value }}px; height: {{ thickness.value }}px;"></div>
         </div>
       </div>
+
       <div  #colorContainer id="color-container">
         <a *ngFor="let penColor of penColors" [ngClass]="{'color-active': penColor.isActive}" style="--btn-background-color: {{ penColor.name }}" 
           (click)="changePenColor($event, penColor)" attr.data-color="{{ penColor.name }}" class="color-btn"></a>
       </div>
     </div>
+
   </div>
+  
   <app-chat-window #chatWindowComponent
-    style="height: {{ chatBoxHeight }}px; margin-left: 10px; margin-top: -40px;"
-  >
+    style="height: {{ chatBoxHeight }}px; margin-left: 10px; margin-top: -40px;">
   </app-chat-window>
 </div>
