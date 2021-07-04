@@ -14,6 +14,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.username = this.userservice.getName();
+    this.userservice.joinRoom = false;
   }
 
   onCreateRoom(input : HTMLInputElement) {
