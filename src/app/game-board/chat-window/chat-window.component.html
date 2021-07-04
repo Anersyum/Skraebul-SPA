@@ -1,4 +1,5 @@
 <div id="chat-container">
+  <div class="room-number">Room ID: {{ userService.roomNumber }}</div>
   <div #chatBox class="chat-window" [appCreateBubble]="gameManagerService.player" [appCreateBubble]="gameManagerService.message">
   </div>
   <input #chatMessageBox type="text" class="chat-message-box" (keydown.enter)="onKeyEnter(chatMessageBox)"/>

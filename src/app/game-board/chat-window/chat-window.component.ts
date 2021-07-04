@@ -15,7 +15,7 @@ export class ChatWindowComponent implements OnInit {
   colors : Array<string> = ["red", "blue", "yellow"];
   color : string = this.colors[0];
 
-  constructor(private userService : UserService, private gameService : GameService, 
+  constructor(public userService : UserService, private gameService : GameService, 
     public gameManagerService : GameManagerService) { }
 
   ngOnInit() : void {
