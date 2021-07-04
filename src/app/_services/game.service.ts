@@ -9,6 +9,7 @@ import { Player } from '../_models/Player';
 import { environment } from 'src/environments/environment';
 import { RoundInfo } from '../_models/RoundInfo';
 import { GameManagerService } from './gameManager.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class GameService{
 
   private hubConnection : HubConnection | null = null;
 
-  constructor(private userservice : UserService, private gameManagerService: GameManagerService) {}
+  constructor(private userservice : UserService, private gameManagerService: GameManagerService, private router : Router) {}
 
   connect() : void {
     let username = this.userservice.getName();
@@ -42,16 +43,22 @@ export class GameService{
       this.gameManagerService.message.correctAnswer = false;
     });
 
-    this.hubConnection?.on('Connected', (users : Array<Player>, username : string) => {
+    this.hubConnection?.on('Connected', (users : Array<Player>, username : string, gameId : number) => {
       this.gameManagerService.setPlayers(users);
       this.gameManagerService.player = {username : username, loggedIn : true};
       this.setAdmin(users);
+      this.userservice.roomNumber = gameId;
     });
 
     this.hubConnection?.on('Disconnected', (users : Array<Player>, username : string) => {
       this.gameManagerService.setPlayers(users);
       this.gameManagerService.player = {username : username, loggedIn : false};
       this.setAdmin(users);
+    });
+
+    this.hubConnection?.on('FailedToConnect', (message : string) => {
+      alert(message);
+      this.router.navigateByUrl('/');
     });
 
     this.hubConnection?.on("RecieveMove", (move : Move) => {
