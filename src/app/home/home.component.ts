@@ -16,15 +16,13 @@ export class HomeComponent implements OnInit {
     this.username = this.userservice.getName();
   }
 
-  onCreateRoom(input : HTMLInputElement, roomNumber : HTMLInputElement) {
+  onCreateRoom(input : HTMLInputElement) {
     
-    if (input.value == '' || roomNumber.value == '') {
+    if (input.value == '') {
       return;
     }
 
-    this.userservice.roomNumber = (roomNumber.value as unknown) as number;
     this.userservice.setName(input.value);
-    console.log(this.userservice.roomNumber);
     this.router.navigateByUrl("/gameboard");
   }
 
