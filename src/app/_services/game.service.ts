@@ -122,6 +122,7 @@ export class GameService{
       }
       this.gameManagerService.drawing = true;
       this.gameManagerService.setPlayers(users);
+      this.gameManagerService.showEndRoundResults();
       // console.log(users);
       this.gameManagerService.finishRound();
       this.setAdmin(users);
