@@ -1,5 +1,6 @@
 <div id="background"></div>
 <div id="create_room_modal">
+  <button class="close-create-room-modal" (click)="closeModal()">X</button>
   <input type="text" placeholder="Room name" #roomName>
   <input type="text" placeholder="Password" [disabled]="!isPasswordChecked" #password>
   <div>

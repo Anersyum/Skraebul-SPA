@@ -44,4 +44,8 @@ export class HomeComponent implements OnInit {
   showCreateRoomWindow() {
     this.isCreatingRoom = true;
   }
+
+  closeCreateRoomModal(event : boolean) {
+    this.isCreatingRoom = !event
+  }
 }

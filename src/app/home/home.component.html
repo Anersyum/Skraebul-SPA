@@ -1,4 +1,4 @@
-<app-create-room (createRoomEvent)="createRoom($event, usernameInput.value)" *ngIf="isCreatingRoom"></app-create-room>
+<app-create-room (closeModalEvent)="closeCreateRoomModal($event)" (createRoomEvent)="createRoom($event, usernameInput.value)" *ngIf="isCreatingRoom"></app-create-room>
 <div style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; flex-direction: column;">
   <input #usernameInput type="text" value="{{ this.username }}" required/>
   <a style="cursor: pointer; color: blue;" (click)="showCreateRoomWindow()">Create room</a>
