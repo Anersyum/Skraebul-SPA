@@ -12,6 +12,7 @@ import { PointsBoardComponent } from './game-board/points-board/points-board.com
 import { WordChoiceComponent } from './game-board/word-choice/word-choice.component';
 import { CreateBubbleDirective } from './_customDirectives/createBubble.directive';
 import { EndRoundPointsComponent } from './game-board/end-round-points/end-round-points.component';
+import { CreateRoomComponent } from './home/create-room/create-room.component';
 
 @NgModule({
   declarations: [		
@@ -24,6 +25,7 @@ import { EndRoundPointsComponent } from './game-board/end-round-points/end-round
     PointsBoardComponent,
     WordChoiceComponent,
     EndRoundPointsComponent,
+    CreateRoomComponent,
     // directives
     CreateBubbleDirective
    ],

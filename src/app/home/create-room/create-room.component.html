@@ -1,0 +1,10 @@
+<div id="background"></div>
+<div id="create_room_modal">
+  <input type="text" placeholder="Room name" #roomName>
+  <input type="text" placeholder="Password" [disabled]="!isPasswordChecked" #password>
+  <div>
+    <label for="">Requires password?</label>
+    <input type="checkbox" (click)="enablePassword()" #hasPassword>
+  </div>
+  <button (click)="createRoom(roomName.value, hasPassword.checked, password.value)">Create room</button>
+</div>
