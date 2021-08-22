@@ -1,7 +1,7 @@
 <div id="end_round_points_container">
   <div class="end-round-points">
       <p *ngFor="let player of this.players" style="margin-bottom: 5px;">
-          {{ player.username }}: {{ player.points! - player.gottenPoints! }} + {{ player.gottenPoints! }}
+          {{ player.username }}: {{ player.points! - player.gottenPoints! }} <span class="points-increase">+ {{ player.gottenPoints! }}</span>
       </p>
   </div>
 </div>

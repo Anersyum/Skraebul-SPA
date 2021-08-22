@@ -10,11 +10,28 @@ import { GameManagerService } from 'src/app/_services/gameManager.service';
 export class EndRoundPointsComponent implements OnInit {
 
   players : Array<Player> = [];
-  
+  exampleData : Array<Player> = [
+    {
+      username: "Amor",
+      points: 200,
+      gottenPoints: 100,
+    },
+    {
+      username: "Amor",
+      points: 200,
+      gottenPoints: 100,
+    },
+    {
+      username: "Amor",
+      points: 200,
+      gottenPoints: 100,
+    }
+  ]
   constructor(private gameManagerService : GameManagerService) { }
 
   ngOnInit() {
-    this.players = this.gameManagerService.getPlayers() as Array<Player>;
+    // this.players = this.gameManagerService.getPlayers() as Array<Player>;
+    this.players = this.exampleData;
   }
 
 }

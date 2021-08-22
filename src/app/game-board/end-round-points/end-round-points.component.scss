@@ -7,11 +7,18 @@
     display: flex;
     justify-content: center;
     align-items: center;
-}
 
-.end-round-points {
-    border: 1px solid #fff;
-    width: 30%;
-    height: 40%;
-    border-radius: 5px;
+    .end-round-points {
+        border: 1px solid #fff;
+        width: 30%;
+        min-height: 40%;
+        border-radius: 5px;
+        background-color: #fff;
+        font-size: 1.4rem;
+        text-align: center;
+    }
+
+    .points-increase {
+        color: green;
+    }
 }
