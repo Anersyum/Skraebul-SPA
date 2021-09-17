@@ -23,8 +23,9 @@ export class HomeComponent implements OnInit {
   createRoom(event : RoomInfo, username : string) {
     
     if (event.roomName == '') return;
-
+    if (!this.username) return; //todo: add an error message 
     this.userservice.setName(username);
+    this.userservice.roomName = event.roomName;
     this.router.navigateByUrl("/gameboard");
   }
 
@@ -34,8 +35,8 @@ export class HomeComponent implements OnInit {
       return;
     }
 
-    this.userservice.roomNumber = (roomNumber.value as unknown) as number;
-    console.log(this.userservice.roomNumber);
+    this.userservice.roomName = (roomNumber.value as unknown) as string;
+    console.log(this.userservice.roomName);
     this.userservice.joinRoom = true;
     this.userservice.setName(input.value);
     this.router.navigateByUrl("/gameboard");

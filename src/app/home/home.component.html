@@ -2,7 +2,7 @@
 <div style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; flex-direction: column;">
   <input #usernameInput type="text" value="{{ this.username }}" required/>
   <a style="cursor: pointer; color: blue;" (click)="showCreateRoomWindow()">Create room</a>
-  <input #joinRoomNumber type="number" placeholder="Enter room to join">
+  <input #joinRoomNumber type="text" placeholder="Enter room to join">
   <a style="cursor: pointer; color: blue;" (click)="onJoinRoom(usernameInput, joinRoomNumber)">Join room</a>
 </div>
 <!-- maybe create two tabs one for joining a room, one for creating a room -->
