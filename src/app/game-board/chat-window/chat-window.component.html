@@ -13,6 +13,6 @@
       </p>
     </ng-template>
   </div>
-  <input #chatMessageBox type="text" class="chat-message-box" (keydown.enter)="onKeyEnter(chatMessageBox)"/>
-  <input #guessBox [disabled]="gameManagerService.drawing" type="text" class="chat-message-box" (keydown.enter)="guess(guessBox.value, guessBox)" placeholder="Guess box"/>
+  <!-- <input #chatMessageBox type="text" class="chat-message-box" (keydown.enter)="onKeyEnter(chatMessageBox)"/> -->
+  <input #guessBox type="text" class="chat-message-box" (keydown.enter)="guess(guessBox.value, guessBox)" placeholder="Guess box"/>
 </div>

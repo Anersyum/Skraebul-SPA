@@ -215,10 +215,6 @@ export class GameService{
       error => console.error(error)
     );
   }
-  
-  sendMessage(message : Message) : void {
-    this.hubConnection?.invoke('SendMessage', message.username, message.message).catch((err : any) => { console.error(err.toString()); });
-  }
 
   disconnect() : void {
     this.hubConnection?.stop();
