@@ -24,6 +24,7 @@ export class HomeComponent implements OnInit {
     
     if (event.roomName == '') return;
     if (!this.username) return; //todo: add an error message 
+    
     this.userservice.setName(username);
     this.userservice.roomName = event.roomName;
     this.router.navigateByUrl("/gameboard");

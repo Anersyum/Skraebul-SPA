@@ -29,4 +29,13 @@
         position: absolute;
         top: -20px;
     }
+
+    .chat-message {
+        margin: 0 0 0 5px;
+        padding: 0;
+    }
+
+    .correct-answer {
+        color: green;
+    }
 }
