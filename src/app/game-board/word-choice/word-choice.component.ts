@@ -7,13 +7,14 @@ import { Guess_wordService } from 'src/app/_services/guess_word.service';
   selector: 'app-word-choice',
   templateUrl: './word-choice.component.html',
   styleUrls: ['./word-choice.component.scss'],
-  providers: [Guess_wordService]
+  providers: [Guess_wordService],
+  standalone: false
 })
 export class WordChoiceComponent implements OnInit {
 
-  words : Array<string> = []; 
+  words : Array<string> = [];
 
-  constructor(private gameService : GameService, 
+  constructor(private gameService : GameService,
     private gameManagerService : GameManagerService, private wordService : Guess_wordService) { }
 
   ngOnInit() {

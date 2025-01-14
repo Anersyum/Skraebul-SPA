@@ -5,7 +5,8 @@ import { UserService } from '../_services/user.service';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
+  standalone: false
 })
 export class HomeComponent implements OnInit {
 
@@ -18,7 +19,7 @@ export class HomeComponent implements OnInit {
   }
 
   onCreateRoom(input : HTMLInputElement) {
-    
+
     if (input.value == '') {
       return;
     }

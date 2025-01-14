@@ -7,7 +7,8 @@ import { UserService } from 'src/app/_services/user.service';
 @Component({
   selector: 'app-chat-window',
   templateUrl: './chat-window.component.html',
-  styleUrls: ['./chat-window.component.scss']
+  styleUrls: ['./chat-window.component.scss'],
+  standalone: false
 })
 export class ChatWindowComponent implements OnInit {
 
@@ -15,7 +16,7 @@ export class ChatWindowComponent implements OnInit {
   colors : Array<string> = ["red", "blue", "yellow"];
   color : string = this.colors[0];
 
-  constructor(public userService : UserService, private gameService : GameService, 
+  constructor(public userService : UserService, private gameService : GameService,
     public gameManagerService : GameManagerService) { }
 
   ngOnInit() : void {
@@ -23,7 +24,7 @@ export class ChatWindowComponent implements OnInit {
   }
 
   onKeyEnter(input : HTMLInputElement) : void {
-    
+
     if (input.value == '') {
       return;
     }
@@ -41,7 +42,7 @@ export class ChatWindowComponent implements OnInit {
   guess(word : string, guessBox : HTMLInputElement) : void {
 
     const timer : number = this.gameManagerService?.timer as number;
-    
+
     guessBox.value = '';
     this.gameService?.sendAnswer(word, timer);
   }

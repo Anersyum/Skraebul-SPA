@@ -3,7 +3,8 @@ import { Message } from '../_models/Message';
 import { Player } from '../_models/Player';
 
 @Directive({
-  selector: '[appCreateBubble]'
+  selector: '[appCreateBubble]',
+  standalone: false
 })
 export class CreateBubbleDirective implements OnChanges {
 
@@ -16,14 +17,14 @@ export class CreateBubbleDirective implements OnChanges {
       let p : HTMLParagraphElement;
 
       if (this.isMessage(this.appCreateBubble)) {
-        
+
         if (this.appCreateBubble.correctAnswer) {
           p = this.createGuessedCorrectlyBubble();
         }
         else {
           p = this.createChatBubble(this.appCreateBubble);
         }
-        
+
         this.el.nativeElement.appendChild(p);
         this.el.nativeElement.scrollTop = this.el.nativeElement.scrollHeight;
         return;
@@ -47,7 +48,7 @@ export class CreateBubbleDirective implements OnChanges {
 
     strong.innerText = message.username + ':';
     span.innerText = message.message;
-    
+
     p.appendChild(strong);
     p.appendChild(br);
     p.appendChild(span);
@@ -68,9 +69,9 @@ export class CreateBubbleDirective implements OnChanges {
   }
 
   private createGuessedCorrectlyBubble(): HTMLParagraphElement {
-    
+
     const p = document.createElement('p');
-    
+
     p.innerText = 'You guessed correctly!';
     p.style.color = 'green';
 

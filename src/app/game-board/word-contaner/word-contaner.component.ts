@@ -5,7 +5,8 @@ import { GameManagerService } from 'src/app/_services/gameManager.service';
 @Component({
   selector: 'app-word-contaner',
   templateUrl: './word-contaner.component.html',
-  styleUrls: ['./word-contaner.component.scss']
+  styleUrls: ['./word-contaner.component.scss'],
+  standalone: false
 })
 export class WordContanerComponent implements OnDestroy {
 

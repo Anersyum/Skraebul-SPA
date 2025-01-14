@@ -13,7 +13,7 @@ import { WordChoiceComponent } from './game-board/word-choice/word-choice.compon
 import { CreateBubbleDirective } from './_customDirectives/createBubble.directive';
 
 @NgModule({
-  declarations: [		
+  declarations: [
     // components
     AppComponent,
     GameBoardComponent,
@@ -27,8 +27,7 @@ import { CreateBubbleDirective } from './_customDirectives/createBubble.directiv
    ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
-    HttpClientModule
+    AppRoutingModule
   ],
   exports: [],
   providers: [],

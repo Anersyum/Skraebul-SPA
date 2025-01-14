@@ -11,7 +11,8 @@ import { GameManagerService } from '../_services/gameManager.service';
 @Component({
   selector: 'app-game-board',
   templateUrl: './game-board.component.html',
-  styleUrls: ['./game-board.component.scss']
+  styleUrls: ['./game-board.component.scss'],
+  standalone: false
 })
 
 export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -37,9 +38,9 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
   selectedThickness? : number;
   // 0 - start 1 - drawing 2 - end 3 - clear board
   undoStack : Array<Array<Move>> = [];
-  
+
   constructor(public gameService : GameService, public gameManagerService : GameManagerService) { }
-  
+
   ngOnDestroy(): void {
     this.gameManagerService.destroy();
     this.gameService.disconnect();
@@ -128,11 +129,11 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
     const eventCoordinates : Position = this.getEventCoordinates(e);
     const offsetCoordinates : Position = {
       x: eventCoordinates.x - this.xOffset,
-      y: eventCoordinates.y - this.yOffset 
+      y: eventCoordinates.y - this.yOffset
     };
-    
+
     this.context!.moveTo(offsetCoordinates.x, offsetCoordinates.y);
-    
+
     const brush : Brush = {
       brushColor: this.context?.strokeStyle,
       brushWidth: this.context?.lineWidth
@@ -148,9 +149,9 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.addToDrawingStack(points);
 
     this.gameManagerService.isDrawing = true;
-    
+
     this.context?.beginPath();
-    
+
     this.gameService.sendMove({
       position: eventCoordinates,
       drawing: points.drawing,
@@ -185,11 +186,11 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
     const eventCoordinates : Position = this.getEventCoordinates(e);
     const offsetCoordinates : Position = {
       x: eventCoordinates.x - this.xOffset,
-      y: eventCoordinates.y - this.yOffset 
+      y: eventCoordinates.y - this.yOffset
     };
 
     if (this.gameManagerService.isDrawing) {
-      
+
       this.context?.lineTo(offsetCoordinates.x, offsetCoordinates.y);
       this.context?.stroke();
 
@@ -197,7 +198,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
         brushColor: this.context?.strokeStyle,
         brushWidth: this.context?.lineWidth
       };
-  
+
       const points : Move = {
         position: offsetCoordinates,
         drawing: 1,
@@ -228,7 +229,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
     const eventCoordinates : Position = this.getEventCoordinates(e);
     const offsetCoordinates : Position = {
       x: eventCoordinates.x - this.xOffset,
-      y: eventCoordinates.y - this.yOffset 
+      y: eventCoordinates.y - this.yOffset
     };
 
     if (!this.gameManagerService.isDrawing) {
@@ -282,7 +283,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   changePenColor(event : MouseEvent, color : Color) : void {
-    
+
     const element : HTMLAnchorElement = event.target as HTMLAnchorElement;
 
     this.color = element.dataset.color!;
@@ -354,7 +355,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.clearBoardMove(isUndo);
     this.redrawDrawingStack();
-    
+
     if (!isSentMove) {
       this.gameService.sendMove({
         position: { x: 0, y: 0},
@@ -396,7 +397,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
 
     for (let i = 0; i < me.undoStack.length; i++) {
       const element : Array<Move> = this.undoStack[i];
-      
+
       element.forEach((e : Move) => {
         if (e.drawing == 0){
 
@@ -422,7 +423,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   changeBrushSize(penThickness : Thickness) : void {
-    
+
     this.penThickness?.forEach((thickness : Thickness) => {
       thickness.isActive = false;
     });
