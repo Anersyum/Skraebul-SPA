@@ -22,11 +22,11 @@ export class GameService{
 
   connect() : void {
     let username = this.userservice.getName();
-    const roomNumber : number = this.userservice.roomNumber;
+    const roomName : string = this.userservice.roomName;
     const isJoiningRoom : boolean = this.userservice.joinRoom;
-    console.log(environment.url +'/chathub?username=' + username + '&room=' + roomNumber + '&joinRoom=' + isJoiningRoom);
+    console.log(environment.url +'/chathub?username=' + username + '&room=' + roomName + '&joinRoom=' + isJoiningRoom);
     this.hubConnection = new HubConnectionBuilder()
-      .withUrl(environment.url +'/chathub?username=' + username + '&room=' + roomNumber + '&joinroom=' + isJoiningRoom)
+      .withUrl(environment.url +'/chathub?username=' + username + '&room=' + roomName + '&joinroom=' + isJoiningRoom)
       .withAutomaticReconnect()
       .configureLogging(LogLevel.Information)
       .build();
@@ -43,11 +43,11 @@ export class GameService{
       this.gameManagerService.message.correctAnswer = false;
     });
 
-    this.hubConnection?.on('Connected', (users : Array<Player>, username : string, gameId : number) => {
+    this.hubConnection?.on('Connected', (users : Array<Player>, username : string, roomName : string) => {
       this.gameManagerService.setPlayers(users);
       this.gameManagerService.player = {username : username, loggedIn : true};
       this.setAdmin(users);
-      this.userservice.roomNumber = gameId;
+      this.userservice.roomName = roomName;
     });
 
     this.hubConnection?.on('Disconnected', (users : Array<Player>, username : string) => {
@@ -122,6 +122,7 @@ export class GameService{
       }
       this.gameManagerService.drawing = true;
       this.gameManagerService.setPlayers(users);
+      this.gameManagerService.showEndRoundResults();
       // console.log(users);
       this.gameManagerService.finishRound();
       this.setAdmin(users);
@@ -213,10 +214,6 @@ export class GameService{
       },
       error => console.error(error)
     );
-  }
-  
-  sendMessage(message : Message) : void {
-    this.hubConnection?.invoke('SendMessage', message.username, message.message).catch((err : any) => { console.error(err.toString()); });
   }
 
   disconnect() : void {

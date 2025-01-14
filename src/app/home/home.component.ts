@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { RoomInfo } from '../_models/RoomInfo';
 import { UserService } from '../_services/user.service';
 
 @Component({
@@ -11,6 +12,8 @@ import { UserService } from '../_services/user.service';
 export class HomeComponent implements OnInit {
 
   username : string = "";
+  isCreatingRoom : boolean = false;
+
   constructor(private userservice : UserService, private router : Router) { }
 
   ngOnInit() {
@@ -18,13 +21,13 @@ export class HomeComponent implements OnInit {
     this.userservice.joinRoom = false;
   }
 
-  onCreateRoom(input : HTMLInputElement) {
+  createRoom(event : RoomInfo, username : string) {
 
-    if (input.value == '') {
-      return;
-    }
+    if (event.roomName == '') return;
+    if (!this.username) return; //todo: add an error message
 
-    this.userservice.setName(input.value);
+    this.userservice.setName(username);
+    this.userservice.roomName = event.roomName;
     this.router.navigateByUrl("/gameboard");
   }
 
@@ -34,10 +37,18 @@ export class HomeComponent implements OnInit {
       return;
     }
 
-    this.userservice.roomNumber = (roomNumber.value as unknown) as number;
-    console.log(this.userservice.roomNumber);
+    this.userservice.roomName = (roomNumber.value as unknown) as string;
+    console.log(this.userservice.roomName);
     this.userservice.joinRoom = true;
     this.userservice.setName(input.value);
     this.router.navigateByUrl("/gameboard");
+  }
+
+  showCreateRoomWindow() {
+    this.isCreatingRoom = true;
+  }
+
+  closeCreateRoomModal(event : boolean) {
+    this.isCreatingRoom = !event
   }
 }

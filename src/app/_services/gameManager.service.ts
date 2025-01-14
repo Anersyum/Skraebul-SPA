@@ -20,6 +20,7 @@ export class GameManagerService {
   isDrawing : boolean = false;
   canDraw : boolean = false;
   canStartGame : boolean = false;
+  shouldShowEndRoundResults : boolean = false;
 
   constructor() { }
   
@@ -33,6 +34,14 @@ export class GameManagerService {
 
   resetHiddenWord() : void {
     this.word = '';
+  }
+
+  showEndRoundResults() : void {
+    this.shouldShowEndRoundResults = true;
+    
+    setTimeout(() => {
+      this.shouldShowEndRoundResults = false;
+    }, 5 * 1000);
   }
 
   hideWord(gottenWord : string, isAdmin : boolean, gameService : GameService) : void {

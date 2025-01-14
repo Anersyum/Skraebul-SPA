@@ -1,7 +1,18 @@
 <div id="chat-container">
-  <div class="room-number">Room ID: {{ userService.roomNumber }}</div>
-  <div #chatBox class="chat-window" [appCreateBubble]="gameManagerService.player" [appCreateBubble]="gameManagerService.message">
+  <div class="room-number">Room ID: {{ userService.roomName }}</div>
+  <div #chatBox class="chat-window">
+    <ng-template #bubbleTemplate [appCreateBubble]="gameManagerService.player" [appCreateBubble]="gameManagerService.message">
+      <p class="chat-message hide">
+        <strong>
+        </strong>
+        <br />
+        <span>
+        </span>
+      </p>
+      <p class="guessed-correctly-message hide">
+      </p>
+    </ng-template>
   </div>
-  <input #chatMessageBox type="text" class="chat-message-box" (keydown.enter)="onKeyEnter(chatMessageBox)"/>
-  <input #guessBox [disabled]="gameManagerService.drawing" type="text" class="chat-message-box" (keydown.enter)="guess(guessBox.value, guessBox)" placeholder="Guess box"/>
+  <!-- <input #chatMessageBox type="text" class="chat-message-box" (keydown.enter)="onKeyEnter(chatMessageBox)"/> -->
+  <input #guessBox type="text" class="chat-message-box" (keydown.enter)="guess(guessBox.value, guessBox)" placeholder="Guess box"/>
 </div>

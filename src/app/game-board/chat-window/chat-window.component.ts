@@ -23,23 +23,11 @@ export class ChatWindowComponent implements OnInit {
     this.username = this.userService.getName();
   }
 
-  onKeyEnter(input : HTMLInputElement) : void {
+  guess(word : string, guessBox : HTMLInputElement) : void {
 
-    if (input.value == '') {
+    if (word == '') {
       return;
     }
-
-    const message : Message = {
-      username : this.username,
-      message : input.value
-    };
-
-    this.gameService?.sendMessage(message);
-
-    input.value = '';
-  }
-
-  guess(word : string, guessBox : HTMLInputElement) : void {
 
     const timer : number = this.gameManagerService?.timer as number;
 
