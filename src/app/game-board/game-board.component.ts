@@ -299,7 +299,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   /**
    * A move that the player can use to clear the board.
-   * @param isUndo : boolean - provided when the drawing player clicks undo. If isUndo, won't save that move on the
+   * @param isUndo : boolean - provided when the drawing player clicks undo. If isUndo is false, won't save that move on the
    * drawing stack.
    */
   clearBoardMove(isUndo : boolean = false) : void {

@@ -37,7 +37,7 @@ export class GameService{
    * @param gameBoardComponent
    */
   registerEvents(gameBoardComponent : GameBoardComponent) : void {
-    
+
     this.hubConnection?.on('RecieveMessage', (message : Message) => {
       this.gameManagerService.message = message;
       this.gameManagerService.message.correctAnswer = false;
@@ -154,12 +154,12 @@ export class GameService{
 
   /**
    * Sets admin of the room so that the game can be started.
-   * @param users 
+   * @param users
    */
   private setAdmin(users : Array<Player>) {
     for (let i = 0; i < users.length; i++) {
       const user = users[i];
-      
+
       if (user.username == this.userservice.getName()) {
         this.gameManagerService.canStartGame = user.isAdmin as boolean;
         this.gameManagerService.canDraw = false;
@@ -169,8 +169,8 @@ export class GameService{
 
   /**
    * Adapts coordinates to fit the transition from a larger resolution to a lower and vice versa.
-   * @param gameBoardComponent 
-   * @param move 
+   * @param gameBoardComponent
+   * @param move
    * @returns Position
    */
   private getAdaptedCoordinates(gameBoardComponent : GameBoardComponent, move : Move) : Position {
@@ -223,7 +223,6 @@ export class GameService{
   }
 
   deregisterEvents() : void {
-    
     this.hubConnection?.off('RecieveMessage');
     this.hubConnection?.off('Connected');
     this.hubConnection?.off('Disconnected');

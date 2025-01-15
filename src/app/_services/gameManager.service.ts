@@ -9,12 +9,12 @@ import { GameService } from './game.service';
 export class GameManagerService {
 
   private players : Array<Player> | null = null;
+  private timerInterval : any;
   player? : Player;
   message? : Message;
   drawing : boolean = true;
   word : string = '';
   timer : number = 60;
-  private timerInterval : any;
   sentLetters : Array<string> = [];
   isChosingWord : boolean = false;
   isDrawing : boolean = false;
@@ -23,7 +23,7 @@ export class GameManagerService {
   shouldShowEndRoundResults : boolean = false;
 
   constructor() { }
-  
+
   setPlayers(players : Array<Player>) : void {
     this.players = players;
   }
@@ -38,7 +38,7 @@ export class GameManagerService {
 
   showEndRoundResults() : void {
     this.shouldShowEndRoundResults = true;
-    
+
     setTimeout(() => {
       this.shouldShowEndRoundResults = false;
     }, 5 * 1000);
@@ -50,7 +50,7 @@ export class GameManagerService {
 
     if (!isAdmin) {
       for (let i = 0; i < this.word.length; i++) {
-        
+
         if (this.word[i].match(/([A-Za-z])+/)) {
           this.word = this.word.replace(this.word[i], '_');
         }
