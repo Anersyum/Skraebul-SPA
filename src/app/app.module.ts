@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { GameBoardComponent } from './game-board/game-board.component';
 import { WordContanerComponent } from './game-board/word-contaner/word-contaner.component';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ChatWindowComponent } from './game-board/chat-window/chat-window.component';
 import { HomeComponent } from './home/home.component';
 import { PointsBoardComponent } from './game-board/points-board/points-board.component';
@@ -34,7 +34,9 @@ import { CreateRoomComponent } from './home/create-room/create-room.component';
     AppRoutingModule
   ],
   exports: [],
-  providers: [],
+  providers: [
+    provideHttpClient(withInterceptorsFromDi())
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
