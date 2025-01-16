@@ -13,6 +13,7 @@ export class HomeComponent implements OnInit {
 
   username : string = "";
   isCreatingRoom : boolean = false;
+  protected roomNumber: string = '';
 
   constructor(private userservice : UserService, private router : Router) { }
 
@@ -21,26 +22,32 @@ export class HomeComponent implements OnInit {
     this.userservice.joinRoom = false;
   }
 
-  createRoom(event : RoomInfo, username : string) {
-
+  createRoom(event : RoomInfo) {
     if (event.roomName == '') return;
     if (!this.username) return; //todo: add an error message
 
-    this.userservice.setName(username);
+    this.userservice.setName(this.username);
     this.userservice.roomName = event.roomName;
     this.router.navigateByUrl("/gameboard");
   }
 
-  onJoinRoom(input : HTMLInputElement, roomNumber : HTMLInputElement) {
+  setUsername(username: string) {
+    this.username = username;
+  }
 
-    if (input.value == '' || roomNumber.value == '') {
+  setRoomNumber(roomNumber: string) {
+    this.roomNumber = roomNumber;
+  }
+
+  joinRoom() {
+    if (this.username == '' || this.roomNumber == '') {
       return;
     }
 
-    this.userservice.roomName = (roomNumber.value as unknown) as string;
+    this.userservice.roomName = this.roomNumber;
     console.log(this.userservice.roomName);
     this.userservice.joinRoom = true;
-    this.userservice.setName(input.value);
+    this.userservice.setName(this.username);
     this.router.navigateByUrl("/gameboard");
   }
 

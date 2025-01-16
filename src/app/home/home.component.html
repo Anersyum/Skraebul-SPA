@@ -1,8 +1,12 @@
-<app-create-room (closeModalEvent)="closeCreateRoomModal($event)" (createRoomEvent)="createRoom($event, usernameInput.value)" *ngIf="isCreatingRoom"></app-create-room>
-<div style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; flex-direction: column;">
-  <input #usernameInput type="text" value="{{ this.username }}" required/>
-  <a style="cursor: pointer; color: blue;" (click)="showCreateRoomWindow()">Create room</a>
-  <input #joinRoomNumber type="text" placeholder="Enter room to join">
-  <a style="cursor: pointer; color: blue;" (click)="onJoinRoom(usernameInput, joinRoomNumber)">Join room</a>
+<app-create-room (closeModalEvent)="closeCreateRoomModal($event)" (createRoomEvent)="createRoom($event)" *ngIf="isCreatingRoom"></app-create-room>
+<div id="room_information_container">
+  <div class="room-information-form-container">
+    <app-text-input [placeHolderText]="'Player name'" (value)="setUsername($event)"></app-text-input>
+    <a (click)="showCreateRoomWindow()">Create room</a>
+  </div>
+  <div class="room-information-form-container">
+    <app-text-input [placeHolderText]="'Room name'" (value)="setRoomNumber($event)"></app-text-input>
+    <a (click)="joinRoom()">Join room</a>
+  </div>
 </div>
 <!-- maybe create two tabs one for joining a room, one for creating a room -->

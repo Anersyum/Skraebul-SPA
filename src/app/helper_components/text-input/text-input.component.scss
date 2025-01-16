@@ -1,0 +1,41 @@
+//todo: need to move variables to a separate file and import it there
+$defaultInputBorderWidth: 1px solid;
+$borderColor: #323031;
+$transitionDuration: 0.5s;
+
+input[type="text"] {
+  padding: 10px;
+  border: 0;
+  border-bottom: 2px solid rgba(50, 48, 49, 0.7);
+
+  &:focus, &:active {
+    outline: none;
+  }
+}
+
+.text-input {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    border-bottom: 2px solid $borderColor;
+    background-color: #fff;
+    transform: scaleX(0);
+    transition: transform cubic-bezier(0.25, 0.46, 0.45, 0.94) $transitionDuration;
+  }
+
+  &:hover::after {
+    content: "";
+    transform: scaleX(100%);
+    transition: transform cubic-bezier(0.25, 0.46, 0.45, 0.94) $transitionDuration;
+  }
+
+  &:focus-within::after {
+    border-bottom: 2px solid $borderColor;
+    transform: scaleX(100%);
+  }
+}
