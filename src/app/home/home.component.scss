@@ -1,3 +1,10 @@
+$dashArray: 2342;
+$animationTiming: ease-in;
+$animationDuration: 3s;
+$path: "M 20 20 L 500 20";
+$numberOfBackgroundLines: 4;
+$heightPercentage: percentage((100 / $numberOfBackgroundLines) / 100);
+
 #room_information_container {
   width: 100%;
   height: 100%;
@@ -6,3 +13,54 @@
   align-items: center;
   flex-direction: column;
 }
+
+#background-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
+  & #straight-line-container {
+    position: absolute;
+    width: 100%;
+    height: $heightPercentage;
+  }
+}
+
+#background-pen {
+  offset-path: path($path);
+  animation: move $animationDuration infinite alternate $animationTiming;
+  width: 20px;
+  height: 20px;
+  background: black;
+  border-radius: 100%;
+  position: absolute;
+}
+
+@keyframes move {
+  0% {
+    offset-distance: 0%;
+  }
+  100% {
+    offset-distance: 100%;
+  }
+}
+
+svg {
+  position: absolute;
+}
+
+.path {
+  stroke-dasharray: $dashArray;
+  stroke-dashoffset: $dashArray;
+  animation: draw $animationDuration infinite alternate $animationTiming;
+}
+
+@keyframes draw {
+  0% {
+    stroke-dashoffset: $dashArray;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+

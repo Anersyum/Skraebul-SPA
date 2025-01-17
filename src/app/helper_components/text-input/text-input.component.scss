@@ -1,6 +1,5 @@
-//todo: need to move variables to a separate file and import it there
-$defaultInputBorderWidth: 1px solid;
-$borderColor: #323031;
+@import '/src/sass/colors.scss';
+
 $transitionDuration: 0.5s;
 
 input[type="text"] {

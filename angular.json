@@ -31,10 +31,14 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss",
-              "src/colors.scss"
+              "src/styles.scss" 
             ],
-            "scripts": []
+            "scripts": [],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "/src/saas"
+              ]
+            }
           },
           "configurations": {
             "production": {
@@ -127,5 +131,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }
