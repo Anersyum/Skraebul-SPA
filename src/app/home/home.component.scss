@@ -1,4 +1,4 @@
-$dashArray: 700;
+$dashArray: 770;
 $animationTiming: ease-in;
 $animationDuration: 5s;
 $path: "M 0 0 L 500 0";
@@ -47,10 +47,21 @@ svg {
   position: absolute;
 }
 
-.path {
+#path, #curve_path, #zig_zag_path, #dash_path {
   stroke-dasharray: $dashArray;
   stroke-dashoffset: $dashArray;
+}
+
+#path {
   animation: draw $animationDuration infinite alternate $animationTiming;
+}
+
+#curve_path {
+  animation: draw $animationDuration 1s infinite alternate $animationTiming;
+}
+
+#zig_zag_path {
+  animation: draw $animationDuration 2s infinite alternate $animationTiming;
 }
 
 @keyframes draw {
