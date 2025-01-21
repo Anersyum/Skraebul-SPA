@@ -14,6 +14,7 @@ import { CreateBubbleDirective } from './_customDirectives/createBubble.directiv
 import { EndRoundPointsComponent } from './game-board/end-round-points/end-round-points.component';
 import { CreateRoomComponent } from './home/create-room/create-room.component';
 import { TextInputComponent } from './helper_components/text-input/text-input.component';
+import { NavigationComponent } from './navigation/navigation.component';
 
 @NgModule({
   declarations: [
@@ -33,8 +34,10 @@ import { TextInputComponent } from './helper_components/text-input/text-input.co
    ],
   imports: [
     BrowserModule,
-    AppRoutingModule
-  ],
+    AppRoutingModule,
+    NavigationComponent
+
+],
   exports: [],
   providers: [
     provideHttpClient(withInterceptorsFromDi())
