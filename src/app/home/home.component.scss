@@ -1,7 +1,7 @@
 $dashArray: 770;
+$dashArrayOffset: 100;
 $animationTiming: ease-in;
-$animationDuration: 5s;
-$path: "M 0 0 L 500 0";
+$animationDuration: 8s;
 
 #room_information_container {
   width: 100%;
@@ -16,30 +16,12 @@ $path: "M 0 0 L 500 0";
   position: absolute;
   width: 100%;
   height: 100%;
+  z-index: -1;
 
   & #straight-line-container {
     position: absolute;
     width: 100%;
     height: 100%;
-  }
-}
-
-#background-pen {
-  offset-path: path($path);
-  animation: move $animationDuration infinite alternate $animationTiming;
-  width: 20px;
-  height: 20px;
-  background: black;
-  border-radius: 100%;
-  position: absolute;
-}
-
-@keyframes move {
-  0% {
-    offset-distance: 0%;
-  }
-  100% {
-    offset-distance: 100%;
   }
 }
 
@@ -50,26 +32,47 @@ svg {
 #path, #curve_path, #zig_zag_path, #dash_path {
   stroke-dasharray: $dashArray;
   stroke-dashoffset: $dashArray;
-}
-
-#path {
   animation: draw $animationDuration infinite alternate $animationTiming;
 }
 
+#path {
+  animation-name: draw-with-offset;
+}
+
 #curve_path {
-  animation: draw $animationDuration 1s infinite alternate $animationTiming;
+  animation-delay: 1s;
+  animation-direction: normal;
 }
 
 #zig_zag_path {
-  animation: draw $animationDuration 2s infinite alternate $animationTiming;
+  animation-delay: 2s;
+  animation-direction: alternate-reverse;
+}
+
+#dash_path {
+  animation-delay: 3s;
+}
+
+@keyframes draw-with-offset {
+  0% {
+    stroke-dashoffset: $dashArray;
+  }
+  50% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: -$dashArray + $dashArrayOffset;
+  }
 }
 
 @keyframes draw {
   0% {
     stroke-dashoffset: $dashArray;
   }
-  100% {
+  50% {
     stroke-dashoffset: 0;
   }
+  100% {
+    stroke-dashoffset: -$dashArray;
+  }
 }
-
