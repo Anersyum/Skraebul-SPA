@@ -9,6 +9,7 @@ import { Component, input, InputSignal, Output, EventEmitter } from '@angular/co
 export class TextInputComponent {
 
   public placeHolderText: InputSignal<string> = input('');
+  public disabled: InputSignal<boolean> = input(false);
   @Output() value: EventEmitter<string> = new EventEmitter<string>();
 
   protected emmitValue(inputValue: string): void{
