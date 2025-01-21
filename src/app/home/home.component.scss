@@ -17,6 +17,7 @@ $animationDuration: 8s;
   width: 100%;
   height: 100%;
   z-index: -1;
+  top: 0;
 
   & #straight-line-container {
     position: absolute;
@@ -33,6 +34,7 @@ svg {
   stroke-dasharray: $dashArray;
   stroke-dashoffset: $dashArray;
   animation: draw $animationDuration infinite alternate $animationTiming;
+  stroke: #323031;
 }
 
 #path {
@@ -75,4 +77,12 @@ svg {
   100% {
     stroke-dashoffset: -$dashArray;
   }
+}
+
+
+#start_game_btn_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
