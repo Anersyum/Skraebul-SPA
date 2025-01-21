@@ -1,11 +1,13 @@
 <div id="background"></div>
 <div id="create_room_modal">
   <button class="close-create-room-modal" (click)="closeModal()">X</button>
-  <input type="text" placeholder="Room name" #roomName>
-  <input type="text" placeholder="Password" [disabled]="!isPasswordChecked" #password>
+  <app-text-input [placeHolderText]="'Room name'" (value)="roomName"></app-text-input>
+  <!-- <input type="text" placeholder="Room name" #roomName> -->
+  <app-text-input [placeHolderText]="'Password'" [disabled]="!isPasswordChecked" (value)="password"></app-text-input>
+  <!-- <input type="text" placeholder="Password" [disabled]="!isPasswordChecked" #password> -->
   <div>
     <label for="">Requires password?</label>
     <input type="checkbox" (click)="enablePassword()" #hasPassword>
   </div>
-  <button (click)="createRoom(roomName.value, hasPassword.checked, password.value)">Create room</button>
+  <button (click)="createRoom(hasPassword.checked)">Create room</button>
 </div>

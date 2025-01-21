@@ -12,6 +12,8 @@ export class CreateRoomComponent implements OnInit {
   isPasswordChecked : boolean = false;
   @Output() closeModalEvent = new EventEmitter<boolean>();
   @Output() createRoomEvent = new EventEmitter<RoomInfo>();
+  protected roomName: string = '';
+  protected password: string = '';
 
   constructor() { }
 
@@ -22,18 +24,21 @@ export class CreateRoomComponent implements OnInit {
     this.isPasswordChecked = !this.isPasswordChecked;
   }
 
-  createRoom(roomName : string, hasPassword : boolean, password : string) {
+  createRoom(hasPassword : boolean) {
 
-    if (roomName == '') return;
+    if (this.roomName == '') return;
 
     const roomInfo = {
-      roomName,
+      roomName: this.roomName,
       password: ''
     }
 
-    if (hasPassword) {
-      roomInfo.password = password
+    if (hasPassword && this.password == '') {
+      // todo: add error message
+      return;
     }
+
+    roomInfo.password = this.password;
 
     this.createRoomEvent.emit(roomInfo);
   }
