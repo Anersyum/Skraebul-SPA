@@ -1,7 +1,6 @@
 <app-create-room (closeModalEvent)="closeCreateRoomModal($event)" (createRoomEvent)="createRoom($event)" *ngIf="isCreatingRoom"></app-create-room>
 <div id="background-container">
   <div id="straight-line-container">
-    <!-- <div id="background-pen"></div> -->
     <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="none" viewBox="0 0 700 70">
       <path id="path" class="svg-line" d="M 0 15 L 700 15" fill="none" stroke="black" stroke-width="2" stroke-mitterLimit="10"></path>
       <path id="curve_path" class="svg-line" d="M 0 30 C 30 30 40 35 60 30 S 80 35 100 30 S 120 25 140 30
@@ -19,16 +18,6 @@
     </svg>
   </div>
 </div>
-<!-- <div id="room_information_container">
-  <div class="room-information-form-container">
-    <app-text-input [placeHolderText]="'Player name'" (value)="setUsername($event)"></app-text-input>
-    <a (click)="showCreateRoomWindow()">Create room</a>
-  </div>
-  <div class="room-information-form-container">
-    <app-text-input [placeHolderText]="'Room name'" (value)="setRoomNumber($event)"></app-text-input>
-    <a (click)="joinRoom()">Join room</a>
-  </div>
-</div> -->
 <div id="start_game_btn_container">
   <button id="start_game_btn" class="btn game-btn">Start Game</button>
 </div>
