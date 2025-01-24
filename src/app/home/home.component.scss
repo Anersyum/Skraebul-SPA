@@ -30,14 +30,14 @@ svg {
   position: absolute;
 }
 
-#path, #curve_path, #zig_zag_path, #dash_path {
+#line_path, #curve_path, #zig_zag_path, #dash_path {
   stroke-dasharray: $dashArray;
   stroke-dashoffset: $dashArray;
   animation: draw $animationDuration infinite alternate $animationTiming;
   stroke: #323031;
 }
 
-#path {
+#line_path {
   animation-name: draw-with-offset;
 }
 
