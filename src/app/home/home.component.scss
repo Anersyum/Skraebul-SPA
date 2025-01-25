@@ -85,7 +85,8 @@ svg {
   justify-content: center;
   align-items: center;
   height: 100%;
-
+  border-radius: 10px;
+  
   .btn {
     padding: 15px 30px;
     background: linear-gradient(180deg, #084C61, 0%, #A8E9F0, 62%, #D8C99B, 100%);
